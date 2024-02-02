@@ -21,6 +21,7 @@ export interface LoblawsStore {
 export interface IStoreLoblawsSrcProps {
 	id: string;
 	storeId: string;
+	name: string;
 	storeBannerId: string;
 	geoPoint: {
 		latitude: number;

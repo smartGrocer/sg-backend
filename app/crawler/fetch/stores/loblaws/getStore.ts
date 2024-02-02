@@ -24,26 +24,24 @@ const getLoblawsStores = async ({
 
 	try {
 		const response = await axios.get(fetchUrl);
-		const data = response.data
-			.map((store: IStoreLoblawsSrcProps) => {
-				return {
-					id: store.id,
-					store_id: store.storeId,
-					chain_name: store.storeBannerId,
-					latitude: store.geoPoint.latitude,
-					longitude: store.geoPoint.longitude,
-					formatted_address: store.address.formattedAddress,
-					city: store.address.town,
-					line1: store.address.line1,
-					line2: store.address.line2,
-					postal_code: store.address.postalCode,
-					province: store.address.region,
-					country: store.address.country,
-				};
-			})
-			.sort(
-				(a: any, b: any) => parseInt(a.store_id) - parseInt(b.store_id)
-			);
+		const data = response.data.map((store: IStoreLoblawsSrcProps) => {
+			return {
+				id: store.id,
+				store_id: store.storeId,
+				chain_name: store.storeBannerId,
+				store_name: store.name,
+				latitude: store.geoPoint.latitude,
+				longitude: store.geoPoint.longitude,
+				formatted_address: store.address.formattedAddress,
+				city: store.address.town,
+				line1: store.address.line1,
+				line2: store.address.line2,
+				postal_code: store.address.postalCode,
+				province: store.address.region,
+				country: store.address.country,
+			};
+		});
+
 		return data;
 	} catch (error) {
 		throw new Error("Error fetching stores");

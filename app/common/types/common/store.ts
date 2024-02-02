@@ -2,6 +2,7 @@ export interface IStoreProps {
 	id: string;
 	store_id: string;
 	chain_name: string;
+	store_name: string;
 	latitude: number;
 	longitude: number;
 	formatted_address: string;
@@ -20,7 +21,5 @@ export interface IStoreResponse {
 
 export enum AllStoreChainBrands {
 	loblaws = "loblaws",
-	walmart = "walmart",
 	foodbasics = "foodbasics",
-	metro = "metro",
 }
