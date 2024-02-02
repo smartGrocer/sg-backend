@@ -12,9 +12,27 @@ export enum LoblawsChainName {
 	maxi = "maxi",
 	provigo = "provigo",
 	extrafoods = "extrafoods",
-
 }
 
 export interface LoblawsStore {
 	chainName: LoblawsChainName;
+}
+
+export interface IStoreLoblawsSrcProps {
+	id: string;
+	storeId: string;
+	storeBannerId: string;
+	geoPoint: {
+		latitude: number;
+		longitude: number;
+	};
+	address: {
+		formattedAddress: string;
+		town: string;
+		line1: string;
+		line2: string;
+		postalCode: string;
+		region: string;
+		country: string;
+	};
 }

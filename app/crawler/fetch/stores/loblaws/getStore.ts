@@ -1,9 +1,10 @@
 import axios from "axios";
 import {
+	IStoreLoblawsSrcProps,
 	LoblawsChainName,
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
-import { IStoreProps, IStoreSrcProps } from "../../../../common/types/common/store";
+import { IStoreProps } from "../../../../common/types/common/store";
 
 const getLoblawsStores = async ({
 	chainName,
@@ -22,10 +23,9 @@ const getLoblawsStores = async ({
 	const fetchUrl = `${url}?bannerIds=${bannerId}`;
 
 	try {
-		console.log(`Fetching stores for ${chainName}`, fetchUrl);
 		const response = await axios.get(fetchUrl);
 		const data = response.data
-			.map((store: IStoreSrcProps) => {
+			.map((store: IStoreLoblawsSrcProps) => {
 				return {
 					id: store.id,
 					store_id: store.storeId,
@@ -46,7 +46,6 @@ const getLoblawsStores = async ({
 			);
 		return data;
 	} catch (error) {
-		console.error("Error fetching stores", error);
 		throw new Error("Error fetching stores");
 	}
 };
