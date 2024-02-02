@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc",
+    "start:api": "node dist/app/api/index.js",
+    "dev:server:api": "nodemon app/api/index.ts --host 0.0.0.0"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "axios": "^1.6.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",

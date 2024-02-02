@@ -1,0 +1,54 @@
+import axios from "axios";
+import {
+	LoblawsChainName,
+	LoblawsStore,
+} from "../../../../common/types/loblaws/loblaws";
+import { IStoreProps, IStoreSrcProps } from "../../../../common/types/common/store";
+
+const getLoblawsStores = async ({
+	chainName,
+}: LoblawsStore): Promise<IStoreProps[] | Error> => {
+	if (!chainName) {
+		throw new Error("Chain name is required");
+	}
+
+	// if the chain name is not in the enum, throw an error
+	if (!Object.values(LoblawsChainName).includes(chainName)) {
+		throw new Error("Invalid chain name");
+	}
+
+	const url = `https://www.loblaws.ca/api/pickup-locations`;
+	const bannerId = chainName;
+	const fetchUrl = `${url}?bannerIds=${bannerId}`;
+
+	try {
+		console.log(`Fetching stores for ${chainName}`, fetchUrl);
+		const response = await axios.get(fetchUrl);
+		const data = response.data
+			.map((store: IStoreSrcProps) => {
+				return {
+					id: store.id,
+					store_id: store.storeId,
+					chain_name: store.storeBannerId,
+					latitude: store.geoPoint.latitude,
+					longitude: store.geoPoint.longitude,
+					formatted_address: store.address.formattedAddress,
+					city: store.address.town,
+					line1: store.address.line1,
+					line2: store.address.line2,
+					postal_code: store.address.postalCode,
+					province: store.address.region,
+					country: store.address.country,
+				};
+			})
+			.sort(
+				(a: any, b: any) => parseInt(a.store_id) - parseInt(b.store_id)
+			);
+		return data;
+	} catch (error) {
+		console.error("Error fetching stores", error);
+		throw new Error("Error fetching stores");
+	}
+};
+
+export default getLoblawsStores;
