@@ -7,6 +7,7 @@ import {
 	TValidPostalCode,
 	validatePostalCode,
 } from "../../common/helpers/validatePostalCode";
+import { getCoordinatesFromPostal } from "../../data/readJson";
 const router = express.Router();
 
 // Routes
@@ -19,6 +20,9 @@ router.get(
 		const postalCode = req.query.postal_code as string;
 
 		const validPostalCode = validatePostalCode(postalCode);
+
+		const coordinates = await getCoordinatesFromPostal(postalCode);
+		console.log({ coordinates });
 
 		// if chain brand is not provided or is invalid
 		if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
