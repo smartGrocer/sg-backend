@@ -43,8 +43,10 @@ const getLoblawsStores = async ({
 		});
 
 		return data;
-	} catch (error) {
-		throw new Error("Error fetching stores");
+	} catch (error: any) {
+		throw new Error(
+			`Error fetching stores for walmart: ${error?.response?.statusText} | ${error}`
+		);
 	}
 };
 

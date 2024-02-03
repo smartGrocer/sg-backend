@@ -21,5 +21,6 @@ export interface IStoreResponse {
 
 export enum AllStoreChainBrands {
 	loblaws = "loblaws",
-	foodbasics = "foodbasics",
+	walmart = "walmart",
+	metro = "metro",
 }

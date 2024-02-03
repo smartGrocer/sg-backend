@@ -1,14 +1,26 @@
+import { Request, Response } from "express";
+import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
 import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
 import getLoblawsStores from "./getStore";
 
-const fetchLoblawsStores = async (req: any, res: any) => {
+interface IFetchLoblawsStores {
+	req: Request;
+	res: Response;
+	validPostalCode: TValidPostalCode;
+}
+
+const fetchLoblawsStores = async ({
+	req,
+	res,
+	validPostalCode,
+}: IFetchLoblawsStores) => {
 	// chain name
 	const chainName = req.params.chain as LoblawsChainName;
 
 	if (!chainName) {
 		return {
 			message:
-				"Store_name is required, please provide a store name as /stores/:store_name",
+				"chain_name is required, please provide a store name as /stores/:store_name/:chain_name",
 			data: Object.values(LoblawsChainName),
 			code: 400,
 		};

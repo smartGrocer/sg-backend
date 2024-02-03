@@ -4,10 +4,20 @@ import {
 	AllStoreChainBrands,
 	IStoreProps,
 } from "../../../../common/types/common/store";
+import { MetroChain } from "../../../../common/types/metro/metro";
 
-const getFoodBasicStores = async () => {
+interface IGetMetroStores {
+	chainName: MetroChain;
+}
+
+const getMetroStores = async ({ chainName }: IGetMetroStores) => {
 	try {
-		const url = `https://www.foodbasics.ca/find-a-grocery`;
+		const chain = chainName;
+		const endpoint = `/find-a-grocery`;
+		const domain = `https://www.${chain}.ca`;
+		const url =
+			chain === MetroChain.metro ? `${domain}/en${endpoint}` : `${domain}${endpoint}`;
+		console.log({ url });
 		const response = await axios.get(url);
 		const resData = response.data;
 
@@ -44,7 +54,7 @@ const getFoodBasicStores = async () => {
 				data.push({
 					id: storeId,
 					store_id: storeId,
-					chain_name: AllStoreChainBrands.foodbasics,
+					chain_name: chainName,
 					store_name: storeName,
 					latitude: parseFloat(storeLatitude),
 					longitude: parseFloat(storeLongitude),
@@ -59,9 +69,11 @@ const getFoodBasicStores = async () => {
 			});
 
 		return data;
-	} catch (error) {
-		throw new Error("Error fetching stores");
+	} catch (error: any) {
+		throw new Error(
+			`Error fetching stores for walmart: ${error?.response?.statusText} | ${error}`
+		);
 	}
 };
 
-export default getFoodBasicStores;
+export default getMetroStores;

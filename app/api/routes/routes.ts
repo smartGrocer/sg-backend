@@ -1,62 +1,104 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import fetchLoblawsStores from "../../crawler/fetch/stores/loblaws/fetchLoblawsStores";
 import { AllStoreChainBrands } from "../../common/types/common/store";
-import fetchFoodBasicStores from "../../crawler/fetch/stores/foodbasics/fetchFoodBasicStores";
+import fetchMetroStores from "../../crawler/fetch/stores/metro/fetchMetroStores";
+import fetchWalmartStores from "../../crawler/fetch/stores/walmart/fetchWalmartStores";
+import {
+	TValidPostalCode,
+	validatePostalCode,
+} from "../../common/helpers/validatePostalCode";
 const router = express.Router();
 
 // Routes
-router.get("/stores/:chain_brand?/:chain?", async (req, res) => {
-	const params = req.params;
-	const chain_brand = params.chain_brand as AllStoreChainBrands;
+router.get(
+	"/stores/:chain_brand?/:chain?",
+	async (req: Request, res: Response) => {
+		const params = req.params;
+		const chain_brand = params.chain_brand as AllStoreChainBrands;
 
-	// if chain brand is not provided or is invalid
-	if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
-		return res.status(400).json({
-			message: `Invalid chain brand, please provide a valid chain brand.`,
-			availableChains: Object.values(AllStoreChainBrands),
-		});
-	}
+		const postalCode = req.query.postal_code as string;
 
-	// if the chain brand is loblaws
-	if (chain_brand === AllStoreChainBrands.loblaws) {
-		const { data, code, message } = await fetchLoblawsStores(req, res);
+		const validPostalCode = validatePostalCode(postalCode);
 
-		if (code !== 200) {
+		// if chain brand is not provided or is invalid
+		if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
+			return res.status(400).json({
+				message: `Invalid chain brand, please provide a valid chain brand.`,
+				availableChains: Object.values(AllStoreChainBrands),
+			});
+		}
+
+		// if the chain brand is loblaws
+		if (chain_brand === AllStoreChainBrands.loblaws) {
+			const { data, code, message } = await fetchLoblawsStores({
+				req,
+				res,
+				validPostalCode,
+			});
+
+			if (code !== 200) {
+				return res.status(code).json({
+					message,
+					available_options: data,
+				});
+			}
+
 			return res.status(code).json({
 				message,
-				available_options: data,
+				count: data?.length || 0,
+				data,
 			});
 		}
 
-		return res.status(code).json({
-			message,
-			count: data?.length || 0,
-			data,
-		});
-	}
+		// if the chain brand is metro
+		if (chain_brand === AllStoreChainBrands.metro) {
+			const stores = await fetchMetroStores({
+				req,
+				res,
+				validPostalCode,
+			});
 
-	// if the chain brand is foodbasics
-	if (chain_brand === AllStoreChainBrands.foodbasics) {
-		const stores = await fetchFoodBasicStores(req, res);
+			if (stores.code !== 200) {
+				return res.status(stores.code).json({
+					message: stores.message,
+					availableChains: stores.data,
+				});
+			}
 
-		if (stores.code !== 200) {
 			return res.status(stores.code).json({
 				message: stores.message,
+				count: stores.data?.length || 0,
+				data: stores.data,
 			});
 		}
 
-		return res.status(stores.code).json({
-			message: stores.message,
-			count: stores.data?.length || 0,
-			data: stores.data,
+		if (chain_brand === AllStoreChainBrands.walmart) {
+			const stores = await fetchWalmartStores({
+				req,
+				res,
+				validPostalCode,
+			});
+
+			if (stores.code !== 200) {
+				return res.status(stores.code).json({
+					message: stores.message,
+					availableParams: stores.availableParams,
+				});
+			}
+
+			return res.status(stores.code).json({
+				message: stores.message,
+				count: stores.data?.length || 0,
+				data: stores.data,
+			});
+		}
+
+		// if the chain brand is unavailable
+		return res.status(400).json({
+			message: "Unavailable chain brand. Please try again later.",
 		});
 	}
-
-	// if the chain brand is unavailable
-	return res.status(400).json({
-		message: "Unavailable chain brand. Please try again later.",
-	});
-});
+);
 
 router.get("*", (req, res) => {
 	res.json({
