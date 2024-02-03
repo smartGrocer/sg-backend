@@ -7,7 +7,7 @@ import {
 	TValidPostalCode,
 	validatePostalCode,
 } from "../../common/helpers/validatePostalCode";
-import { getCoordinatesFromPostal } from "../../data/readJson";
+import { getCoordinatesFromPostal } from "../../common/helpers/getPostalCode";
 const router = express.Router();
 
 // Routes

@@ -5,6 +5,10 @@ import getSecret from "../common/helpers/getSecret";
 import apiLogger from "../common/helpers/logger";
 import cors from "cors";
 import connectToDb from "../common/db/db";
+import { localCache } from "../common/cache/localCache";
+
+// init localCache
+localCache;
 
 //For env File
 dotenv.config();
