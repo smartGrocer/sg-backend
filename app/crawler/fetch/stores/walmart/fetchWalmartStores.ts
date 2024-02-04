@@ -14,11 +14,10 @@ const fetchWalmartStores = async ({
 	validPostalCode,
 }: IFetchWalmartStores) => {
 	if (!validPostalCode) {
-		return {
+		return res.status(400).json({
 			message: `Invalid postal code, please provide a valid postal code.`,
 			availableParams: "postal_code",
-			code: 400,
-		};
+		});
 	}
 
 	const stores = await getWalmartStores({
@@ -26,18 +25,17 @@ const fetchWalmartStores = async ({
 	});
 
 	if (stores instanceof Error) {
-		return {
+		return res.status(500).json({
 			message: stores.message,
-			data: null,
-			code: 500,
-		};
+			
+		});
 	}
 
-	return {
+	return res.status(200).json({
 		message: `Stores fetched successfully for walmart`,
+		count: stores.length,
 		data: stores,
-		code: 200,
-	};
+	});
 };
 
 export default fetchWalmartStores;

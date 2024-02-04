@@ -18,8 +18,14 @@ router.get(
 		const chain_brand = params.chain_brand as AllStoreChainBrands;
 
 		const postalCode = req.query.postal_code as string;
-
 		const validPostalCode = validatePostalCode(postalCode);
+
+		if (!validPostalCode) {
+			return res.status(400).json({
+				message:
+					"Invalid postal code. Please provide a valid postal code as a query parameter in the format: ?postal_code=a1a1a1",
+			});
+		}
 
 		const coordinates = await getCoordinatesFromPostal(postalCode);
 		console.log({ coordinates });
@@ -34,66 +40,27 @@ router.get(
 
 		// if the chain brand is loblaws
 		if (chain_brand === AllStoreChainBrands.loblaws) {
-			const { data, code, message } = await fetchLoblawsStores({
+			return await fetchLoblawsStores({
 				req,
 				res,
 				validPostalCode,
-			});
-
-			if (code !== 200) {
-				return res.status(code).json({
-					message,
-					available_options: data,
-				});
-			}
-
-			return res.status(code).json({
-				message,
-				count: data?.length || 0,
-				data,
 			});
 		}
 
 		// if the chain brand is metro
 		if (chain_brand === AllStoreChainBrands.metro) {
-			const stores = await fetchMetroStores({
+			return await fetchMetroStores({
 				req,
 				res,
 				validPostalCode,
-			});
-
-			if (stores.code !== 200) {
-				return res.status(stores.code).json({
-					message: stores.message,
-					availableChains: stores.data,
-				});
-			}
-
-			return res.status(stores.code).json({
-				message: stores.message,
-				count: stores.data?.length || 0,
-				data: stores.data,
 			});
 		}
 
 		if (chain_brand === AllStoreChainBrands.walmart) {
-			const stores = await fetchWalmartStores({
+			return await fetchWalmartStores({
 				req,
 				res,
 				validPostalCode,
-			});
-
-			if (stores.code !== 200) {
-				return res.status(stores.code).json({
-					message: stores.message,
-					availableParams: stores.availableParams,
-				});
-			}
-
-			return res.status(stores.code).json({
-				message: stores.message,
-				count: stores.data?.length || 0,
-				data: stores.data,
 			});
 		}
 

@@ -17,11 +17,18 @@ const fetchMetroStores = async ({
 	const chainName = req.params.chain as MetroChain;
 
 	if (!chainName) {
-		return {
+		return res.status(400).json({
 			message: `chain_name is required, please provide a store name as /stores/:store_name/:chain_name`,
-			data: Object.values(MetroChain),
-			code: 400,
-		};
+			availableChains: Object.values(MetroChain),
+		});
+	}
+
+	// if chain name is not valid
+	if (!Object.values(MetroChain).includes(chainName)) {
+		return res.status(400).json({
+			message: `Invalid chain name, please provide a valid chain name.`,
+			availableChains: Object.values(MetroChain),
+		});
 	}
 
 	const stores = await getMetroStores({
@@ -29,18 +36,17 @@ const fetchMetroStores = async ({
 	});
 
 	if (stores instanceof Error) {
-		return {
+		return res.status(500).json({
 			message: stores.message,
-			data: null,
-			code: 500,
-		};
+			
+		});
 	}
 
-	return {
+	return res.status(200).json({
 		message: `Stores fetched successfully for ${chainName}`,
+		count: stores.length,
 		data: stores,
-		code: 200,
-	};
+	});
 };
 
 export default fetchMetroStores;

@@ -16,8 +16,10 @@ const getMetroStores = async ({ chainName }: IGetMetroStores) => {
 		const endpoint = `/find-a-grocery`;
 		const domain = `https://www.${chain}.ca`;
 		const url =
-			chain === MetroChain.metro ? `${domain}/en${endpoint}` : `${domain}${endpoint}`;
-		console.log({ url });
+			chain === MetroChain.metro
+				? `${domain}/en${endpoint}`
+				: `${domain}${endpoint}`;
+
 		const response = await axios.get(url);
 		const resData = response.data;
 

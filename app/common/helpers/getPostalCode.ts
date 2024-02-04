@@ -15,7 +15,6 @@ export const getCoordinatesFromPostal = async (postalCode: string) => {
 	const postalData = JSON.parse(data)[formattedPostalCode];
 
 	const returnData = {
-
 		...postalData,
 		postalCode,
 		formattedPostalCode,
@@ -33,7 +32,7 @@ export const getCoordinatesFromPostal = async (postalCode: string) => {
 	}
 };
 
-export const formatPostalCode = (postalCode: string) => {
+const formatPostalCode = (postalCode: string) => {
 	// format 1a1a1a into 1A1 A1A
 	const firstPart = postalCode.slice(0, 3).toUpperCase();
 	const secondPart = postalCode.slice(3, 6).toUpperCase();

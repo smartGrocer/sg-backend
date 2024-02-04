@@ -18,40 +18,35 @@ const fetchLoblawsStores = async ({
 	const chainName = req.params.chain as LoblawsChainName;
 
 	if (!chainName) {
-		return {
+		return res.status(400).json({
 			message:
 				"chain_name is required, please provide a store name as /stores/:store_name/:chain_name",
-			data: Object.values(LoblawsChainName),
-			code: 400,
-		};
+			availableOptions: Object.values(LoblawsChainName),
+		});
 	}
 
 	// chain name has to be in the enum
 	if (!Object.values(LoblawsChainName).includes(chainName)) {
-		return {
+		return res.status(400).json({
 			message:
 				"Invalid chain name, please provide a valid chain name. Pick a valid chain name",
-			data: Object.values(LoblawsChainName),
-			code: 400,
-		};
+			availableOptions: Object.values(LoblawsChainName),
+		});
 	}
 
 	// get stores
 	const stores = await getLoblawsStores({ chainName });
 
 	if (stores instanceof Error) {
-		return {
+		return res.status(500).json({
 			message: stores.message,
-			data: null,
-			code: 500,
-		};
+		});
 	}
 
-	return {
+	return res.status(200).json({
 		message: `Stores fetched successfully for ${chainName}`,
 		data: stores,
-		code: 200,
-	};
+	});
 };
 
 export default fetchLoblawsStores;
