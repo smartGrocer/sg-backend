@@ -3,6 +3,7 @@ import UserAgent from "user-agents";
 import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
 import { IStoreWalmartSrcProps } from "../../../../common/types/walmart/walmart";
 import { IStoreProps } from "../../../../common/types/common/store";
+import { getCachedStoreData, saveToStoreCache } from "../../../../common/cache/storeCache";
 
 interface IGetWalmartStores {
 	validPostalCode: TValidPostalCode;
@@ -18,11 +19,19 @@ const getWalmartStores = async ({
 
 		const userAgent = new UserAgent().toString();
 
-		const response = await axios.get(urlWithQuery, {
-			headers: {
-				"user-agent": userAgent,
-			},
-		});
+		const cachedData = getCachedStoreData(urlWithQuery);
+
+		const response =
+			cachedData ||
+			(await axios.get(urlWithQuery, {
+				headers: {
+					"user-agent": userAgent,
+				},
+			}));
+
+		if (!cachedData) {
+			saveToStoreCache(urlWithQuery, response);
+		}
 
 		const data = response.data.payload.stores.map(
 			(store: IStoreWalmartSrcProps) => {

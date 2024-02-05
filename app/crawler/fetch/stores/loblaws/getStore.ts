@@ -6,6 +6,7 @@ import {
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
 import { IStoreProps } from "../../../../common/types/common/store";
+import { getCachedStoreData, saveToStoreCache } from "../../../../common/cache/storeCache";
 
 const getLoblawsStores = async ({
 	showAllStores,
@@ -35,7 +36,13 @@ const getLoblawsStores = async ({
 			const url = `https://www.${LoblawsChainAlternateName(listOfStores[i])}.ca/api/pickup-locations`;
 			const bannerId = listOfStores[i];
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
-			const response = await axios.get(fetchUrl);
+			const cachedData = getCachedStoreData(fetchUrl);
+			const response = cachedData || (await axios.get(fetchUrl));
+
+			if (!cachedData) {
+				saveToStoreCache(fetchUrl, response);
+			}
+
 			const data = response.data.map((store: IStoreLoblawsSrcProps) => {
 				return {
 					id: store.id,

@@ -2,6 +2,10 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import { IStoreProps } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
+import {
+	getCachedStoreData,
+	saveToStoreCache,
+} from "../../../../common/cache/storeCache";
 
 interface IGetMetroStores {
 	chainName: MetroChain;
@@ -19,7 +23,13 @@ const getMetroStores = async ({
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
-		const response = await axios.get(url);
+		const cachedData = getCachedStoreData(url);
+		const response = cachedData || (await axios.get(url));
+
+		if (!cachedData) {
+			saveToStoreCache(url, response);
+		}
+		
 		const resData = response.data;
 
 		// // clean data by removing \n \r \t

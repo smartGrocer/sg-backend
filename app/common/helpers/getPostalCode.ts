@@ -1,6 +1,6 @@
 const JSONInput = "app/data/CanadianPostalCodes.json";
 import fs from "fs/promises";
-import { localCache } from "../cache/localCache";
+import { getCachedData, localCache, saveToCache } from "../cache/localCache";
 
 interface IPostalData {
 	lat: number;
@@ -19,7 +19,7 @@ export interface IPostalDataWithDate {
 export const getCoordinatesFromPostal = async (
 	postalCode: string
 ): Promise<IPostalDataWithDate | null> => {
-	const cachedData = getCachedData(postalCode);
+	const cachedData = getCachedPostalData(postalCode);
 	if (cachedData) {
 		return cachedData;
 	}
@@ -36,7 +36,7 @@ export const getCoordinatesFromPostal = async (
 		formattedPostalCode,
 	};
 
-	saveToCache(postalCode, returnData);
+	saveToPostalCache(postalCode, returnData);
 
 	if (postalData) {
 		return {
@@ -55,27 +55,12 @@ const formatPostalCode = (postalCode: string): string => {
 	return `${firstPart} ${secondPart}`;
 };
 
-const getCachedData = (postalCode: string): IPostalDataWithDate | null => {
-	// read from cache
-	const cachedData = localCache.get(postalCode);
-	if (cachedData) {
-		// remove destroy from the return object
-		const { destroy, ...data } = cachedData
-		return data as IPostalDataWithDate;
-	}
-	return null;
+const getCachedPostalData = (
+	postalCode: string
+): IPostalDataWithDate | null => {
+	return getCachedData(postalCode);
 };
 
-const saveToCache = (postalCode: string, data: IPostalData) => {
-	localCache.set(postalCode, {
-		data,
-		updatedAt: new Date(),
-		destroy: setTimeout(
-			() => {
-				console.log(`Cache cleaned up for ${postalCode}`);
-				localCache.delete(postalCode);
-			},
-			1000 * 60 * 60 * 24 * 7
-		),
-	});
+const saveToPostalCache = (postalCode: string, data: IPostalData) => {
+	saveToCache(postalCode, data, 1000 * 60 * 60 * 24 * 7);
 };
