@@ -15,24 +15,24 @@ const filterStoresByLocation = ({
 }: IFilterStoresByLocation): IStoreProps[] => {
 	const { lat, lng } = userCoordinates;
 
+	const searchDistance = distance / 1000;
+
 	// add distance to each store
 	const storesWithinDistance = stores
 		.map((store) => {
 			const distance_from_user =
 				getDistance(
 					{ latitude: Number(lat), longitude: Number(lng) },
-					{
-						latitude: Number(store.latitude),
-						longitude: Number(store.longitude),
-					}
+					{ latitude: store.latitude, longitude: store.longitude }
 				) / 1000;
+
 			return {
 				...store,
-				distance_from_user: distance_from_user,
+				distance: distance_from_user,
 			};
 		})
-		.filter((store) => store.distance_from_user <= distance / 1000)
-		.sort((a, b) => a.distance_from_user - b.distance_from_user);
+		.filter((store) => store.distance <= searchDistance)
+		.sort((a, b) => a.distance - b.distance);
 
 	return storesWithinDistance;
 };

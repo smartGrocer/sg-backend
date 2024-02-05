@@ -130,8 +130,8 @@ router.get(
 		
 		return res.status(200).json({
 			message: `Stores fetched successfully for all stores.`,
-			count: allStores.length,
-			data: allStores,
+			count: filteredAllStores.length,
+			data: filteredAllStores,
 		});
 	}
 );

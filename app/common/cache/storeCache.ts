@@ -30,6 +30,6 @@ export const saveToStoreCache = async ({
 
 	// save to redis
 	if (cacheInRedis) {
-		await saveToRedisCache(key, data, 1000 * 60 * 60 * 24 * 7);
+		await saveToRedisCache(key, data, 1000 * 60 * 60 * 24 * 30);
 	}
 };
