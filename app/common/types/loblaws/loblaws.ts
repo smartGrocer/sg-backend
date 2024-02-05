@@ -14,8 +14,37 @@ export enum LoblawsChainName {
 	extrafoods = "extrafoods",
 }
 
+export const LoblawsChainAlternateName = (
+	chainBrand: LoblawsChainName
+): string => {
+	if (chainBrand === LoblawsChainName.superstore) {
+		return "realcanadiansuperstore";
+	}
+
+	if (chainBrand === LoblawsChainName.independent) {
+		return "yourindependentgrocer";
+	}
+
+	if (chainBrand === LoblawsChainName.loblaw) {
+		return "loblaws";
+	}
+
+	if (chainBrand === LoblawsChainName.dominion) {
+		return "newfoundlandgrocerystores";
+	}
+
+	if (chainBrand === LoblawsChainName.rass) {
+		return "atlanticsuperstore";
+	}
+
+	return chainBrand;
+};
+
+
+
 export interface LoblawsStore {
 	chainName: LoblawsChainName;
+	showAllStores: boolean;
 }
 
 export interface IStoreLoblawsSrcProps {

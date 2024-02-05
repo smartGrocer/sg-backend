@@ -1,23 +1,27 @@
 import { Request, Response } from "express";
 import getWalmartStores from "./getStore";
 import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
+import { IPostalDataWithDate } from "../../../../common/helpers/getPostalCode";
+import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";
+import {
+	IFetchStores,
+	IFetchStoresReturn,
+} from "../../../../common/types/common/store";
 
-interface IFetchWalmartStores {
-	req: Request;
-	res: Response;
-	validPostalCode: TValidPostalCode;
-}
+interface IFetchWalmartStores extends IFetchStores {}
 
 const fetchWalmartStores = async ({
-	req,
-	res,
 	validPostalCode,
-}: IFetchWalmartStores) => {
+	userCoordinates,
+	distance,
+	showAllStores,
+}: IFetchWalmartStores): Promise<IFetchStoresReturn> => {
 	if (!validPostalCode) {
-		return res.status(400).json({
+		return {
 			message: `Invalid postal code, please provide a valid postal code.`,
-			availableParams: "postal_code",
-		});
+			availableOptions: "postal_code",
+			code: 400,
+		};
 	}
 
 	const stores = await getWalmartStores({
@@ -25,17 +29,26 @@ const fetchWalmartStores = async ({
 	});
 
 	if (stores instanceof Error) {
-		return res.status(500).json({
+		return {
 			message: stores.message,
-			
-		});
+			code: 500,
+		};
 	}
 
-	return res.status(200).json({
+	const filteredStores = showAllStores
+		? stores
+		: filterStoresByLocation({
+				stores,
+				distance,
+				userCoordinates,
+			});
+
+	return {
 		message: `Stores fetched successfully for walmart`,
-		count: stores.length,
-		data: stores,
-	});
+		count: filteredStores.length,
+		data: filteredStores,
+		code: 200,
+	};
 };
 
 export default fetchWalmartStores;

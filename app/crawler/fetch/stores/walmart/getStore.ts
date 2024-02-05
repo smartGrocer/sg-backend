@@ -2,12 +2,15 @@ import axios from "axios";
 import UserAgent from "user-agents";
 import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
 import { IStoreWalmartSrcProps } from "../../../../common/types/walmart/walmart";
+import { IStoreProps } from "../../../../common/types/common/store";
 
 interface IGetWalmartStores {
 	validPostalCode: TValidPostalCode;
 }
 
-const getWalmartStores = async ({ validPostalCode }: IGetWalmartStores) => {
+const getWalmartStores = async ({
+	validPostalCode,
+}: IGetWalmartStores): Promise<IStoreProps[] | Error> => {
 	try {
 		const url = `https://www.walmart.ca/en/stores-near-me/api/searchStores`;
 		const postalCodeQuery = `singleLineAddr=${validPostalCode}`;
@@ -33,7 +36,7 @@ const getWalmartStores = async ({ validPostalCode }: IGetWalmartStores) => {
 				]
 					.join(", ")
 					.replace(/,\s+/g, ", ");
-					
+
 				return {
 					id: store.id,
 					store_id: store.id,

@@ -1,16 +1,15 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import {
-	AllStoreChainBrands,
-	IStoreProps,
-} from "../../../../common/types/common/store";
+import { IStoreProps } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
 
 interface IGetMetroStores {
 	chainName: MetroChain;
 }
 
-const getMetroStores = async ({ chainName }: IGetMetroStores) => {
+const getMetroStores = async ({
+	chainName,
+}: IGetMetroStores): Promise<IStoreProps[] | Error> => {
 	try {
 		const chain = chainName;
 		const endpoint = `/find-a-grocery`;

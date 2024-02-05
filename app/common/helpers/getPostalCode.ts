@@ -2,7 +2,23 @@ const JSONInput = "app/data/CanadianPostalCodes.json";
 import fs from "fs/promises";
 import { localCache } from "../cache/localCache";
 
-export const getCoordinatesFromPostal = async (postalCode: string) => {
+interface IPostalData {
+	lat: number;
+	lng: number;
+	city: string;
+	province: string;
+	postalCode: string;
+	formattedPostalCode: string;
+}
+
+export interface IPostalDataWithDate {
+	data: IPostalData;
+	updatedAt: Date;
+}
+
+export const getCoordinatesFromPostal = async (
+	postalCode: string
+): Promise<IPostalDataWithDate | null> => {
 	const cachedData = getCachedData(postalCode);
 	if (cachedData) {
 		return cachedData;
@@ -14,7 +30,7 @@ export const getCoordinatesFromPostal = async (postalCode: string) => {
 
 	const postalData = JSON.parse(data)[formattedPostalCode];
 
-	const returnData = {
+	const returnData: IPostalData = {
 		...postalData,
 		postalCode,
 		formattedPostalCode,
@@ -32,24 +48,25 @@ export const getCoordinatesFromPostal = async (postalCode: string) => {
 	}
 };
 
-const formatPostalCode = (postalCode: string) => {
+const formatPostalCode = (postalCode: string): string => {
 	// format 1a1a1a into 1A1 A1A
 	const firstPart = postalCode.slice(0, 3).toUpperCase();
 	const secondPart = postalCode.slice(3, 6).toUpperCase();
 	return `${firstPart} ${secondPart}`;
 };
 
-const getCachedData = (postalCode: string) => {
+const getCachedData = (postalCode: string): IPostalDataWithDate | null => {
 	// read from cache
 	const cachedData = localCache.get(postalCode);
 	if (cachedData) {
 		// remove destroy from the return object
-		const { destroy, ...data } = cachedData;
-		return data;
+		const { destroy, ...data } = cachedData
+		return data as IPostalDataWithDate;
 	}
+	return null;
 };
 
-const saveToCache = (postalCode: string, data: unknown) => {
+const saveToCache = (postalCode: string, data: IPostalData) => {
 	localCache.set(postalCode, {
 		data,
 		updatedAt: new Date(),
