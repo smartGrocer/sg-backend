@@ -26,7 +26,6 @@ const getMetroStores = async ({
 		const cachedData = await getCachedStoreData(url);
 
 		if (cachedData) {
-
 			saveToStoreCache({
 				key: url,
 				data: cachedData,
@@ -36,10 +35,7 @@ const getMetroStores = async ({
 		}
 		const response = await axios.get(url);
 
-		// if (!cachedData) {
-		// saveToStoreCache(url, response.data);
 
-		// }
 
 		const resData = response.data;
 

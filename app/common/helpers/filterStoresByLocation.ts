@@ -14,7 +14,6 @@ const filterStoresByLocation = ({
 	userCoordinates,
 }: IFilterStoresByLocation): IStoreProps[] => {
 	const { lat, lng } = userCoordinates;
-	// const { lat, lng } = data;
 
 	// add distance to each store
 	const storesWithinDistance = stores

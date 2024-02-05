@@ -26,53 +26,48 @@ const getWalmartStores = async ({
 
 		const response =
 			(await cachedData) ||
-			(await axios.get(urlWithQuery, {
-				headers: {
-					"user-agent": userAgent,
-				},
-			})).data.payload.stores;
+			(
+				await axios.get(urlWithQuery, {
+					headers: {
+						"user-agent": userAgent,
+					},
+				})
+			).data.payload.stores;
 
-		
+		saveToStoreCache({
+			key: urlWithQuery,
+			data: response,
+			cacheInRedis: !cachedData,
+		});
 
-		// if (!cachedData) {
-			// saveToStoreCache(urlWithQuery, response);
-			saveToStoreCache({
-				key: urlWithQuery,
-				data: response,
-				cacheInRedis: !cachedData,
-			});
-		// }
+		const data = response.map((store: IStoreWalmartSrcProps) => {
+			const formatted_address = [
+				store.address.address1,
+				store.address.address6,
+				store.address.city,
+				store.address.state,
+				store.address.postalCode,
+				store.address.country,
+			]
+				.join(", ")
+				.replace(/,\s+/g, ", ");
 
-		const data = response.map(
-			(store: IStoreWalmartSrcProps) => {
-				const formatted_address = [
-					store.address.address1,
-					store.address.address6,
-					store.address.city,
-					store.address.state,
-					store.address.postalCode,
-					store.address.country,
-				]
-					.join(", ")
-					.replace(/,\s+/g, ", ");
-
-				return {
-					id: store.id,
-					store_id: store.id,
-					chain_name: "walmart",
-					store_name: store.displayName,
-					latitude: store.geoPoint.latitude,
-					longitude: store.geoPoint.longitude,
-					formatted_address: formatted_address,
-					city: store.address.city,
-					line1: store.address.address1,
-					line2: store.address.address6,
-					postal_code: store.address.postalCode,
-					province: store.address.state,
-					country: store.address.country,
-				};
-			}
-		);
+			return {
+				id: store.id,
+				store_id: store.id,
+				chain_name: "walmart",
+				store_name: store.displayName,
+				latitude: store.geoPoint.latitude,
+				longitude: store.geoPoint.longitude,
+				formatted_address: formatted_address,
+				city: store.address.city,
+				line1: store.address.address1,
+				line2: store.address.address6,
+				postal_code: store.address.postalCode,
+				province: store.address.state,
+				country: store.address.country,
+			};
+		});
 
 		return data;
 	} catch (error: any) {

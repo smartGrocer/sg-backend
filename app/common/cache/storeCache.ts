@@ -28,8 +28,8 @@ export const saveToStoreCache = async ({
 }) => {
 	await saveToCache(key, data, 1000 * 60 * 60 * 24 * 2);
 
+	// save to redis
 	if (cacheInRedis) {
 		await saveToRedisCache(key, data, 1000 * 60 * 60 * 24 * 7);
 	}
-	// save to redis
 };
