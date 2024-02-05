@@ -1,17 +1,21 @@
 export const localCache = new Map();
 
-export const getCachedData = (key: string) => {
+export const getCachedData = async (key: string) => {
 	// read from cache
-	const cachedData = localCache.get(key);
+	const cachedData = await localCache.get(key);
+
 	if (cachedData) {
+		console.log(`CACHE HIT:Local: ${key}`);
 		// remove destroy from the return object
-		const { destroy, ...data } = cachedData;
-		return data;
+		const { destroy, updatedAt, ...data } = cachedData;
+
+		return data.data;
 	}
 	return null;
 };
 
-export const saveToCache = (key: string, data: any, ttl: number) => {
+export const saveToCache = async (key: string, data: any, ttl?: number) => {
+	console.log(`CACHE SET:Local: ${key}`);
 	localCache.set(key, {
 		data,
 		updatedAt: new Date(),

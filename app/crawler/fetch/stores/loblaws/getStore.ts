@@ -6,7 +6,10 @@ import {
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
 import { IStoreProps } from "../../../../common/types/common/store";
-import { getCachedStoreData, saveToStoreCache } from "../../../../common/cache/storeCache";
+import {
+	getCachedStoreData,
+	saveToStoreCache,
+} from "../../../../common/cache/storeCache";
 
 const getLoblawsStores = async ({
 	showAllStores,
@@ -36,14 +39,18 @@ const getLoblawsStores = async ({
 			const url = `https://www.${LoblawsChainAlternateName(listOfStores[i])}.ca/api/pickup-locations`;
 			const bannerId = listOfStores[i];
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
-			const cachedData = getCachedStoreData(fetchUrl);
-			const response = cachedData || (await axios.get(fetchUrl));
+			const cachedData = await getCachedStoreData(fetchUrl);
 
-			if (!cachedData) {
-				saveToStoreCache(fetchUrl, response);
-			}
+			const response =
+				(await cachedData) || (await axios.get(fetchUrl)).data;
 
-			const data = response.data.map((store: IStoreLoblawsSrcProps) => {
+			saveToStoreCache({
+				key: fetchUrl,
+				data: response,
+				cacheInRedis: !cachedData,
+			});
+
+			const data = response.map((store: IStoreLoblawsSrcProps) => {
 				return {
 					id: store.id,
 					store_id: store.storeId,
@@ -69,6 +76,7 @@ const getLoblawsStores = async ({
 
 		return returnData;
 	} catch (error: any) {
+		console.log("Error fetching stores for loblaws", error);
 		throw new Error(
 			`Error fetching stores for loblaws: ${error?.response?.statusText} | ${error}`
 		);

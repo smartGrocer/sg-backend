@@ -1,11 +1,11 @@
 import { IStoreProps } from "../types/common/store";
-import { IPostalDataWithDate } from "./getPostalCode";
+import { IPostalData, IPostalDataWithDate } from "./getPostalCode";
 import { getDistance } from "geolib";
 
 interface IFilterStoresByLocation {
 	stores: IStoreProps[];
 	distance: number;
-	userCoordinates: IPostalDataWithDate;
+	userCoordinates: IPostalData;
 }
 
 const filterStoresByLocation = ({
@@ -13,23 +13,26 @@ const filterStoresByLocation = ({
 	distance,
 	userCoordinates,
 }: IFilterStoresByLocation): IStoreProps[] => {
-	const { data } = userCoordinates;
-	const { lat, lng } = data;
+	const { lat, lng } = userCoordinates;
+	// const { lat, lng } = data;
 
 	// add distance to each store
 	const storesWithinDistance = stores
 		.map((store) => {
 			const distance_from_user =
 				getDistance(
-					{ latitude: lat, longitude: lng },
-					{ latitude: store.latitude, longitude: store.longitude }
+					{ latitude: Number(lat), longitude: Number(lng) },
+					{
+						latitude: Number(store.latitude),
+						longitude: Number(store.longitude),
+					}
 				) / 1000;
 			return {
 				...store,
 				distance_from_user: distance_from_user,
 			};
 		})
-		.filter((store) => store.distance_from_user <= distance/1000)
+		.filter((store) => store.distance_from_user <= distance / 1000)
 		.sort((a, b) => a.distance_from_user - b.distance_from_user);
 
 	return storesWithinDistance;

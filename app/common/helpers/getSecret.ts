@@ -1,4 +1,9 @@
-type SecretType = "PORT_API" | "PORT_CRAWLER";
+type SecretType =
+	| "PORT_API"
+	| "PORT_CRAWLER"
+	| "UPSTASH_PORT"
+	| "UPSTASH_ENDPOINT"
+	| "UPSTASH_PASSWORD";
 
 const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables

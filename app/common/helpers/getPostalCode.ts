@@ -1,8 +1,12 @@
 const JSONInput = "app/data/CanadianPostalCodes.json";
 import fs from "fs/promises";
-import { getCachedData, localCache, saveToCache } from "../cache/localCache";
+import {
+	getCachedData,
+	localCache,
+	saveToCache,
+} from "../cache/localCache/localCache";
 
-interface IPostalData {
+export interface IPostalData {
 	lat: number;
 	lng: number;
 	city: string;
@@ -18,8 +22,8 @@ export interface IPostalDataWithDate {
 
 export const getCoordinatesFromPostal = async (
 	postalCode: string
-): Promise<IPostalDataWithDate | null> => {
-	const cachedData = getCachedPostalData(postalCode);
+): Promise<IPostalData | null> => {
+	const cachedData = await getCachedPostalData(postalCode);
 	if (cachedData) {
 		return cachedData;
 	}
@@ -39,10 +43,7 @@ export const getCoordinatesFromPostal = async (
 	saveToPostalCache(postalCode, returnData);
 
 	if (postalData) {
-		return {
-			data: returnData,
-			updatedAt: new Date(),
-		};
+		return returnData;
 	} else {
 		return null;
 	}
@@ -55,10 +56,10 @@ const formatPostalCode = (postalCode: string): string => {
 	return `${firstPart} ${secondPart}`;
 };
 
-const getCachedPostalData = (
+const getCachedPostalData = async (
 	postalCode: string
-): IPostalDataWithDate | null => {
-	return getCachedData(postalCode);
+): Promise<IPostalData | null> => {
+	return await getCachedData(postalCode);
 };
 
 const saveToPostalCache = (postalCode: string, data: IPostalData) => {

@@ -1,4 +1,4 @@
-import { IPostalDataWithDate } from "../../helpers/getPostalCode";
+import { IPostalData } from "../../helpers/getPostalCode";
 import { TValidPostalCode } from "../../helpers/validatePostalCode";
 import { Request, Response } from "express";
 
@@ -34,7 +34,7 @@ export interface IFetchStores {
 	req: Request;
 	res: Response;
 	validPostalCode: TValidPostalCode;
-	userCoordinates: IPostalDataWithDate;
+	userCoordinates: IPostalData;
 	distance: number;
 	showAllStores: boolean;
 }

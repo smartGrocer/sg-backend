@@ -1,17 +1,16 @@
 import express, { Application, Request, Response } from "express";
-import routes from "./routes/routes";
-import dotenv from "dotenv";
 import getSecret from "../common/helpers/getSecret";
-import apiLogger from "../common/helpers/logger";
 import cors from "cors";
 import connectToDb from "../common/db/db";
-import { localCache } from "../common/cache/localCache";
+import { localCache } from "../common/cache/localCache/localCache";
+import dotenv from "dotenv";
+//For env File
+dotenv.config();
+import apiLogger from "../common/helpers/logger";
+import routes from "./routes/routes";
 
 // init localCache
 localCache;
-
-//For env File
-dotenv.config();
 
 const app: Application = express();
 const port = getSecret("PORT_API") || 4000;

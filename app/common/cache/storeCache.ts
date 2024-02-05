@@ -1,12 +1,35 @@
-import { getCachedData, saveToCache } from "./localCache";
+import { getCachedData, saveToCache } from "./localCache/localCache";
+import { getRedisCache, saveToRedisCache } from "./redis/redisCache";
 
-export const getCachedStoreData = (key: string) => {
-	const response = getCachedData(key);
+export const getCachedStoreData = async (key: string) => {
+	const response = await getCachedData(key);
+
 	if (response) {
-		return response.data;
+		return response;
 	}
+
+	const redisResponse = await getRedisCache(key);
+	if (redisResponse) {
+		return redisResponse;
+	}
+
+	console.log("CACHE MISS:Store");
+	return null;
 };
 
-export const saveToStoreCache = (key: string, data: any) => {
-	saveToCache(key, data, 1000 * 60 * 60 * 24 * 7);
+export const saveToStoreCache = async ({
+	key,
+	data,
+	cacheInRedis,
+}: {
+	key: string;
+	data: any;
+	cacheInRedis: boolean;
+}) => {
+	await saveToCache(key, data, 1000 * 60 * 60 * 24 * 2);
+
+	if (cacheInRedis) {
+		await saveToRedisCache(key, data, 1000 * 60 * 60 * 24 * 7);
+	}
+	// save to redis
 };

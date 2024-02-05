@@ -23,13 +23,24 @@ const getMetroStores = async ({
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
-		const cachedData = getCachedStoreData(url);
-		const response = cachedData || (await axios.get(url));
+		const cachedData = await getCachedStoreData(url);
 
-		if (!cachedData) {
-			saveToStoreCache(url, response);
+		if (cachedData) {
+
+			saveToStoreCache({
+				key: url,
+				data: cachedData,
+				cacheInRedis: !cachedData,
+			});
+			return await cachedData;
 		}
-		
+		const response = await axios.get(url);
+
+		// if (!cachedData) {
+		// saveToStoreCache(url, response.data);
+
+		// }
+
 		const resData = response.data;
 
 		// // clean data by removing \n \r \t
@@ -79,10 +90,16 @@ const getMetroStores = async ({
 				});
 			});
 
+		saveToStoreCache({
+			key: url,
+			data: data,
+			cacheInRedis: !!cachedData,
+		});
+
 		return data;
 	} catch (error: any) {
 		throw new Error(
-			`Error fetching stores for walmart: ${error?.response?.statusText} | ${error}`
+			`Error fetching stores for metro: ${error?.response?.statusText} | ${error}`
 		);
 	}
 };
