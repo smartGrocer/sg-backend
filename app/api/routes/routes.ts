@@ -22,7 +22,7 @@ router.get(
 		const postalCode = (req.query.postal_code || "m9b6c2") as string;
 		const validPostalCode = validatePostalCode(postalCode);
 
-		const distance = Number(req.query.distance as string) || 10000;
+		const distance = Number(req.query.distance as string) || 5000;
 
 		const allStores: IStoreProps[] = [];
 

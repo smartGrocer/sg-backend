@@ -89,13 +89,14 @@ const filterDuplicates = (data: IStoreProps[]): IStoreProps[] => {
 			index ===
 			self.findIndex(
 				(t) =>
-					t.store_id === store.store_id &&
-					t.line1 === store.line1 &&
+					t.store_id === store.store_id ||
+					t.line1 === store.line1 ||
+					t.formatted_address === store.formatted_address ||
 					// when checking the latitude and longitude, round it to 2 decimal places
-					Math.round(t.latitude * 100) / 100 ===
+					(Math.round(t.latitude * 100) / 100 ===
 						Math.round(store.latitude * 100) / 100 &&
-					Math.round(t.longitude * 100) / 100 ===
-						Math.round(store.longitude * 100) / 100
+						Math.round(t.longitude * 100) / 100 ===
+							Math.round(store.longitude * 100) / 100)
 			)
 	);
 };
