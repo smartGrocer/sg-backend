@@ -1,22 +1,19 @@
 import axios from "axios";
-import {
-	ILoblawsProductSrcProps,
-	IProductProps,
-	LoblawsChainName,
-} from "../../../common/types/loblaws/loblaws";
+import { ILoblawsProductSrcProps } from "../../../common/types/loblaws/loblaws";
 import UserAgent from "user-agents";
+import {
+	IProductProps,
+	IProductPropsWithPagination,
+	ISearchProducts,
+} from "../../../common/types/common/product";
 
-interface ISearchProducts {
-	search_term: string;
-	chainName: LoblawsChainName;
-	store_id: string;
-}
+
 
 const searchProducts = async ({
 	search_term,
 	chainName,
 	store_id,
-}: ISearchProducts) => {
+}: ISearchProducts): Promise<IProductPropsWithPagination> => {
 	try {
 		const userAgent = new UserAgent().toString();
 
@@ -45,6 +42,7 @@ const searchProducts = async ({
 				return {
 					product_id: product.code,
 					store_id: storeId,
+					chainName: chainName,
 					product_brand: product.brand,
 					product_name: product.name,
 					product_link: product.link,
@@ -78,8 +76,16 @@ const searchProducts = async ({
 			},
 			results: products,
 		};
-	} catch (error: any) {
-		console.error(error);
+	} catch (error: unknown) {
+		console.log("Error fetching products for loblaws", error);
+
+		if (axios.isAxiosError(error)) {
+			throw new Error(
+				`Error fetching products for loblaws: ${error?.response?.statusText} | ${error} | ${error?.response?.data}`
+			);
+		}
+
+		throw new Error(`Error fetching products for loblaws: ${error}`);
 	}
 };
 

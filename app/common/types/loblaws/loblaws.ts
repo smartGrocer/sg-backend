@@ -65,25 +65,6 @@ export interface IStoreLoblawsSrcProps {
 	};
 }
 
-export interface IProductProps {
-	product_id: string;
-	store_id: string;
-	product_brand: string;
-	product_name: string;
-	product_link: string;
-	product_image: string;
-	product_size: string;
-	unit_soldby_type: string;
-	unit_soldby_unit: string;
-	price: number;
-	price_unit: string;
-	price_was: number | null;
-	price_was_unit: string | null;
-	compare_price: number | null;
-	compare_price_unit: string | null;
-	compare_price_quantity: number | null;
-}
-
 export interface ILoblawsProductSrcProps {
 	code: string;
 	name: string;
@@ -163,33 +144,3 @@ export interface ILoblawsProductSrcProps {
 	taxes: null;
 	fees: null;
 }
-
-// // "imageAssets": [
-//                 {
-//                     "imageUrl": null,
-//                     "smallUrl": "https://assets.shop.loblaws.ca/products/20252014/b1/en/front/20252014_front_a01_@2.png",
-//                     "mediumUrl": "https://assets.shop.loblaws.ca/products/20252014/b3/en/front/20252014_front_a06_@2.png",
-//                     "largeUrl": "https://assets.shop.loblaws.ca/products/20252014/b2/en/front/20252014_front_a06_@2.png",
-//                     "smallRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b1/en/front/20252014_front_a01_@2.png",
-//                     "mediumRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b3/en/front/20252014_front_a06_@2.png",
-//                     "largeRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b2/en/front/20252014_front_a06_@2.png"
-//                 },
-//                 {
-//                     "imageUrl": null,
-//                     "smallUrl": "https://assets.shop.loblaws.ca/products/20252014/b1/en/side/20252014_side_a01_@2.png",
-//                     "mediumUrl": "https://assets.shop.loblaws.ca/products/20252014/b3/en/side/20252014_side_a06_@2.png",
-//                     "largeUrl": "https://assets.shop.loblaws.ca/products/20252014/b2/en/side/20252014_side_a06_@2.png",
-//                     "smallRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b1/en/side/20252014_side_a01_@2.png",
-//                     "mediumRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b3/en/side/20252014_side_a06_@2.png",
-//                     "largeRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b2/en/side/20252014_side_a06_@2.png"
-//                 },
-//                 {
-//                     "imageUrl": null,
-//                     "smallUrl": "https://assets.shop.loblaws.ca/products/20252014/b1/en/closed/20252014_closed_a01_@2.png",
-//                     "mediumUrl": "https://assets.shop.loblaws.ca/products/20252014/b3/en/closed/20252014_closed_a06_@2.png",
-//                     "largeUrl": "https://assets.shop.loblaws.ca/products/20252014/b2/en/closed/20252014_closed_a06_@2.png",
-//                     "smallRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b1/en/closed/20252014_closed_a01_@2.png",
-//                     "mediumRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b3/en/closed/20252014_closed_a06_@2.png",
-//                     "largeRetinaUrl": "https://assets.shop.loblaws.ca/products/20252014/b2/en/closed/20252014_closed_a06_@2.png"
-//                 }
-//             ],

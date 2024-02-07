@@ -3,6 +3,7 @@ import fetchLoblawsStores from "../../crawler/fetch/stores/loblaws/fetchLoblawsS
 import {
 	AllStoreChainBrands,
 	IStoreProps,
+	IAllStoreChains,
 } from "../../common/types/common/store";
 import fetchMetroStores from "../../crawler/fetch/stores/metro/fetchMetroStores";
 import fetchWalmartStores from "../../crawler/fetch/stores/walmart/fetchWalmartStores";
@@ -12,8 +13,12 @@ import {
 } from "../../common/helpers/validatePostalCode";
 import { getCoordinatesFromPostal } from "../../common/helpers/getPostalCode";
 import filterStoresByLocation from "../../common/helpers/filterStoresByLocation";
-import searchProducts from "../../crawler/fetch/search/loblaws";
+import searchProducts from "../../crawler/fetch/search/searchProducts";
 import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
+import searchLoblaws from "../../crawler/fetch/search/searchLoblaws";
+import { IProductProps } from "../../common/types/common/product";
+import { MetroChain } from "../../common/types/metro/metro";
+
 const router = express.Router();
 
 // Routes
@@ -140,30 +145,66 @@ router.get(
 	}
 );
 
-router.get("/search/:chain/:store_id/:product_search", async (req, res) => {
-	const search_term = req.params.product_search;
+router.get(
+	"/product/search/:product_search?",
+	async (req: Request, res: Response) => {
+		const search_term = req.params.product_search;
+		const chainName = req.query.chain as
+			| LoblawsChainName
+			| MetroChain
+			| "walmart";
+		const store_id = req.query.store_id as string;
 
-	const chain = (req.params.chain) as LoblawsChainName;
-	const store_id = req.params.store_id as string;
+		if (!search_term) {
+			return res.status(400).json({
+				message: `Search term is required, please provide a search term as a query parameter like so: /search/:product_search?chain=chain_name`,
+				availableOptions: [
+					`/search/:product_search`,
+					`/search/eggs`,
+					"/search/milk",
+				],
+			});
+		}
 
-	try {
-		const response = await searchProducts({
-			search_term,
-			chainName: chain,
-			store_id,
-		});
+		try {
+			if (
+				Object.values(LoblawsChainName).includes(
+					chainName as LoblawsChainName
+				)
+			) {
+				const { message, data, code, availableOptions, count } =
+					await searchLoblaws({
+						req,
+						res,
+						search_term,
+						chainName: chainName as LoblawsChainName,
+						store_id,
+					});
 
-		return res.status(200).json({
-			message: `Products fetched successfully for search term: ${search_term}`,
-			data: response,
-		});
-	} catch (error) {
-		return res.status(500).json({
-			message: `Error fetching products for search term: ${search_term}`,
-			error: error,
-		});
+				return res.status(code).json({
+					message,
+					availableOptions,
+					count,
+					data,
+				});
+			}
+
+			return res.status(400).json({
+				message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /search/:product_search?chain=chain_name`,
+				availableOptions: [
+					...Object.values(LoblawsChainName),
+					...Object.values(MetroChain),
+					"walmart",
+				],
+			});
+		} catch (error) {
+			return res.status(500).json({
+				message: `Error fetching products for search term: ${search_term}`,
+				error: error,
+			});
+		}
 	}
-});
+);
 
 router.get("*", (req, res) => {
 	res.json({
@@ -171,7 +212,9 @@ router.get("*", (req, res) => {
 			"Welcome to the Loblaws API. Please use one of the available routes",
 		availableRoutes: {
 			loblaws: {
-				stores: "/stores/:chain_brand?/:chain?",
+				stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
+				product_search:
+					"/product/search/:product_search?chain=chain_name&store_id=1234",
 			},
 		},
 	});

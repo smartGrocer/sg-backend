@@ -1,6 +1,8 @@
 import { IPostalData } from "../../helpers/getPostalCode";
 import { TValidPostalCode } from "../../helpers/validatePostalCode";
 import { Request, Response } from "express";
+import { LoblawsChainName } from "../loblaws/loblaws";
+import { MetroChain } from "../metro/metro";
 
 export interface IStoreProps {
 	id: string;
@@ -46,3 +48,6 @@ export interface IFetchStoresReturn {
 	code: number;
 	availableOptions?: string | string[];
 }
+
+// IAllStoreChains is a union of all the store chains enums like LoblawsChainName, MetroChain, walmart, etc. Need to be able to do Object.values(IAllStoreChains) to get all the chain names
+export type IAllStoreChains = LoblawsChainName | MetroChain | "walmart";

@@ -33,6 +33,7 @@ const filterStoresByLocation = ({
 		})
 		.filter((store) => store.distance <= searchDistance)
 		.sort((a, b) => a.distance - b.distance);
+		// .sort((a, b) => Number(a.store_id) - Number(b.store_id));
 
 	return storesWithinDistance;
 };
