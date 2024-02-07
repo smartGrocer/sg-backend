@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 import fetchLoblawsStores from "../../crawler/fetch/stores/loblaws/fetchLoblawsStores";
-import { AllStoreChainBrands, IStoreProps } from "../../common/types/common/store";
+import {
+	AllStoreChainBrands,
+	IStoreProps,
+} from "../../common/types/common/store";
 import fetchMetroStores from "../../crawler/fetch/stores/metro/fetchMetroStores";
 import fetchWalmartStores from "../../crawler/fetch/stores/walmart/fetchWalmartStores";
 import {
@@ -9,6 +12,8 @@ import {
 } from "../../common/helpers/validatePostalCode";
 import { getCoordinatesFromPostal } from "../../common/helpers/getPostalCode";
 import filterStoresByLocation from "../../common/helpers/filterStoresByLocation";
+import searchProducts from "../../crawler/fetch/search/loblaws";
+import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
 const router = express.Router();
 
 // Routes
@@ -71,7 +76,7 @@ router.get(
 				});
 			}
 
-			allStores.push(...data || []);
+			allStores.push(...(data || []));
 		}
 
 		// if the chain brand is metro or foodbasics
@@ -95,7 +100,7 @@ router.get(
 				});
 			}
 
-			allStores.push(...data || []);
+			allStores.push(...(data || []));
 		}
 
 		if (chain_brand === AllStoreChainBrands.walmart || showAllStores) {
@@ -118,7 +123,7 @@ router.get(
 				});
 			}
 
-			allStores.push(...data || []);
+			allStores.push(...(data || []));
 		}
 
 		const filteredAllStores = filterStoresByLocation({
@@ -127,7 +132,6 @@ router.get(
 			userCoordinates,
 		});
 
-		
 		return res.status(200).json({
 			message: `Stores fetched successfully for all stores.`,
 			count: filteredAllStores.length,
@@ -135,6 +139,31 @@ router.get(
 		});
 	}
 );
+
+router.get("/search/:chain/:store_id/:product_search", async (req, res) => {
+	const search_term = req.params.product_search;
+
+	const chain = (req.params.chain) as LoblawsChainName;
+	const store_id = req.params.store_id as string;
+
+	try {
+		const response = await searchProducts({
+			search_term,
+			chainName: chain,
+			store_id,
+		});
+
+		return res.status(200).json({
+			message: `Products fetched successfully for search term: ${search_term}`,
+			data: response,
+		});
+	} catch (error) {
+		return res.status(500).json({
+			message: `Error fetching products for search term: ${search_term}`,
+			error: error,
+		});
+	}
+});
 
 router.get("*", (req, res) => {
 	res.json({
