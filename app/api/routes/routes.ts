@@ -16,7 +16,6 @@ router.get(
 		try {
 			const built_url = `${domain_port}/api${request_url}`;
 
-			console.log(`TO: ${built_url}`);
 			const response = await axios.get(`${built_url}`);
 
 			// @ts-ignore
@@ -38,7 +37,6 @@ router.get(
 		try {
 			const built_url = `${domain_port}/api${request_url}`;
 
-			console.log(`TO: ${built_url}`);
 			const response = await axios.get(`${built_url}`);
 
 			// @ts-ignore
