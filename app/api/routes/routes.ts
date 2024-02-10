@@ -21,8 +21,7 @@ router.get(
 
 			// @ts-ignore
 			res.status(response.status).json(response.data);
-			// res.status(response.code).json(response);
-		} catch (e) {
+		} catch (e: unknown) {
 			// @ts-ignore
 			res.status(e.response ? e.response.status : 500).json({
 				// @ts-ignore
@@ -36,17 +35,19 @@ router.get(
 	"/product/search/:product_search?",
 	async (req: Request, res: Response) => {
 		const request_url = req.url;
-
 		try {
 			const built_url = `${domain_port}/api${request_url}`;
+
 			console.log(`TO: ${built_url}`);
 			const response = await axios.get(`${built_url}`);
 
+			// @ts-ignore
 			res.status(response.status).json(response.data);
-		} catch (e) {
-			res.status(500).json({
-				message: "Internal server error",
-				error: e,
+		} catch (e: unknown) {
+			// @ts-ignore
+			res.status(e.response ? e.response.status : 500).json({
+				// @ts-ignore
+				error: e.response ? e.response.data : e,
 			});
 		}
 	}

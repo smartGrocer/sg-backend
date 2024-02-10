@@ -50,7 +50,7 @@ router.get(
 		if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
 			return res.status(400).json({
 				message: `Invalid chain brand, please provide a valid chain brand.`,
-				availableChains: Object.values(AllStoreChainBrands),
+				availableOptions: Object.values(AllStoreChainBrands),
 			});
 		}
 
