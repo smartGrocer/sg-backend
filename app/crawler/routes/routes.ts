@@ -10,8 +10,9 @@ import { validatePostalCode } from "../../common/helpers/validatePostalCode";
 import { getCoordinatesFromPostal } from "../../common/helpers/getPostalCode";
 import filterStoresByLocation from "../../common/helpers/filterStoresByLocation";
 import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
-import searchLoblaws from "../fetch/search/searchLoblaws";
+import searchLoblaws from "../fetch/search/loblaws/searchLoblaws";
 import { MetroChain } from "../../common/types/metro/metro";
+import searchProducts from "../fetch/search/metro/searchProducts";
 
 const router = express.Router();
 
@@ -179,6 +180,19 @@ router.get(
 					message,
 					availableOptions,
 					count,
+					data,
+				});
+			}
+
+			if (Object.values(MetroChain).includes(chainName as MetroChain)) {
+				const data = await searchProducts({
+					search_term,
+					chainName,
+					store_id,
+				});
+
+				return res.status(200).json({
+					message: `Products fetched successfully for search term: ${search_term}`,
 					data,
 				});
 			}

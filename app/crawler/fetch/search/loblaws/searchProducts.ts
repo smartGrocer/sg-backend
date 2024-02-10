@@ -1,11 +1,11 @@
 import axios from "axios";
-import { ILoblawsProductSrcProps } from "../../../common/types/loblaws/loblaws";
+import { ILoblawsProductSrcProps } from "../../../../common/types/loblaws/loblaws";
 import UserAgent from "user-agents";
 import {
 	IProductProps,
 	IProductPropsWithPagination,
 	ISearchProducts,
-} from "../../../common/types/common/product";
+} from "../../../../common/types/common/product";
 
 
 
