@@ -6,8 +6,8 @@ import {
 	IProductPropsWithPagination,
 	ISearchProducts,
 } from "../../../../common/types/common/product";
-
-
+import { parse } from "dotenv";
+import parseQuantity from "../../../../common/helpers/parseQuantity";
 
 const searchProducts = async ({
 	search_term,
@@ -47,7 +47,9 @@ const searchProducts = async ({
 					product_name: product.name,
 					product_link: product.link,
 					product_image: pickImage(product.imageAssets),
-					product_size: product.packageSize,
+					product_size_unit: parseQuantity(product.packageSize).unit,
+					product_size_quantity: parseQuantity(product.packageSize)
+						.quantity,
 					unit_soldby_type: product.pricingUnits.type,
 					unit_soldby_unit: product.pricingUnits.unit,
 					price: product.prices.price.value,

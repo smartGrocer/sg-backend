@@ -4,6 +4,7 @@ import {
 	IProductProps,
 	ISearchProducts,
 } from "../../../../common/types/common/product";
+import parseQuantity from "../../../../common/helpers/parseQuantity";
 
 const searchProducts = async ({
 	search_term,
@@ -24,7 +25,7 @@ const searchProducts = async ({
 			.find("div.tile-product")
 			.each((i, el) => {
 				const product_id = $(el).attr("data-product-code") || "";
-				const store_id = "";
+				const store_id = "all";
 
 				const product_brand =
 					$(el).find(".head__brand").text().trim() || "";
@@ -42,38 +43,78 @@ const searchProducts = async ({
 
 				const product_size =
 					$(el).find(".head__unit-details").text().trim() || "";
-				const unit_soldby_type =
-					$(el).find(".address--line2").text().trim() || "";
-				const unit_soldby_unit =
-					$(el).find(".address--line2").text().trim() || "";
+
+				const product_size_quantity =
+					parseQuantity(product_size).quantity;
+				const product_size_unit = parseQuantity(product_size).unit;
 
 				const price =
 					Number(
-						$(el).find(".price-update").text().trim().split("$")
+						$(el).find(".price-update").text().trim().split("$")[1]
 					) || 0;
 
+				// remove the word "avg." if it exists
 				const price_unit =
 					$(el)
 						.find(".pricing__sale-price")
 						.children()
 						.find("abbr")
 						.text()
-						.trim() || "";
+						.trim()
+						.replace("avg.", "") || "";
+
+				const price_was_price_unit =
+					$(el)
+						.find(".pricing__before-price")
+						.children()
+						.next()
+						.text()
+						.trim()
+						.split("$")[1] || 0;
 
 				const price_was =
-					Number($(el).find(".address--line2").text().trim()) || 0;
+					Number(
+						price_was_price_unit === 0
+							? null
+							: parseQuantity(price_was_price_unit).quantity
+					) || null;
+
 				const price_was_unit =
-					$(el).find(".address--line2").text().trim() || "";
+					price_was_price_unit === 0
+						? null
+						: parseQuantity(price_was_price_unit).unit || null;
 
-                const compare_pricing_parent= $(el).find(".pricing__secondary-price")
+				const compare_pricing_parent = $(el).find(
+					".pricing__secondary-price"
+				);
+				const compare_price_first =
+					compare_pricing_parent.children().first().text().trim() ||
+					"";
+				const compare_price_split = compare_price_first.split("/");
+
 				const compare_price =
-					compare_pricing_parent[0] || 0;
+					Number(
+						compare_price_split[0].trim().split("$")[1].trim()
+					) || null;
 
-                
+				const compare_price_unit_quantity =
+					compare_price_split[1].trim() || "";
+
 				const compare_price_unit =
-					$(el).find(".address--line2").text().trim() || "";
+					parseQuantity(compare_price_unit_quantity).unit || null;
 				const compare_price_quantity =
-					Number($(el).find(".address--line2").text().trim()) || 0;
+					parseQuantity(compare_price_unit_quantity).quantity || null;
+
+				const unit_soldby_type =
+					$(el).find(".unit-update").text().trim() || "ea.";
+
+				const unit_soldby_unit =
+					unit_soldby_type === "ea." ? "ea." : "pack";
+
+				console.log({
+					unit_soldby_type,
+					unit_soldby_unit,
+				});
 
 				data.push({
 					product_id,
@@ -83,7 +124,9 @@ const searchProducts = async ({
 					product_name,
 					product_link,
 					product_image,
-					product_size,
+					product_size_unit,
+					product_size_quantity,
+
 					unit_soldby_type,
 					unit_soldby_unit,
 					price,
