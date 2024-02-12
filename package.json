@@ -8,7 +8,7 @@
     "start:api": "node dist/app/api/index.js",
     "dev:server:api": "nodemon app/api/index.ts --host 0.0.0.0",		
     "pm2:delete:crawler": "pm2 delete sg-backend",
-		"pm2:start:crawler": "pm2 start dist/crawler/index.js --name sg-backend --watch --time",
+		"pm2:start:crawler": "pm2 start dist/app/api/index.js --name sg-backend --watch --time",
 		"pm2:startup": "pm2 startup && pm2 save"
   },
   "repository": {
