@@ -30,6 +30,7 @@ jobs:
           whoami
           pwd
           ip addr
+          pm2 -v
           cd sg-backend
           rm -rf dist/
           git checkout HEAD .
