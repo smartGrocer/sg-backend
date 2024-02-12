@@ -12,8 +12,20 @@ const searchProducts = async ({
 	store_id,
 }: ISearchProducts): Promise<IProductProps[] | Error> => {
 	try {
-		const url = `https://www.foodbasics.ca/search?filter=eggs`;
+		let url = `https://www.${chainName === "metro" ? "metro.ca/en/online-grocery" : "foodbasics.ca"}/search?filter=${search_term}`;
+
+		if (chainName === "metro") {
+			url += `&freeText=true`;
+		}
+
 		const response = await axios.get(url);
+
+		if (response.status === 500) {
+			throw new Error(
+				`Errors fetching products for metro, status: ${response.status}`
+			);
+		}
+
 		const resData = response.data;
 
 		const cleanData = resData.replace(/\n|\r|\t/g, "");
@@ -29,10 +41,16 @@ const searchProducts = async ({
 
 				const product_brand =
 					$(el).find(".head__brand").text().trim() || "";
+
 				const product_name =
 					$(el).find(".head__title").text().trim() || "";
-				const product_link =
+
+				const link_to_product =
 					$(el).find(".product-details-link").attr("href") || "";
+				const product_link =
+					`https://www.${
+						chainName === "metro" ? "metro.ca" : "foodbasics.ca"
+					}${link_to_product}` || "";
 				const product_image =
 					$(el)
 						.find(".pt__visual")
@@ -45,23 +63,35 @@ const searchProducts = async ({
 					$(el).find(".head__unit-details").text().trim() || "";
 
 				const product_size_quantity =
-					parseQuantity(product_size).quantity;
-				const product_size_unit = parseQuantity(product_size).unit;
+					parseQuantity(product_size).quantity || 0;
+				const product_size_unit =
+					parseQuantity(product_size).unit || "";
 
 				const price =
 					Number(
 						$(el).find(".price-update").text().trim().split("$")[1]
 					) || 0;
 
+				// if there are 2 .price-update
+				const has2Prices = $(el).find(".price-update").length > 1;
 				// remove the word "avg." if it exists
-				const price_unit =
-					$(el)
-						.find(".pricing__sale-price")
-						.children()
-						.find("abbr")
-						.text()
-						.trim()
-						.replace("avg.", "") || "";
+				const price_unit = has2Prices
+					? $(el)
+							.find(".pricing__sale-price")
+							.children()
+							.first()
+							.text()
+							.trim()
+							.split("/")[0]
+							.trim()
+							.replace(/^/, "for ")
+					: $(el)
+							.find(".pricing__sale-price")
+							.children()
+							.next()
+							.text()
+							.trim()
+							.replace("avg.", "");
 
 				const price_was_price_unit =
 					$(el)
@@ -84,13 +114,17 @@ const searchProducts = async ({
 						? null
 						: parseQuantity(price_was_price_unit).unit || null;
 
-				const compare_pricing_parent = $(el).find(
+				let compare_pricing_parent = $(el).find(
 					".pricing__secondary-price"
 				);
 				const compare_price_first =
 					compare_pricing_parent.children().first().text().trim() ||
 					"";
-				const compare_price_split = compare_price_first.split("/");
+
+				const compare_price_split = compare_price_first.includes("/")
+					? compare_price_first.split("/")
+					: compare_pricing_parent.children().next().text().trim() ||
+						"";
 
 				const compare_price =
 					Number(
@@ -106,15 +140,10 @@ const searchProducts = async ({
 					parseQuantity(compare_price_unit_quantity).quantity || null;
 
 				const unit_soldby_type =
-					$(el).find(".unit-update").text().trim() || "ea.";
+					$(el).find(".unit-update")?.text()?.trim() || "ea.";
 
 				const unit_soldby_unit =
 					unit_soldby_type === "ea." ? "ea." : "pack";
-
-				console.log({
-					unit_soldby_type,
-					unit_soldby_unit,
-				});
 
 				data.push({
 					product_id,
@@ -141,7 +170,8 @@ const searchProducts = async ({
 
 		return data;
 	} catch (e) {
-		throw new Error(`Error fetching products for metro: ${e}`);
+		console.log(`Error fetching products for metro: ${e}`);
+		return new Error(`Error fetching products for metro: ${e}`);
 	}
 };
 

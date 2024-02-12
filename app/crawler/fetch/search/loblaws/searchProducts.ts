@@ -1,5 +1,9 @@
 import axios from "axios";
-import { ILoblawsProductSrcProps } from "../../../../common/types/loblaws/loblaws";
+import {
+	ILoblawsProductSrcProps,
+	LoblawsChainAlternateName,
+	LoblawsChainName,
+} from "../../../../common/types/loblaws/loblaws";
 import UserAgent from "user-agents";
 import {
 	IProductProps,
@@ -45,7 +49,7 @@ const searchProducts = async ({
 					chainName: chainName,
 					product_brand: product.brand,
 					product_name: product.name,
-					product_link: product.link,
+					product_link: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`,
 					product_image: pickImage(product.imageAssets),
 					product_size_unit: parseQuantity(product.packageSize).unit,
 					product_size_quantity: parseQuantity(product.packageSize)
