@@ -29,6 +29,7 @@ jobs:
         script: |
           whoami
           pwd
+          ip addr
           cd sg-backend
           rm -rf dist/
           git checkout HEAD .
