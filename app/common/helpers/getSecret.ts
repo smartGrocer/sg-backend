@@ -1,6 +1,7 @@
 type SecretType =
 	| "PORT_API"
 	| "PORT_CRAWLER"
+	| "CRAWLER_URL"
 	| "UPSTASH_PORT"
 	| "UPSTASH_ENDPOINT"
 	| "UPSTASH_PASSWORD";

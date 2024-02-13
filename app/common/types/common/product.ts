@@ -37,7 +37,8 @@ export interface IProductProps {
 	product_name: string;
 	product_link: string;
 	product_image: string;
-	product_size: string;
+	product_size_unit: string;
+	product_size_quantity: number;
 	unit_soldby_type: string;
 	unit_soldby_unit: string;
 	price: number;

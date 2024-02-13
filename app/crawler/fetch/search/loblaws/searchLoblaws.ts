@@ -1,10 +1,10 @@
 import {
 	ISearchLoblaws,
 	ISearchLoblawsReturn,
-} from "../../../common/types/common/product";
-import { IStoreProps } from "../../../common/types/common/store";
-import { LoblawsChainName } from "../../../common/types/loblaws/loblaws";
-import getLoblawsStores from "../stores/loblaws/getStore";
+} from "../../../../common/types/common/product";
+import { IStoreProps } from "../../../../common/types/common/store";
+import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
+import getLoblawsStores from "../../stores/loblaws/getStore";
 import searchProducts from "./searchProducts";
 
 const searchLoblaws = async ({

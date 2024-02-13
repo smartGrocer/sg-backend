@@ -35,8 +35,6 @@ const getMetroStores = async ({
 		}
 		const response = await axios.get(url);
 
-
-
 		const resData = response.data;
 
 		// // clean data by removing \n \r \t
