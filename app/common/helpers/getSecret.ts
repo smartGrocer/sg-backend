@@ -1,7 +1,4 @@
-type SecretType =
-	| "PORT_API"
-	| "PORT_CRAWLER"
-	| "CRAWLER_URL"
+type SecretType = "PORT"
 	| "UPSTASH_PORT"
 	| "UPSTASH_ENDPOINT"
 	| "UPSTASH_PASSWORD";

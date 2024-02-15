@@ -5,11 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "npx tsc",
-		"dev:server:api": "nodemon app/api/index.ts --host 0.0.0.0",
-		"dev:server:crawler": "nodemon app/crawler/index.ts --host 0.0.0.0",
-		"pm2:delete:crawler": "pm2 delete sg-backend",
-		"pm2:start:crawler": "pm2 start dist/crawler/index.js --name sg-backend --watch --time",
-		"pm2:startup": "pm2 startup && pm2 save"
+		"dev": "nodemon app/index.ts --host 0.0.0.0",
+		"start": "node app/index.js"
 	},
 	"repository": {
 		"type": "git",

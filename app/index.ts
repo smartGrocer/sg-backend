@@ -1,19 +1,19 @@
 import express, { Application, Request, Response } from "express";
-import getSecret from "../common/helpers/getSecret";
+import getSecret from "./common/helpers/getSecret";
 import cors from "cors";
-import connectToDb from "../common/db/db";
-import { localCache } from "../common/cache/localCache/localCache";
+import connectToDb from "./common/db/db";
+import { localCache } from "./common/cache/localCache/localCache";
 import dotenv from "dotenv";
 //For env File
 dotenv.config();
-import logger from "../common/helpers/logger";
-import routes from "./routes/routes";
+import logger from "./common/helpers/logger";
+import routes from "./crawler/routes/routes";
 
 // init localCache
 localCache;
 
 const app: Application = express();
-const port = getSecret("PORT_CRAWLER") || 7000;
+const port = getSecret("PORT") || 7000;
 
 // body parser middleware
 app.use(express.json());
