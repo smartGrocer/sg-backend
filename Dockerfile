@@ -10,4 +10,3 @@ COPY . ./
 ENV PORT 8000
 EXPOSE $PORT
 RUN npm run build
-# CMD ["node", "dist/app/index.js"]
