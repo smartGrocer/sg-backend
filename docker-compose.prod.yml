@@ -3,10 +3,10 @@ services:
   node-app:
     build:
       context: .
-      args:
-        NODE_ENV: production
-    environment:
-      - NODE_ENV=production
+      # args:
+      #   NODE_ENV: production
+    # environment:
+    #   - NODE_ENV=production
     env_file:
       - .env
     ports:
