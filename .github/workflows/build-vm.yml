@@ -29,4 +29,5 @@ jobs:
         script: |
           cd sg-backend
           git checkout HEAD .
+          git pull
           npm run docker:prod
