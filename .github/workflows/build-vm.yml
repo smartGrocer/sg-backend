@@ -27,16 +27,6 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          whoami
-          pwd
-          ip addr
-          pm2 -v
           cd sg-backend
-          rm -rf dist/
           git checkout HEAD .
-          git pull
-          npm run pm2:delete:crawler
-          npm ci
-          npm run build
-          npm run pm2:start:crawler
-          npm run pm2:startup
+          npm run docker:prod
