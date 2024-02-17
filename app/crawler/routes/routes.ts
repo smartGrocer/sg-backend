@@ -13,6 +13,7 @@ import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
 import searchLoblaws from "../fetch/search/loblaws/searchLoblaws";
 import { MetroChain } from "../../common/types/metro/metro";
 import searchProducts from "../fetch/search/metro/searchProducts";
+import searchMetro from "../fetch/search/metro/searchMetro";
 
 const router = express.Router();
 
@@ -169,8 +170,6 @@ router.get(
 			) {
 				const { message, data, code, availableOptions, count } =
 					await searchLoblaws({
-						req,
-						res,
 						search_term,
 						chainName: chainName as LoblawsChainName,
 						store_id,
@@ -185,14 +184,17 @@ router.get(
 			}
 
 			if (Object.values(MetroChain).includes(chainName as MetroChain)) {
-				const data = await searchProducts({
-					search_term,
-					chainName,
-					store_id,
-				});
+				const { message, data, code, availableOptions, count } =
+					await searchMetro({
+						search_term,
+						chainName: chainName as MetroChain,
+						store_id,
+					});
 
-				return res.status(200).json({
-					message: `Products fetched successfully for search term: ${search_term}`,
+				return res.status(code).json({
+					message,
+					availableOptions,
+					count,
 					data,
 				});
 			}

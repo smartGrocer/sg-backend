@@ -1,23 +1,4 @@
-import { Request, Response } from "express";
-import { LoblawsChainName } from "../loblaws/loblaws";
-import { MetroChain } from "../metro/metro";
 import { IAllStoreChains } from "./store";
-
-export interface ISearchLoblaws {
-	req: Request;
-	res: Response;
-	search_term: string;
-	chainName: LoblawsChainName;
-	store_id: string;
-}
-
-export interface ISearchLoblawsReturn {
-	message: string;
-	count?: number;
-	data?: IProductPropsWithPagination;
-	code: number;
-	availableOptions?: string | string[];
-}
 
 export interface IProductPropsWithPagination {
 	results: IProductProps[];
@@ -29,10 +10,22 @@ export interface IProductPropsWithPagination {
 	};
 }
 
+export interface ISearchStore {
+	search_term: string;
+	store_id: string;
+}
+export interface ISearchReturn {
+	message: string;
+	count?: number;
+	data?: IProductProps[];
+	code: number;
+	availableOptions?: string | string[];
+}
+
 export interface IProductProps {
 	product_id: string;
 	store_id: string;
-    chainName: string;
+	chainName: string;
 	product_brand: string;
 	product_name: string;
 	product_link: string;

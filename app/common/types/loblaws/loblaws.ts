@@ -1,3 +1,6 @@
+import { Response, Request } from "express";
+import { IProductPropsWithPagination, ISearchStore } from "../common/product";
+
 export enum LoblawsChainName {
 	loblaw = "loblaw",
 	zehrs = "zehrs",
@@ -12,6 +15,18 @@ export enum LoblawsChainName {
 	maxi = "maxi",
 	provigo = "provigo",
 	extrafoods = "extrafoods",
+}
+
+export interface ISearchLoblaws extends ISearchStore {
+	chainName: LoblawsChainName;
+}
+
+export interface ISearchLoblawsReturn {
+	message: string;
+	count?: number;
+	data?: IProductPropsWithPagination;
+	code: number;
+	availableOptions?: string | string[];
 }
 
 export const LoblawsChainAlternateName = (
