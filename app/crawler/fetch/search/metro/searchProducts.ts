@@ -5,6 +5,7 @@ import {
 	ISearchProducts,
 } from "../../../../common/types/common/product";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
+import UserAgent from "user-agents";
 
 const searchProducts = async ({
 	search_term,
@@ -18,7 +19,15 @@ const searchProducts = async ({
 			url += `&freeText=true`;
 		}
 
-		const response = await axios.get(url);
+		const userAgent = new UserAgent().toString();
+
+		const headers = {
+			"user-agent": userAgent,
+		};
+
+		const response = await axios.get(url, {
+			headers,
+		});
 
 		if (response.status === 500) {
 			throw new Error(

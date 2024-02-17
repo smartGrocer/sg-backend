@@ -12,8 +12,8 @@ import filterStoresByLocation from "../../common/helpers/filterStoresByLocation"
 import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
 import searchLoblaws from "../fetch/search/loblaws/searchLoblaws";
 import { MetroChain } from "../../common/types/metro/metro";
-import searchProducts from "../fetch/search/metro/searchProducts";
 import searchMetro from "../fetch/search/metro/searchMetro";
+import searchProducts from "../fetch/search/walmart/searchProducts";
 
 const router = express.Router();
 
@@ -199,8 +199,29 @@ router.get(
 				});
 			}
 
+			if (chainName.toLowerCase() === "walmart") {
+				const data = await searchProducts({
+					search_term,
+					chainName: chainName as "walmart",
+					store_id,
+				});
+
+				if (data instanceof Error) {
+					return res.status(500).json({
+						message: `Error fetching products for search term: ${search_term}`,
+						error: data,
+					});
+				}
+
+				return res.status(200).json({
+					message: `Products fetched successfully for search term: ${search_term}`,
+					count: data.length,
+					data,
+				});
+			}
+
 			return res.status(400).json({
-				message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /search/:product_search?chain=chain_name`,
+				message: `Invalids chain name, please provide a valid chain name as a query parameter like so: /search/:product_search?chain=chain_name`,
 				availableOptions: [
 					...Object.values(LoblawsChainName),
 					...Object.values(MetroChain),
