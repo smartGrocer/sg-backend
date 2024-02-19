@@ -70,3 +70,19 @@ const searchLoblaws = async ({
 };
 
 export default searchLoblaws;
+
+const validateLoblawsStoreId = async (
+	storeId: string,
+	chainName: LoblawsChainName
+): Promise<boolean> => {
+	const stores = await getLoblawsStores({
+		chainName,
+		showAllStores: false,
+	});
+
+	if (stores instanceof Error) {
+		return false;
+	}
+
+	return stores.some((store: IStoreProps) => store.store_id === storeId);
+};
