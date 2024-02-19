@@ -5,12 +5,11 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "npx tsc",
-		"dev": "nodemon app/index.ts --host 0.0.0.0",
+		"dev": "nodemon app/index.ts --host 0.0.0.0 --legacy-watch",
 		"start": "node dist/index.js",
 		"docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
 		"docker:prod": "docker-compose -f docker-compose.prod.yml up --build -d",
 		"docker:prod:down": "docker-compose -f docker-compose.prod.yml down"
-
 	},
 	"repository": {
 		"type": "git",
