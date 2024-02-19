@@ -3,6 +3,7 @@ import {
 	ILoblawsProductSrcProps,
 	LoblawsChainAlternateName,
 	LoblawsChainName,
+	pickImage,
 } from "../../../../common/types/loblaws/loblaws";
 import UserAgent from "user-agents";
 import {
@@ -93,43 +94,6 @@ const searchProducts = async ({
 
 		throw new Error(`Error fetching products for loblaws: ${error}`);
 	}
-};
-
-const pickImage = (images: ILoblawsProductSrcProps["imageAssets"]) => {
-	return (
-		images.filter((img) => {
-			return (
-				img.imageUrl !== null ||
-				img.smallUrl !== null ||
-				img.mediumUrl !== null ||
-				img.largeUrl !== null
-			);
-		})[0]?.imageUrl ||
-		images.filter((img) => {
-			return (
-				img.imageUrl !== null ||
-				img.smallUrl !== null ||
-				img.mediumUrl !== null ||
-				img.largeUrl !== null
-			);
-		})[0]?.smallUrl ||
-		images.filter((img) => {
-			return (
-				img.imageUrl !== null ||
-				img.smallUrl !== null ||
-				img.mediumUrl !== null ||
-				img.largeUrl !== null
-			);
-		})[0]?.mediumUrl ||
-		images.filter((img) => {
-			return (
-				img.imageUrl !== null ||
-				img.smallUrl !== null ||
-				img.mediumUrl !== null ||
-				img.largeUrl !== null
-			);
-		})[0]?.largeUrl
-	);
 };
 
 export default searchProducts;

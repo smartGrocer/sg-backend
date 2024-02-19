@@ -1,6 +1,12 @@
 import UserAgent from "user-agents";
 import { IProductProps } from "../../../../common/types/common/product";
 import axios from "axios";
+import {
+	LoblawsChainAlternateName,
+	LoblawsChainName,
+	pickImage,
+} from "../../../../common/types/loblaws/loblaws";
+import parseQuantity from "../../../../common/helpers/parseQuantity";
 
 interface IGetProductProps {
 	url?: string;
@@ -16,13 +22,13 @@ const getProduct = async ({
 }: IGetProductProps): Promise<IProductProps> => {
 	const productData = {} as IProductProps;
 	const userAgent = new UserAgent().toString();
-	// format date as ddmmyyyy
+	// format date as ddmmyyyy in toronto
 	const date = new Date()
-		.toISOString()
-		.split("T")[0]
+		.toLocaleDateString("en-CA")
 		.split("-")
 		.reverse()
 		.join("");
+
 	const url_get = `https://api.pcexpress.ca/pcx-bff/api/v1/products/${product_id}?lang=en&date=${date}&pickupType=STORE&storeId=${store_id}&banner=${chainName}`;
 
 	const headers = {
@@ -41,7 +47,7 @@ const getProduct = async ({
 		productData.chainName = chainName;
 		productData.product_brand = product.brand;
 		productData.product_name = product.name;
-		productData.product_link = `https://www.${chainName}.ca${product.link}`;
+		productData.product_link = `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`;
 		productData.product_image = pickImage(product.imageAssets);
 		productData.product_size_unit = parseQuantity(product.packageSize).unit;
 		productData.product_size_quantity = parseQuantity(
@@ -49,13 +55,16 @@ const getProduct = async ({
 		).quantity;
 		productData.unit_soldby_type = product.pricingUnits.type;
 		productData.unit_soldby_unit = product.pricingUnits.unit;
-		productData.price = product.prices.price.value;
-		productData.price_unit = product.prices.price.unit;
-		productData.price_was = product.prices.priceWas.value;
-		productData.price_was_unit = product.prices.priceWas.unit;
-		productData.compare_price = product.prices.compareAt.value;
-		productData.compare_price_unit = product.prices.compareAt.unit;
-		productData.compare_price_quantity = product.prices.compareAt.quantity;
+		productData.price = product.offers[0].price.value || null;
+		productData.price_unit = product.offers[0].price.unit || null;
+		productData.price_was = product.offers[0]?.priceWas?.value || null;
+		productData.price_was_unit = product.offers[0]?.priceWas?.unit || null;
+		productData.compare_price =
+			product.offers[0].comparisonPrices[0].value || null;
+		productData.compare_price_unit =
+			product.offers[0].comparisonPrices[0].unit || null;
+		productData.compare_price_quantity =
+			product.offers[0].comparisonPrices[0].quantity || null;
 
 		return productData;
 	} catch (error: unknown) {
@@ -70,3 +79,5 @@ const getProduct = async ({
 		throw new Error(`Error fetching products for loblaws: ${error}`);
 	}
 };
+
+export default getProduct;
