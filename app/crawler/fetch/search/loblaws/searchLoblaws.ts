@@ -3,8 +3,8 @@ import {
 	ISearchLoblaws,
 	ISearchLoblawsReturn,
 	LoblawsChainName,
+	validateLoblawsStoreId,
 } from "../../../../common/types/loblaws/loblaws";
-import getLoblawsStores from "../../stores/loblaws/getStore";
 import searchProducts from "./searchProducts";
 
 const searchLoblaws = async ({
@@ -22,28 +22,16 @@ const searchLoblaws = async ({
 		};
 	}
 
-	if (!store_id) {
-		const stores = await getLoblawsStores({
-			chainName,
-			showAllStores: false,
-		});
+	const { message, code, availableOptions } = await validateLoblawsStoreId({
+		storeId: store_id,
+		chainName,
+	});
 
-		if (stores instanceof Error) {
-			return {
-				message: stores.message,
-				code: 500,
-			};
-		}
-
+	if (code !== 200) {
 		return {
-			message: `Store ID is required as a query parameter like so: /search/:product_search?store_id=1234`,
-			availableOptions: [
-				// remove duplicates
-				...new Set<string>(
-					stores.map((store: IStoreProps) => store.store_id).sort()
-				),
-			],
-			code: 400,
+			message,
+			availableOptions,
+			code,
 		};
 	}
 
@@ -71,18 +59,3 @@ const searchLoblaws = async ({
 
 export default searchLoblaws;
 
-const validateLoblawsStoreId = async (
-	storeId: string,
-	chainName: LoblawsChainName
-): Promise<boolean> => {
-	const stores = await getLoblawsStores({
-		chainName,
-		showAllStores: false,
-	});
-
-	if (stores instanceof Error) {
-		return false;
-	}
-
-	return stores.some((store: IStoreProps) => store.store_id === storeId);
-};
