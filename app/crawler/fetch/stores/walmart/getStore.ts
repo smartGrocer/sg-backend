@@ -70,10 +70,8 @@ const getWalmartStores = async ({
 		});
 
 		return data;
-	} catch (error: any) {
-		throw new Error(
-			`Error fetching stores for walmart: ${error?.response?.statusText} | ${error}`
-		);
+	} catch (error: unknown) {
+		return error as Error;
 	}
 };
 

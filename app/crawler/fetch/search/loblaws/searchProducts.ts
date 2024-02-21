@@ -18,7 +18,7 @@ const searchProducts = async ({
 	search_term,
 	chainName,
 	store_id,
-}: ISearchProducts): Promise<IProductPropsWithPagination> => {
+}: ISearchProducts): Promise<IProductPropsWithPagination | Error> => {
 	try {
 		const userAgent = new UserAgent().toString();
 
@@ -84,15 +84,7 @@ const searchProducts = async ({
 			results: products,
 		};
 	} catch (error: unknown) {
-		console.log("Error fetching products for loblaws", error);
-
-		if (axios.isAxiosError(error)) {
-			throw new Error(
-				`Error fetching products for loblaws: ${error?.response?.statusText} | ${error} | ${error?.response?.data}`
-			);
-		}
-
-		throw new Error(`Error fetching products for loblaws: ${error}`);
+		return error as Error;
 	}
 };
 

@@ -76,10 +76,7 @@ const getLoblawsStores = async ({
 
 		return returnData;
 	} catch (error: any) {
-		console.log("Error fetching stores for loblaws", error);
-		throw new Error(
-			`Error fetching stores for loblaws: ${error?.response?.statusText} | ${error}`
-		);
+		return error as Error;
 	}
 };
 

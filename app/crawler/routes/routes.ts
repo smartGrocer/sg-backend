@@ -15,6 +15,7 @@ import { MetroChain } from "../../common/types/metro/metro";
 import searchProducts from "../fetch/search/metro/searchProducts";
 import searchMetro from "../fetch/search/metro/searchMetro";
 import getProduct from "../fetch/product/loblaws/getProduct";
+import getLoblawsProduct from "../fetch/product/loblaws/getLoblawsProduct";
 
 const router = express.Router();
 
@@ -163,57 +164,50 @@ router.get(
 			});
 		}
 
-		try {
-			if (
-				Object.values(LoblawsChainName).includes(
-					chainName as LoblawsChainName
-				)
-			) {
-				const { message, data, code, availableOptions, count } =
-					await searchLoblaws({
-						search_term,
-						chainName: chainName as LoblawsChainName,
-						store_id,
-					});
-
-				return res.status(code).json({
-					message,
-					availableOptions,
-					count,
-					data,
+		if (
+			Object.values(LoblawsChainName).includes(
+				chainName as LoblawsChainName
+			)
+		) {
+			const { message, data, code, availableOptions, count } =
+				await searchLoblaws({
+					search_term,
+					chainName: chainName as LoblawsChainName,
+					store_id,
 				});
-			}
 
-			if (Object.values(MetroChain).includes(chainName as MetroChain)) {
-				const { message, data, code, availableOptions, count } =
-					await searchMetro({
-						search_term,
-						chainName: chainName as MetroChain,
-						store_id,
-					});
-
-				return res.status(code).json({
-					message,
-					availableOptions,
-					count,
-					data,
-				});
-			}
-
-			return res.status(400).json({
-				message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /search/:product_search?chain=chain_name`,
-				availableOptions: [
-					...Object.values(LoblawsChainName),
-					...Object.values(MetroChain),
-					"walmart",
-				],
-			});
-		} catch (error) {
-			return res.status(500).json({
-				message: `Error fetching products for search term: ${search_term}`,
-				error: error,
+			return res.status(code).json({
+				message,
+				availableOptions,
+				count,
+				data,
 			});
 		}
+
+		if (Object.values(MetroChain).includes(chainName as MetroChain)) {
+			const { message, data, code, availableOptions, count } =
+				await searchMetro({
+					search_term,
+					chainName: chainName as MetroChain,
+					store_id,
+				});
+
+			return res.status(code).json({
+				message,
+				availableOptions,
+				count,
+				data,
+			});
+		}
+
+		return res.status(400).json({
+			message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /search/:product_search?chain=chain_name`,
+			availableOptions: [
+				...Object.values(LoblawsChainName),
+				...Object.values(MetroChain),
+				"walmart",
+			],
+		});
 	}
 );
 
@@ -236,70 +230,47 @@ router.get("/product/id/:product_id", async (req: Request, res: Response) => {
 		});
 	}
 
-	console.log("chainName", chainName);
-
-	try {
-		if (
-			Object.values(LoblawsChainName).includes(
-				chainName as LoblawsChainName
-			)
-		) {
-			// const { message, data, code, availableOptions, count } =
-			// 	await searchLoblaws({
-			// 		search_term: product_id,
-			// 		chainName: chainName as LoblawsChainName,
-			// 		store_id,
-			// 	});
-
-			// return res.status(code).json({
-			// 	message,
-			// 	availableOptions,
-			// 	count,
-			// 	data,
-			// });
-
-			const data = await getProduct({
+	if (
+		Object.values(LoblawsChainName).includes(chainName as LoblawsChainName)
+	) {
+		const { message, data, code, availableOptions } =
+			await getLoblawsProduct({
 				product_id,
 				store_id,
 				chainName: chainName as LoblawsChainName,
 			});
 
-			return res.status(200).json({
-				message: `Product fetched successfully for product id: ${product_id}`,
-				data,
-			});
-		}
-
-		// if (Object.values(MetroChain).includes(chainName as MetroChain)) {
-		// 	const { message, data, code, availableOptions, count } =
-		// 		await searchMetro({
-		// 			search_term: product_id,
-		// 			chainName: chainName as MetroChain,
-		// 			store_id,
-		// 		});
-
-		// 	return res.status(code).json({
-		// 		message,
-		// 		availableOptions,
-		// 		count,
-		// 		data,
-		// 	});
-		// }
-
-		return res.status(400).json({
-			message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /product/id/:product_id?chain=chain_name`,
-			availableOptions: [
-				...Object.values(LoblawsChainName),
-				...Object.values(MetroChain),
-				"walmart",
-			],
-		});
-	} catch (error) {
-		return res.status(500).json({
-			message: `Error fetching products for search term: ${product_id}`,
-			error: error,
+		return res.status(code).json({
+			message,
+			availableOptions,
+			data,
 		});
 	}
+
+	// if (Object.values(MetroChain).includes(chainName as MetroChain)) {
+	// 	const { message, data, code, availableOptions, count } =
+	// 		await searchMetro({
+	// 			search_term: product_id,
+	// 			chainName: chainName as MetroChain,
+	// 			store_id,
+	// 		});
+
+	// 	return res.status(code).json({
+	// 		message,
+	// 		availableOptions,
+	// 		count,
+	// 		data,
+	// 	});
+	// }
+
+	return res.status(400).json({
+		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /product/id/:product_id?chain=chain_name`,
+		availableOptions: [
+			...Object.values(LoblawsChainName),
+			...Object.values(MetroChain),
+			"walmart",
+		],
+	});
 });
 
 router.get("*", (req, res) => {

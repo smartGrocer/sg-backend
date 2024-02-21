@@ -19,7 +19,7 @@ const getProduct = async ({
 	product_id,
 	store_id,
 	chainName,
-}: IGetProductProps): Promise<IProductProps> => {
+}: IGetProductProps): Promise<IProductProps | Error> => {
 	const productData = {} as IProductProps;
 	const userAgent = new UserAgent().toString();
 	// format date as ddmmyyyy in toronto
@@ -68,15 +68,7 @@ const getProduct = async ({
 
 		return productData;
 	} catch (error: unknown) {
-		console.log("Error fetching products for loblaws", error);
-
-		if (axios.isAxiosError(error)) {
-			throw new Error(
-				`Error fetching products for loblaws: ${error?.response?.statusText} | ${error} | ${error?.response?.data}`
-			);
-		}
-
-		throw new Error(`Error fetching products for loblaws: ${error}`);
+		return error as Error;
 	}
 };
 

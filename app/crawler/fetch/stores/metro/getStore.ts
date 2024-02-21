@@ -92,9 +92,7 @@ const getMetroStores = async ({
 
 		return data;
 	} catch (error: any) {
-		throw new Error(
-			`Error fetching stores for metro: ${error?.response?.statusText} | ${error}`
-		);
+		return error as Error;
 	}
 };
 

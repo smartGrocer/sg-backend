@@ -171,7 +171,7 @@ const searchProducts = async ({
 		return data;
 	} catch (e) {
 		console.log(`Error fetching products for metro: ${e}`);
-		return new Error(`Error fetching products for metro: ${e}`);
+		return e as Error;
 	}
 };
 

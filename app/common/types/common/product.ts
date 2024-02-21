@@ -14,10 +14,22 @@ export interface ISearchStore {
 	search_term: string;
 	store_id: string;
 }
+
+export interface IGetProduct {
+	product_id: string;
+	store_id: string;
+}
 export interface ISearchReturn {
 	message: string;
 	count?: number;
-	data?: IProductProps[];
+	data?: IProductProps[] | IProductPropsWithPagination;
+	code: number;
+	availableOptions?: string | string[];
+}
+
+export interface IGetProductReturn {
+	message: string;
+	data?: IProductProps;
 	code: number;
 	availableOptions?: string | string[];
 }

@@ -1,5 +1,10 @@
 import { Response, Request } from "express";
-import { IProductPropsWithPagination, ISearchStore } from "../common/product";
+import {
+	IGetProduct,
+	IProductPropsWithPagination,
+	ISearchReturn,
+	ISearchStore,
+} from "../common/product";
 import getLoblawsStores from "../../../crawler/fetch/stores/loblaws/getStore";
 import { IStoreProps } from "../common/store";
 
@@ -23,12 +28,8 @@ export interface ISearchLoblaws extends ISearchStore {
 	chainName: LoblawsChainName;
 }
 
-export interface ISearchLoblawsReturn {
-	message: string;
-	count?: number;
-	data?: IProductPropsWithPagination;
-	code: number;
-	availableOptions?: string | string[];
+export interface IGetProductLoblaws extends IGetProduct {
+	chainName: LoblawsChainName;
 }
 
 export const LoblawsChainAlternateName = (

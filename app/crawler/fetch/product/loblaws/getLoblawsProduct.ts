@@ -1,17 +1,16 @@
-import { ISearchReturn } from "../../../../common/types/common/product";
-import { IStoreProps } from "../../../../common/types/common/store";
+import { IGetProductReturn } from "../../../../common/types/common/product";
 import {
-	ISearchLoblaws,
+	IGetProductLoblaws,
 	LoblawsChainName,
 	validateLoblawsStoreId,
 } from "../../../../common/types/loblaws/loblaws";
-import searchProducts from "./searchProducts";
+import getProduct from "./getProduct";
 
-const searchLoblaws = async ({
-	search_term,
+const getLoblawsProduct = async ({
+	product_id,
 	chainName,
 	store_id,
-}: ISearchLoblaws): Promise<ISearchReturn> => {
+}: IGetProductLoblaws): Promise<IGetProductReturn> => {
 	if (
 		!Object.values(LoblawsChainName).includes(chainName as LoblawsChainName)
 	) {
@@ -35,14 +34,23 @@ const searchLoblaws = async ({
 		};
 	}
 
-	const response = await searchProducts({
-		search_term,
-		chainName: chainName as LoblawsChainName,
+	const response = await getProduct({
+		product_id,
 		store_id,
+		chainName: chainName as LoblawsChainName,
 	});
 
 	// if error
 	if (response instanceof Error) {
+
+        // if 404
+        if (response.message === "Request failed with status code 404") {
+            return {
+                message: `Product not found for product id: ${product_id}`,
+                code: 404,
+            };
+        }
+
 		return {
 			message: response.message,
 			code: 500,
@@ -50,11 +58,10 @@ const searchLoblaws = async ({
 	}
 
 	return {
-		message: `Products fetched successfully for search term: ${search_term}`,
+		message: `Product fetched successfully for product id: ${product_id}`,
 		data: response,
-		count: response.results.length,
 		code: 200,
 	};
 };
 
-export default searchLoblaws;
+export default getLoblawsProduct;
