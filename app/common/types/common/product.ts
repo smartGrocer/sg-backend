@@ -60,3 +60,9 @@ export interface ISearchProducts {
 	chainName: IAllStoreChains;
 	store_id: string;
 }
+
+export interface IGetProductProps {
+	url?: string;
+	product_id?: string;
+	store_id: string;
+}

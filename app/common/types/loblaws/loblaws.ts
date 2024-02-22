@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import {
 	IGetProduct,
+	IGetProductProps,
 	IProductPropsWithPagination,
 	ISearchReturn,
 	ISearchStore,
@@ -254,3 +255,8 @@ export const validateLoblawsStoreId = async ({
 		code: 200,
 	};
 };
+
+
+export interface IGetProductLoblawsProps extends IGetProductProps {
+	chainName: LoblawsChainName;
+}

@@ -2,24 +2,20 @@ import UserAgent from "user-agents";
 import { IProductProps } from "../../../../common/types/common/product";
 import axios from "axios";
 import {
+	IGetProductLoblawsProps,
 	LoblawsChainAlternateName,
 	LoblawsChainName,
 	pickImage,
 } from "../../../../common/types/loblaws/loblaws";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
 
-interface IGetProductProps {
-	url?: string;
-	product_id?: string;
-	store_id: string;
-	chainName: string;
-}
+
 
 const getProduct = async ({
 	product_id,
 	store_id,
 	chainName,
-}: IGetProductProps): Promise<IProductProps | Error> => {
+}: IGetProductLoblawsProps): Promise<IProductProps | Error> => {
 	const productData = {} as IProductProps;
 	const userAgent = new UserAgent().toString();
 	// format date as ddmmyyyy in toronto

@@ -16,6 +16,7 @@ import searchProducts from "../fetch/search/metro/searchProducts";
 import searchMetro from "../fetch/search/metro/searchMetro";
 import getProduct from "../fetch/product/loblaws/getProduct";
 import getLoblawsProduct from "../fetch/product/loblaws/getLoblawsProduct";
+import getMetroProduct from "../fetch/product/metro/getMetroProduct";
 
 const router = express.Router();
 
@@ -211,21 +212,24 @@ router.get(
 	}
 );
 
-router.get("/product/id/:product_id", async (req: Request, res: Response) => {
-	const product_id = req.params.product_id;
+router.get("/product/lookup", async (req: Request, res: Response) => {
+	const product_id = req.query.product_id as string;
+	const link_to_product = req.query.url as string;
 	const chainName = req.query.chain as
 		| LoblawsChainName
 		| MetroChain
 		| "walmart";
 	const store_id = req.query.store_id as string;
 
-	if (!product_id) {
+	if (!product_id && !link_to_product) {
 		return res.status(400).json({
-			message: `Product ID is required, please provide a product ID as a query parameter like so: /product/id/:product_id?chain=chain_name`,
+			message: `Either product_id or url is required as a query param, please provide one like so: /product/lookup?product_id=1234&url=www.example.com/product/id/1234`,
 			availableOptions: [
-				`/product/id/:product_id`,
-				`/product/id/1234`,
-				"/product/id/20324328002_EA",
+				"/product/lookup?product_id=1234",
+				"/product/lookup?url=www.example.com/product/id/1234",
+				"/product/lookup?product_id=1234&url=www.example.com/product/id/1234",
+				"/product/lookup?product_id=1234&chain=chain_name",
+				"/product/lookup?url=www.example.com/product/id/1234&chain=chain_name",
 			],
 		});
 	}
@@ -247,21 +251,21 @@ router.get("/product/id/:product_id", async (req: Request, res: Response) => {
 		});
 	}
 
-	// if (Object.values(MetroChain).includes(chainName as MetroChain)) {
-	// 	const { message, data, code, availableOptions, count } =
-	// 		await searchMetro({
-	// 			search_term: product_id,
-	// 			chainName: chainName as MetroChain,
-	// 			store_id,
-	// 		});
+	if (Object.values(MetroChain).includes(chainName as MetroChain)) {
+		const { message, data, code, availableOptions } = await getMetroProduct(
+			{
+				product_id: link_to_product,
+				chainName: chainName as MetroChain,
+				store_id,
+			}
+		);
 
-	// 	return res.status(code).json({
-	// 		message,
-	// 		availableOptions,
-	// 		count,
-	// 		data,
-	// 	});
-	// }
+		return res.status(code).json({
+			message,
+			availableOptions,
+			data,
+		});
+	}
 
 	return res.status(400).json({
 		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /product/id/:product_id?chain=chain_name`,
@@ -282,8 +286,8 @@ router.get("*", (req, res) => {
 				stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
 				product_search:
 					"/product/search/:product_search?chain=chain_name&store_id=1234",
-				product_id:
-					"/product/id/:product_id?chain=chain_name&store_id=1234",
+				product_lookup:
+					"/product/lookup?product_id=1234&url=www.example.com/product/id/1234&chain=chain_name",
 			},
 		},
 	});

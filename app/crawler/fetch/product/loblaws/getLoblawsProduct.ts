@@ -15,7 +15,7 @@ const getLoblawsProduct = async ({
 		!Object.values(LoblawsChainName).includes(chainName as LoblawsChainName)
 	) {
 		return {
-			message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /search/:product_search?chain=chain_name`,
+			message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /product/lookup&chain=chain_name`,
 			availableOptions: Object.values(LoblawsChainName),
 			code: 400,
 		};
