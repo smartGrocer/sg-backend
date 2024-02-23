@@ -254,7 +254,8 @@ router.get("/product/lookup", async (req: Request, res: Response) => {
 	if (Object.values(MetroChain).includes(chainName as MetroChain)) {
 		const { message, data, code, availableOptions } = await getMetroProduct(
 			{
-				product_id: link_to_product,
+				product_id,
+				url: link_to_product,
 				chainName: chainName as MetroChain,
 				store_id,
 			}

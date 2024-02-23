@@ -16,6 +16,7 @@ export interface ISearchStore {
 }
 
 export interface IGetProduct {
+	
 	product_id: string;
 	store_id: string;
 }
