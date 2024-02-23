@@ -1,10 +1,5 @@
-const JSONInput = "app/data/CanadianPostalCodes.json";
-import fs from "fs/promises";
-import {
-	getCachedData,
-	localCache,
-	saveToCache,
-} from "../cache/localCache/localCache";
+import { getCachedData, saveToCache } from "../cache/localCache/localCache";
+import { getPostalcode } from "../loadPostal";
 
 export interface IPostalData {
 	lat: number;
@@ -28,11 +23,9 @@ export const getCoordinatesFromPostal = async (
 		return cachedData;
 	}
 
-	// read it line by line and parse it, if found return it
-	const data = (await fs.readFile(JSONInput, "utf-8")) as unknown as string;
-	const formattedPostalCode = formatPostalCode(postalCode);
+	const postalData = getPostalcode(formatPostalCode(postalCode));
 
-	const postalData = JSON.parse(data)[formattedPostalCode];
+	const formattedPostalCode = formatPostalCode(postalCode);
 
 	const returnData: IPostalData = {
 		...postalData,
