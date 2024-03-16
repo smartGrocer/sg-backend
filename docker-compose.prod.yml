@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   node-app:
     build:
@@ -8,9 +8,8 @@ services:
     command: npm run start
     restart: unless-stopped
     networks:
-      default:
-        external: true
-          name: nginx-proxy-network
+      - nginx-proxy-network
+
   
   nginx:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -23,4 +22,8 @@ services:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
 
-      
+
+networks:
+  nginx-proxy-network:
+    external: true
+    name: nginx-proxy-network
