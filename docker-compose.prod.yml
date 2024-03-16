@@ -7,8 +7,6 @@ services:
       - .env
     command: npm run start
     restart: unless-stopped
-    networks:
-      - nginx-network
 
   
   nginx:
@@ -26,4 +24,4 @@ services:
 networks:
   nginx-proxy-network:
     external: true
-    name: nginx-network
+    name: nginx-proxy-network
