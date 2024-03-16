@@ -8,7 +8,9 @@ services:
     command: npm run start
     restart: unless-stopped
     networks:
-      - nginx-proxy-network
+      default:
+        external:
+          name: nginx-proxy-network
   
   nginx:
     image: 'jc21/nginx-proxy-manager:latest'
