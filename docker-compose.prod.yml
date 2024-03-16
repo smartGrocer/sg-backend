@@ -7,8 +7,7 @@ services:
       - .env
     command: npm run start
     restart: unless-stopped
-
-  
+      
   nginx:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
@@ -19,9 +18,3 @@ services:
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
-
-
-networks:
-  nginx-proxy-network:
-    external: true
-    name: nginx-proxy-network
