@@ -30,4 +30,5 @@ jobs:
           cd sg-backend
           git checkout HEAD .
           git pull
-          npm run docker:prod
+          docker-compose -f docker-compose.prod.yml down
+          docker-compose -f docker-compose.prod.yml up --build -d
