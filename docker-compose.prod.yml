@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     networks:
       default:
-        external:
+        external: true
           name: nginx-proxy-network
   
   nginx:
