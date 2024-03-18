@@ -30,6 +30,6 @@ jobs:
           cd sg-backend
           git checkout HEAD .
           git pull
-          echo ${{ secrets.VM_PASSWORD }} | sudo -S -k docker compose -f docker-compose.prod.yml down 
-          echo ${{ secrets.VM_PASSWORD }} | sudo -S -k docker compose -f docker-compose.prod.yml up --build -d
+          docker compose -f docker-compose.prod.yml down 
+          docker compose -f docker-compose.prod.yml up --build -d
 
