@@ -1,7 +1,9 @@
-type SecretType = "PORT"
+type SecretType =
+	| "PORT"
 	| "UPSTASH_PORT"
 	| "UPSTASH_ENDPOINT"
-	| "UPSTASH_PASSWORD";
+	| "UPSTASH_PASSWORD"
+	| "PANDA_BROWSER_URL";
 
 const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables

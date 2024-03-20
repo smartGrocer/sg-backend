@@ -1,10 +1,12 @@
-import axios from "axios";
+import axios, { Axios, AxiosResponse } from "axios";
 import * as cheerio from "cheerio";
 import {
 	IProductProps,
 	ISearchProducts,
 } from "../../../../common/types/common/product";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
+import { get } from "cheerio/lib/api/traversing";
+import getSecret from "../../../../common/helpers/getSecret";
 
 const searchProducts = async ({
 	search_term,
@@ -18,15 +20,32 @@ const searchProducts = async ({
 			url += `&freeText=true`;
 		}
 
-		const response = await axios.get(url);
+		let response;
+		let resData;
 
-		if (response.status === 500) {
+		try {
+			response = await axios.get(url);
+			resData = response.data;
+		} catch (e: any) {
+			if (e.response.status === 403) {
+				const pandaURL = `${getSecret("PANDA_BROWSER_URL")}/api/article?full-content=true&cache=false&url=${url}`;
+				response = await axios.get(pandaURL).catch((e) => {
+					throw new Error(
+						`Panda Error fetching products for metro, status: ${e}`
+					);
+				});
+				resData = response.data.fullContent;
+				if (response.status === 200) {
+					console.log(`Fetched data from panda for ${chainName}`);
+				}
+			}
+		}
+
+		if (response?.status === 500) {
 			throw new Error(
 				`Errors fetching products for metro, status: ${response.status}`
 			);
 		}
-
-		const resData = response.data;
 
 		const cleanData = resData.replace(/\n|\r|\t/g, "");
 
