@@ -1,19 +1,18 @@
 version: "3"
 services:
-  node-app:
-    build:
-      context: .
-      args:
-        NODE_ENV: development
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-    env_file:
-      - .env
-    ports:
-      - "8000:8000"
-    # if developing locally, run npm install to add the node_modules folder locally
-    command: npm run dev
-  
+    node-app:
+        build:
+            context: .
+            args:
+                NODE_ENV: development
+        volumes:
+            - ./:/app
+            - /app/node_modules
+        environment:
+            - NODE_ENV=development
+        env_file:
+            - .env
+        ports:
+            - "8000:8000"
+        # if developing locally, run npm install to add the node_modules folder locally
+        command: npm run dev
