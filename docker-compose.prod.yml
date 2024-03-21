@@ -2,12 +2,12 @@ version: "3.8"
 services:
     node-app:
         container_name: node-service
+        restart: unless-stopped
         build:
             context: .
         env_file:
             - .env
         command: npm run start
-        restart: unless-stopped
 
     caddy:
         image: caddy:2.7.6
