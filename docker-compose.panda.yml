@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+    caddy:
+        image: caddy:2.7.6
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - "./caddy/Caddyfile.panda:/etc/caddy/Caddyfile"
+            - "caddy_data:/data"
+            - "caddy_config:/config"
+
+    scrapper:
+        image: amerkurev/scrapper:latest
+        container_name: scrapper
+        volumes:
+            - ./user_data:/home/user/user_data
+            - ./user_scripts:/home/user/user_scripts
+        restart: unless-stopped
+
+    noip:
+        image: aanousakis/no-ip:latest
+        container_name: noip
+        restart: unless-stopped
+        environment:
+            - NOIP_USERNAME="${NOIP_USERNAME}"
+            - NOIP_PASSWORD="${NOIP_PASSWORD}"
+            - NOIP_HOSTNAME="${NOIP_HOSTNAME}"
+
+volumes:
+    caddy_data:
+    caddy_config:
