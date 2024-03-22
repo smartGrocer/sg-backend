@@ -17,7 +17,7 @@ export const getCachedStoreData = async (key: string) => {
 	return null;
 };
 
-export const saveToStoreCache = async ({
+export const saveToCacheStore = async ({
 	key,
 	data,
 	cacheInRedis,

@@ -5,7 +5,7 @@ import { IStoreWalmartSrcProps } from "../../../../common/types/walmart/walmart"
 import { IStoreProps } from "../../../../common/types/common/store";
 import {
 	getCachedStoreData,
-	saveToStoreCache,
+	saveToCacheStore,
 } from "../../../../common/cache/storeCache";
 
 interface IGetWalmartStores {
@@ -34,7 +34,7 @@ const getWalmartStores = async ({
 				})
 			).data.payload.stores;
 
-		saveToStoreCache({
+		saveToCacheStore({
 			key: urlWithQuery,
 			data: response,
 			cacheInRedis: !cachedData,

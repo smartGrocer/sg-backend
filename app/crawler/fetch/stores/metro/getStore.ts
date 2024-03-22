@@ -4,7 +4,7 @@ import { IStoreProps } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import {
 	getCachedStoreData,
-	saveToStoreCache,
+	saveToCacheStore,
 } from "../../../../common/cache/storeCache";
 
 interface IGetMetroStores {
@@ -26,7 +26,7 @@ const getMetroStores = async ({
 		const cachedData = await getCachedStoreData(url);
 
 		if (cachedData) {
-			saveToStoreCache({
+			saveToCacheStore({
 				key: url,
 				data: cachedData,
 				cacheInRedis: !cachedData,
@@ -84,7 +84,7 @@ const getMetroStores = async ({
 				});
 			});
 
-		saveToStoreCache({
+		saveToCacheStore({
 			key: url,
 			data: data,
 			cacheInRedis: !!cachedData,

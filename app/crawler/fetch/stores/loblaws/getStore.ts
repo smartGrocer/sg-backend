@@ -8,7 +8,7 @@ import {
 import { IStoreProps } from "../../../../common/types/common/store";
 import {
 	getCachedStoreData,
-	saveToStoreCache,
+	saveToCacheStore,
 } from "../../../../common/cache/storeCache";
 
 const getLoblawsStores = async ({
@@ -44,7 +44,7 @@ const getLoblawsStores = async ({
 			const response =
 				(await cachedData) || (await axios.get(fetchUrl)).data;
 
-			saveToStoreCache({
+			saveToCacheStore({
 				key: fetchUrl,
 				data: response,
 				cacheInRedis: !cachedData,
@@ -93,13 +93,15 @@ const filterDuplicates = (data: IStoreProps[]): IStoreProps[] => {
 				(Math.round(t.latitude * 100) / 100 ===
 					Math.round(store.latitude * 100) / 100 &&
 					Math.round(t.longitude * 100) / 100 ===
-						Math.round(store.longitude * 100) / 100)||
-
+						Math.round(store.longitude * 100) / 100) ||
 				// If store_name includes the text "testing" or delivery or closed
-				store.store_name.toLowerCase().includes("Colleague Testing".toLowerCase()) ||
-				store.store_name.toLowerCase().includes("Delivery".toLowerCase()) ||
+				store.store_name
+					.toLowerCase()
+					.includes("Colleague Testing".toLowerCase()) ||
+				store.store_name
+					.toLowerCase()
+					.includes("Delivery".toLowerCase()) ||
 				store.store_name.toLowerCase().includes("Closed".toLowerCase())
-
 		);
 
 		if (!existingStore) {
