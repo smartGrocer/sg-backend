@@ -7,7 +7,7 @@ services:
             - "80:80"
             - "443:443"
         volumes:
-            - "./caddy/Caddyfile.panda:/etc/caddy/Caddyfile"
+            - "./caddy/panda/Caddyfile:/etc/caddy/Caddyfile"
             - "caddy_data:/data"
             - "caddy_config:/config"
 

@@ -1,3 +1,0 @@
-panda.nmpereira.com {
-	reverse_proxy scrapper:3000
-}

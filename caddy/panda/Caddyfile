@@ -1,0 +1,3 @@
+panda.nmpereira.com nmpereira.ddns.net {
+	reverse_proxy scrapper:3000
+}
