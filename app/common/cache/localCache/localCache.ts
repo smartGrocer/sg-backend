@@ -1,6 +1,6 @@
 export const localCache = new Map();
 
-export const getCachedData = async (key: string) => {
+export const getLocalCachedData = async (key: string) => {
 	// read from cache
 	const cachedData = await localCache.get(key);
 
@@ -14,7 +14,11 @@ export const getCachedData = async (key: string) => {
 	return null;
 };
 
-export const saveToCache = async (key: string, data: any, ttl?: number) => {
+export const saveToLocalCache = async (
+	key: string,
+	data: any,
+	ttl?: number
+) => {
 	// console.log(`CACHE SET:Local: ${key}`);
 	localCache.set(key, {
 		data,

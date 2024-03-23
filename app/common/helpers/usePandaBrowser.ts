@@ -1,7 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 
 import getSecret from "./getSecret";
-import { getCachedData, saveToCache } from "../cache/localCache/localCache";
+import {
+	getLocalCachedData,
+	saveToLocalCache,
+} from "../cache/localCache/localCache";
 import { PandaBrowserKeys } from "../types/common/product";
 
 interface IUsePandaBrowserArgs {
@@ -22,7 +25,7 @@ const usePandaBrowser = async ({
 	let resData;
 
 	try {
-		const isDown = await getCachedData(key);
+		const isDown = await getLocalCachedData(key);
 
 		if (!isDown) {
 			response = await axios.get(url);
@@ -33,7 +36,7 @@ const usePandaBrowser = async ({
 	} catch (e: any) {
 		// if 403 or if error type is "error-isDown"
 		if (e?.response?.status === 403 || e?.message === "error-isDown") {
-			await saveToCache(key, true, 1000 * 60 * 60);
+			await saveToLocalCache(key, true, 1000 * 60 * 60);
 			const pandaURL = `${getSecret("PANDA_BROWSER_URL")}/api/article?full-content=true&cache=false&url=${url}`;
 			response = await axios.get(pandaURL).catch((e) => {
 				throw new Error(

@@ -3,8 +3,8 @@ import * as cheerio from "cheerio";
 import { IStoreProps } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import {
-	getCachedStoreData,
-	saveToCacheStore,
+	getCachedData,
+	saveToCache,
 } from "../../../../common/cache/storeCache";
 
 interface IGetMetroStores {
@@ -23,15 +23,15 @@ const getMetroStores = async ({
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
-		const cachedData = await getCachedStoreData(url);
+		const cachedData = await getCachedData(url);
 
 		if (cachedData) {
-			saveToCacheStore({
-				key: url,
-				data: cachedData,
-				cacheInRedis: !cachedData,
-			});
-			return await cachedData;
+			// saveToCache({
+			// 	key: url,
+			// 	data: cachedData,
+			// 	cacheInRedis: !cachedData,
+			// });
+			return cachedData;
 		}
 		const response = await axios.get(url);
 
@@ -84,7 +84,7 @@ const getMetroStores = async ({
 				});
 			});
 
-		saveToCacheStore({
+		saveToCache({
 			key: url,
 			data: data,
 			cacheInRedis: !!cachedData,

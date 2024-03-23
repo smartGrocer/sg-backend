@@ -35,6 +35,14 @@ router.get(
 
 		const allStores: IStoreProps[] = [];
 
+		// if chain brand is not provided or is invalid
+		if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
+			return res.status(400).json({
+				message: `Invalid chain brand, please provide a valid chain brand.`,
+				availableOptions: Object.values(AllStoreChainBrands),
+			});
+		}
+
 		if (!validPostalCode) {
 			return res.status(400).json({
 				message:
@@ -48,14 +56,6 @@ router.get(
 			return res.status(400).json({
 				message: `Invalid postal code or postal code not found. Please provide a valid postal code.`,
 				data: `postal_code=${!postalCode ? "''" : postalCode} might be invalid or could not be found. Please provide a valid postal code.`,
-			});
-		}
-
-		// if chain brand is not provided or is invalid
-		if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
-			return res.status(400).json({
-				message: `Invalid chain brand, please provide a valid chain brand.`,
-				availableOptions: Object.values(AllStoreChainBrands),
 			});
 		}
 

@@ -7,8 +7,8 @@ import {
 } from "../../../../common/types/loblaws/loblaws";
 import { IStoreProps } from "../../../../common/types/common/store";
 import {
-	getCachedStoreData,
-	saveToCacheStore,
+	getCachedData,
+	saveToCache,
 } from "../../../../common/cache/storeCache";
 
 const getLoblawsStores = async ({
@@ -39,12 +39,12 @@ const getLoblawsStores = async ({
 			const url = `https://www.${LoblawsChainAlternateName(listOfStores[i])}.ca/api/pickup-locations`;
 			const bannerId = listOfStores[i];
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
-			const cachedData = await getCachedStoreData(fetchUrl);
+			const cachedData = await getCachedData(fetchUrl);
 
 			const response =
 				(await cachedData) || (await axios.get(fetchUrl)).data;
 
-			saveToCacheStore({
+			saveToCache({
 				key: fetchUrl,
 				data: response,
 				cacheInRedis: !cachedData,

@@ -4,8 +4,8 @@ import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode"
 import { IStoreWalmartSrcProps } from "../../../../common/types/walmart/walmart";
 import { IStoreProps } from "../../../../common/types/common/store";
 import {
-	getCachedStoreData,
-	saveToCacheStore,
+	getCachedData,
+	saveToCache,
 } from "../../../../common/cache/storeCache";
 
 interface IGetWalmartStores {
@@ -22,7 +22,7 @@ const getWalmartStores = async ({
 
 		const userAgent = new UserAgent().toString();
 
-		const cachedData = await getCachedStoreData(urlWithQuery);
+		const cachedData = await getCachedData(urlWithQuery);
 
 		const response =
 			(await cachedData) ||
@@ -34,7 +34,7 @@ const getWalmartStores = async ({
 				})
 			).data.payload.stores;
 
-		saveToCacheStore({
+		saveToCache({
 			key: urlWithQuery,
 			data: response,
 			cacheInRedis: !cachedData,

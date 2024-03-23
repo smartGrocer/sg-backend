@@ -1,8 +1,8 @@
-import { getCachedData, saveToCache } from "./localCache/localCache";
+import { getLocalCachedData, saveToLocalCache } from "./localCache/localCache";
 import { getRedisCache, saveToRedisCache } from "./redis/redisCache";
 
-export const getCachedStoreData = async (key: string) => {
-	const response = await getCachedData(key);
+export const getCachedData = async (key: string) => {
+	const response = await getLocalCachedData(key);
 
 	if (response) {
 		return response;
@@ -17,7 +17,7 @@ export const getCachedStoreData = async (key: string) => {
 	return null;
 };
 
-export const saveToCacheStore = async ({
+export const saveToCache = async ({
 	key,
 	data,
 	cacheInRedis,
@@ -26,7 +26,7 @@ export const saveToCacheStore = async ({
 	data: any;
 	cacheInRedis: boolean;
 }) => {
-	await saveToCache(key, data, 1000 * 60 * 60 * 24 * 2);
+	await saveToLocalCache(key, data, 1000 * 60 * 60 * 24 * 2);
 
 	// save to redis
 	if (cacheInRedis) {
