@@ -1,0 +1,1 @@
+sudo docker compose -f docker-compose.panda.yml down && sudo docker compose -f docker-compose.panda.yml up --build -d --remove-orphans
