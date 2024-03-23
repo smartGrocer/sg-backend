@@ -1,0 +1,74 @@
+version: "3.8"
+services:
+    caddy:
+        image: caddy:2.7.6
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - "./caddy/panda/Caddyfile:/etc/caddy/Caddyfile"
+            - "caddy_data:/data"
+            - "caddy_config:/config"
+
+    noip:
+        image: aanousakis/no-ip:latest
+        container_name: noip
+        restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            - NOIP_USERNAME="${NOIP_USERNAME}"
+            - NOIP_PASSWORD="${NOIP_PASSWORD}"
+            - NOIP_HOSTNAME="${NOIP_HOSTNAME}"
+
+    portainer:
+        image: portainer/portainer-ce:latest
+        ports:
+            - 9443:9443
+        volumes:
+            - data:/data
+            - /var/run/docker.sock:/var/run/docker.sock
+        restart: unless-stopped
+
+    scrapper1:
+        image: amerkurev/scrapper:latest
+        volumes:
+            - ./user_data:/home/user/user_data
+            - ./user_scripts:/home/user/user_scripts
+        restart: unless-stopped
+
+    scrapper2:
+        image: amerkurev/scrapper:latest
+        volumes:
+            - ./user_data:/home/user/user_data
+            - ./user_scripts:/home/user/user_scripts
+        restart: unless-stopped
+
+    scrapper3:
+        image: amerkurev/scrapper:latest
+        volumes:
+            - ./user_data:/home/user/user_data
+            - ./user_scripts:/home/user/user_scripts
+        restart: unless-stopped
+
+    scrapper4:
+        image: amerkurev/scrapper:latest
+        volumes:
+            - ./user_data:/home/user/user_data
+            - ./user_scripts:/home/user/user_scripts
+        restart: unless-stopped
+
+    uptime-kuma:
+        image: louislam/uptime-kuma:1
+        container_name: uptime-kuma
+        volumes:
+            - ./uptime-kuma-data:/app/data
+        ports:
+            - 3001:3001 # <Host Port>:<Container Port>
+        restart: always
+
+volumes:
+    data:
+    caddy_data:
+    caddy_config:

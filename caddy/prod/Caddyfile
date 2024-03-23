@@ -1,0 +1,3 @@
+smartgrocer.nmpereira.com {
+    reverse_proxy node-service:8000
+}

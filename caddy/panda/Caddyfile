@@ -1,0 +1,15 @@
+panda.nmpereira.com nmpereira.ddns.net {
+	reverse_proxy scrapper1:3000 scrapper2:3000 scrapper3:3000 scrapper4:3000 {
+        lb_policy round_robin # "random" is default if not specified
+
+        lb_retries 2
+        fail_duration 10s
+
+        # https://thedevelopercafe.com/articles/reverse-proxy-in-caddy-5c40d2fe21fe
+        health_uri /
+        health_interval 5s
+        health_timeout 2s
+        health_status 2xx
+	}
+
+}
