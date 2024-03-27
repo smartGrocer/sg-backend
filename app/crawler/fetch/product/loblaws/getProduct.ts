@@ -20,7 +20,10 @@ const getProduct = async ({
 }: IGetProductLoblawsProps): Promise<IProductProps | Error> => {
 	const cacheKey = `product-${chainName}-${store_id}-${product_id}`;
 
-	const cachedData = await getCachedData(cacheKey);
+	const cachedData = await getCachedData({
+		key: cacheKey,
+		cacheInRedis: true,
+	});
 
 	if (cachedData) {
 		return cachedData;
@@ -75,7 +78,7 @@ const getProduct = async ({
 		await saveToCache({
 			key: cacheKey,
 			data: productData,
-			cacheInRedis: !cachedData,
+			cacheInRedis: true,
 		});
 
 		return productData;

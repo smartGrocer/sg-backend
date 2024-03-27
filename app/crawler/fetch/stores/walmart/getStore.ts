@@ -17,7 +17,10 @@ const getWalmartStores = async ({
 }: IGetWalmartStores): Promise<IStoreProps[] | Error> => {
 	try {
 		const cacheKey = `stores-walmart-${validPostalCode}`;
-		const cachedData = await getCachedData(cacheKey);
+		const cachedData = await getCachedData({
+			key: cacheKey,
+			cacheInRedis: true,
+		});
 
 		if (cachedData) {
 			return cachedData;
@@ -68,7 +71,7 @@ const getWalmartStores = async ({
 		await saveToCache({
 			key: cacheKey,
 			data: data,
-			cacheInRedis: !cachedData,
+			cacheInRedis: true,
 		});
 
 		return data;

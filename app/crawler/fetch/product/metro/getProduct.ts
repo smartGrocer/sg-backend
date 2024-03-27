@@ -21,12 +21,15 @@ const getProduct = async ({
 	try {
 		const cacheKey = `product-${chainName}-${store_id}-${product_id}-${url}`;
 
-		const cachedData = await getCachedData(cacheKey);
+		const cachedData = await getCachedData({
+			key: cacheKey,
+			cacheInRedis: true,
+		});
 
 		if (cachedData) {
 			return cachedData;
 		}
-
+		//TODO: use panda browser
 		const response = await axios.get(url as string, {
 			headers: {
 				"user-agent": userAgent,
@@ -172,7 +175,7 @@ const getProduct = async ({
 		await saveToCache({
 			key: cacheKey,
 			data: result,
-			cacheInRedis: !cachedData,
+			cacheInRedis: true,
 		});
 
 		return result;

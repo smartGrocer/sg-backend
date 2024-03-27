@@ -25,7 +25,10 @@ const searchProducts = async ({
 }: ISearchProducts): Promise<IProductPropsWithPagination | Error> => {
 	try {
 		const cacheKey = `search-${chainName}-${store_id}-${search_term}`;
-		const cachedData = await getCachedData(cacheKey);
+		const cachedData = await getCachedData({
+			key: cacheKey,
+			cacheInRedis: true,
+		});
 
 		if (cachedData) {
 			return cachedData;
@@ -98,7 +101,7 @@ const searchProducts = async ({
 				pagination,
 				results: products,
 			},
-			cacheInRedis: !cachedData,
+			cacheInRedis: true,
 		});
 
 		return {

@@ -18,9 +18,13 @@ const searchProducts = async ({
 	store_id,
 }: ISearchProducts): Promise<IProductProps[] | Error> => {
 	try {
+		const store_id = "all";
 		const cacheKey = `search-${chainName}-${store_id}-${search_term}`;
 
-		const cachedData = await getCachedData(cacheKey);
+		const cachedData = await getCachedData({
+			key: cacheKey,
+			cacheInRedis: true,
+		});
 
 		if (cachedData) {
 			return cachedData;
@@ -51,7 +55,6 @@ const searchProducts = async ({
 			.find("div.tile-product")
 			.each((i, el) => {
 				const product_id = $(el).attr("data-product-code") || "";
-				const store_id = "all";
 
 				const product_brand =
 					$(el).find(".head__brand").text().trim() || "";
@@ -186,7 +189,7 @@ const searchProducts = async ({
 		await saveToCache({
 			key: cacheKey,
 			data,
-			cacheInRedis: !cachedData,
+			cacheInRedis: true,
 		});
 
 		return data;

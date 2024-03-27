@@ -17,7 +17,10 @@ const getMetroStores = async ({
 	try {
 		const chain = chainName;
 		const cacheKey = `stores-${chainName}`;
-		const cachedData = await getCachedData(cacheKey);
+		const cachedData = await getCachedData({
+			key: cacheKey,
+			cacheInRedis: true,
+		});
 
 		if (cachedData) {
 			return cachedData;
@@ -83,7 +86,7 @@ const getMetroStores = async ({
 		saveToCache({
 			key: cacheKey,
 			data: data,
-			cacheInRedis: !cachedData,
+			cacheInRedis: true,
 		});
 
 		return data;

@@ -19,7 +19,7 @@ export const saveToLocalCache = async (
 	data: any,
 	ttl?: number
 ) => {
-	// console.log(`CACHE SET:Local: ${key}`);
+	console.log(`CACHE SET:Local: ${key}`);
 	localCache.set(key, {
 		data,
 		updatedAt: new Date(),

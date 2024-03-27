@@ -29,7 +29,10 @@ const getLoblawsStores = async ({
 
 	const cacheKey = `stores-${chainName}-${showAllStores ? "all" : chainName}`;
 
-	const cachedData = await getCachedData(cacheKey);
+	const cachedData = await getCachedData({
+		key: cacheKey,
+		cacheInRedis: true,
+	});
 
 	if (cachedData) {
 		return cachedData;
@@ -77,7 +80,7 @@ const getLoblawsStores = async ({
 		await saveToCache({
 			key: cacheKey,
 			data: returnData,
-			cacheInRedis: !cachedData,
+			cacheInRedis: true,
 		});
 		return returnData;
 	} catch (error: any) {
