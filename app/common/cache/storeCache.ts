@@ -13,7 +13,7 @@ export const getCachedData = async (key: string) => {
 		return redisResponse;
 	}
 
-	console.log("CACHE MISS:Store");
+	console.log(`CACHE MISS: ${key}`);
 	return null;
 };
 

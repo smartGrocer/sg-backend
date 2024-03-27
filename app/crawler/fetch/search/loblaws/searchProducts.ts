@@ -13,6 +13,10 @@ import {
 } from "../../../../common/types/common/product";
 import { parse } from "dotenv";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
+import {
+	getCachedData,
+	saveToCache,
+} from "../../../../common/cache/storeCache";
 
 const searchProducts = async ({
 	search_term,
@@ -20,6 +24,12 @@ const searchProducts = async ({
 	store_id,
 }: ISearchProducts): Promise<IProductPropsWithPagination | Error> => {
 	try {
+		const cacheKey = `search-${chainName}-${store_id}-${search_term}`;
+		const cachedData = await getCachedData(cacheKey);
+
+		if (cachedData) {
+			return cachedData;
+		}
 		const userAgent = new UserAgent().toString();
 
 		const url = `https://api.pcexpress.ca/pcx-bff/api/v1/products/search`;
@@ -71,16 +81,28 @@ const searchProducts = async ({
 			}
 		);
 
-		return {
-			pagination: {
-				totalResults: response.data.pagination.totalResults,
-				pageNumber: response.data.pagination.pageNumber,
-				pageSize: response.data.pagination.pageSize,
-				totalPages: Math.ceil(
-					response.data.pagination.totalResults /
-						response.data.pagination.pageSize
-				),
+		const pagination = {
+			totalResults: response.data.pagination.totalResults,
+			pageNumber: response.data.pagination.pageNumber,
+			pageSize: response.data.pagination.pageSize,
+			totalPages: Math.ceil(
+				response.data.pagination.totalResults /
+					response.data.pagination.pageSize
+			),
+		};
+
+		// save to cache
+		await saveToCache({
+			key: cacheKey,
+			data: {
+				pagination,
+				results: products,
 			},
+			cacheInRedis: !cachedData,
+		});
+
+		return {
+			pagination,
 			results: products,
 		};
 	} catch (error: unknown) {

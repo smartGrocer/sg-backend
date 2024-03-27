@@ -16,6 +16,12 @@ const getMetroStores = async ({
 }: IGetMetroStores): Promise<IStoreProps[] | Error> => {
 	try {
 		const chain = chainName;
+		const cacheKey = `stores-${chainName}`;
+		const cachedData = await getCachedData(cacheKey);
+
+		if (cachedData) {
+			return cachedData;
+		}
 		const endpoint = `/find-a-grocery`;
 		const domain = `https://www.${chain}.ca`;
 		const url =
@@ -23,16 +29,6 @@ const getMetroStores = async ({
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
-		const cachedData = await getCachedData(url);
-
-		if (cachedData) {
-			// saveToCache({
-			// 	key: url,
-			// 	data: cachedData,
-			// 	cacheInRedis: !cachedData,
-			// });
-			return cachedData;
-		}
 		const response = await axios.get(url);
 
 		const resData = response.data;
@@ -85,9 +81,9 @@ const getMetroStores = async ({
 			});
 
 		saveToCache({
-			key: url,
+			key: cacheKey,
 			data: data,
-			cacheInRedis: !!cachedData,
+			cacheInRedis: !cachedData,
 		});
 
 		return data;

@@ -16,29 +16,25 @@ const getWalmartStores = async ({
 	validPostalCode,
 }: IGetWalmartStores): Promise<IStoreProps[] | Error> => {
 	try {
+		const cacheKey = `stores-walmart-${validPostalCode}`;
+		const cachedData = await getCachedData(cacheKey);
+
+		if (cachedData) {
+			return cachedData;
+		}
 		const url = `https://www.walmart.ca/en/stores-near-me/api/searchStores`;
 		const postalCodeQuery = `singleLineAddr=${validPostalCode}`;
 		const urlWithQuery = `${url}?${postalCodeQuery}`;
 
 		const userAgent = new UserAgent().toString();
 
-		const cachedData = await getCachedData(urlWithQuery);
-
-		const response =
-			(await cachedData) ||
-			(
-				await axios.get(urlWithQuery, {
-					headers: {
-						"user-agent": userAgent,
-					},
-				})
-			).data.payload.stores;
-
-		saveToCache({
-			key: urlWithQuery,
-			data: response,
-			cacheInRedis: !cachedData,
-		});
+		const response = (
+			await axios.get(urlWithQuery, {
+				headers: {
+					"user-agent": userAgent,
+				},
+			})
+		).data.payload.stores;
 
 		const data = response.map((store: IStoreWalmartSrcProps) => {
 			const formatted_address = [
@@ -67,6 +63,12 @@ const getWalmartStores = async ({
 				province: store.address.state,
 				country: store.address.country,
 			};
+		});
+
+		await saveToCache({
+			key: cacheKey,
+			data: data,
+			cacheInRedis: !cachedData,
 		});
 
 		return data;

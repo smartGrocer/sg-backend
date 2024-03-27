@@ -27,6 +27,14 @@ const getLoblawsStores = async ({
 		throw new Error("Invalid chain name");
 	}
 
+	const cacheKey = `stores-${chainName}-${showAllStores ? "all" : chainName}`;
+
+	const cachedData = await getCachedData(cacheKey);
+
+	if (cachedData) {
+		return cachedData;
+	}
+
 	const listOfStores = showAllStores
 		? Object.values(LoblawsChainName)
 		: [chainName];
@@ -39,16 +47,8 @@ const getLoblawsStores = async ({
 			const url = `https://www.${LoblawsChainAlternateName(listOfStores[i])}.ca/api/pickup-locations`;
 			const bannerId = listOfStores[i];
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
-			const cachedData = await getCachedData(fetchUrl);
 
-			const response =
-				(await cachedData) || (await axios.get(fetchUrl)).data;
-
-			saveToCache({
-				key: fetchUrl,
-				data: response,
-				cacheInRedis: !cachedData,
-			});
+			const response = (await axios.get(fetchUrl)).data;
 
 			const data = response.map((store: IStoreLoblawsSrcProps) => {
 				return {
@@ -74,6 +74,11 @@ const getLoblawsStores = async ({
 			returnData.push(...filteredData);
 		}
 
+		await saveToCache({
+			key: cacheKey,
+			data: returnData,
+			cacheInRedis: !cachedData,
+		});
 		return returnData;
 	} catch (error: any) {
 		return error as Error;

@@ -4,6 +4,10 @@ import { IGetProductMetroProps } from "../../../../common/types/metro/metro";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
+import {
+	getCachedData,
+	saveToCache,
+} from "../../../../common/cache/storeCache";
 
 const getProduct = async ({
 	product_id,
@@ -15,8 +19,14 @@ const getProduct = async ({
 	const userAgent = new UserAgent().toString();
 
 	try {
-		// fetch product data
-		console.log({ url });
+		const cacheKey = `product-${chainName}-${store_id}-${product_id}-${url}`;
+
+		const cachedData = await getCachedData(cacheKey);
+
+		if (cachedData) {
+			return cachedData;
+		}
+
 		const response = await axios.get(url as string, {
 			headers: {
 				"user-agent": userAgent,
@@ -156,7 +166,16 @@ const getProduct = async ({
 			});
 		});
 
-		return productData[0];
+		const result = productData[0];
+
+		// cache data
+		await saveToCache({
+			key: cacheKey,
+			data: result,
+			cacheInRedis: !cachedData,
+		});
+
+		return result;
 	} catch (error: unknown) {
 		console.log({ error });
 		return error as Error;

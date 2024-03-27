@@ -8,14 +8,23 @@ import {
 	pickImage,
 } from "../../../../common/types/loblaws/loblaws";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
-
-
+import {
+	getCachedData,
+	saveToCache,
+} from "../../../../common/cache/storeCache";
 
 const getProduct = async ({
 	product_id,
 	store_id,
 	chainName,
 }: IGetProductLoblawsProps): Promise<IProductProps | Error> => {
+	const cacheKey = `product-${chainName}-${store_id}-${product_id}`;
+
+	const cachedData = await getCachedData(cacheKey);
+
+	if (cachedData) {
+		return cachedData;
+	}
 	const productData = {} as IProductProps;
 	const userAgent = new UserAgent().toString();
 	// format date as ddmmyyyy in toronto
@@ -61,6 +70,13 @@ const getProduct = async ({
 			product.offers[0].comparisonPrices[0].unit || null;
 		productData.compare_price_quantity =
 			product.offers[0].comparisonPrices[0].quantity || null;
+
+		// cache data
+		await saveToCache({
+			key: cacheKey,
+			data: productData,
+			cacheInRedis: !cachedData,
+		});
 
 		return productData;
 	} catch (error: unknown) {

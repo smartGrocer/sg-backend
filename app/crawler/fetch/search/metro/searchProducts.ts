@@ -7,6 +7,10 @@ import {
 import parseQuantity from "../../../../common/helpers/parseQuantity";
 
 import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
+import {
+	getCachedData,
+	saveToCache,
+} from "../../../../common/cache/storeCache";
 
 const searchProducts = async ({
 	search_term,
@@ -14,13 +18,18 @@ const searchProducts = async ({
 	store_id,
 }: ISearchProducts): Promise<IProductProps[] | Error> => {
 	try {
+		const cacheKey = `search-${chainName}-${store_id}-${search_term}`;
+
+		const cachedData = await getCachedData(cacheKey);
+
+		if (cachedData) {
+			return cachedData;
+		}
 		let url = `https://www.${chainName === "metro" ? "metro.ca/en/online-grocery" : "foodbasics.ca"}/search?filter=${search_term}`;
 
 		if (chainName === "metro") {
 			url += `&freeText=true`;
 		}
-
-		//TODO add cache
 
 		const { response, resData } = await usePandaBrowser({
 			url,
@@ -172,6 +181,13 @@ const searchProducts = async ({
 					compare_price_quantity,
 				});
 			});
+
+		// save to cache
+		await saveToCache({
+			key: cacheKey,
+			data,
+			cacheInRedis: !cachedData,
+		});
 
 		return data;
 	} catch (e) {
