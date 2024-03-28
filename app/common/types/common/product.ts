@@ -14,10 +14,22 @@ export interface ISearchStore {
 	search_term: string;
 	store_id: string;
 }
+
+export interface IGetProduct {
+	product_id: string;
+	store_id: string;
+}
 export interface ISearchReturn {
 	message: string;
 	count?: number;
-	data?: IProductProps[];
+	data?: IProductProps[] | IProductPropsWithPagination;
+	code: number;
+	availableOptions?: string | string[];
+}
+
+export interface IGetProductReturn {
+	message: string;
+	data?: IProductProps;
 	code: number;
 	availableOptions?: string | string[];
 }
@@ -47,4 +59,15 @@ export interface ISearchProducts {
 	search_term: string;
 	chainName: IAllStoreChains;
 	store_id: string;
+}
+
+export interface IGetProductProps {
+	url?: string;
+	product_id?: string;
+	store_id: string;
+}
+
+export enum PandaBrowserKeys {
+	metro_search_panda = "metro_search_panda",
+	metro_lookup_panda = "metro_lookup_panda",
 }

@@ -7,8 +7,8 @@ import {
 } from "../../../../common/types/loblaws/loblaws";
 import { IStoreProps } from "../../../../common/types/common/store";
 import {
-	getCachedStoreData,
-	saveToStoreCache,
+	getCachedData,
+	saveToCache,
 } from "../../../../common/cache/storeCache";
 
 const getLoblawsStores = async ({
@@ -27,6 +27,17 @@ const getLoblawsStores = async ({
 		throw new Error("Invalid chain name");
 	}
 
+	const cacheKey = `stores-${chainName}-${showAllStores ? "all" : chainName}`;
+
+	const cachedData = await getCachedData({
+		key: cacheKey,
+		cacheInRedis: true,
+	});
+
+	if (cachedData) {
+		return cachedData;
+	}
+
 	const listOfStores = showAllStores
 		? Object.values(LoblawsChainName)
 		: [chainName];
@@ -39,16 +50,8 @@ const getLoblawsStores = async ({
 			const url = `https://www.${LoblawsChainAlternateName(listOfStores[i])}.ca/api/pickup-locations`;
 			const bannerId = listOfStores[i];
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
-			const cachedData = await getCachedStoreData(fetchUrl);
 
-			const response =
-				(await cachedData) || (await axios.get(fetchUrl)).data;
-
-			saveToStoreCache({
-				key: fetchUrl,
-				data: response,
-				cacheInRedis: !cachedData,
-			});
+			const response = (await axios.get(fetchUrl)).data;
 
 			const data = response.map((store: IStoreLoblawsSrcProps) => {
 				return {
@@ -74,12 +77,14 @@ const getLoblawsStores = async ({
 			returnData.push(...filteredData);
 		}
 
+		await saveToCache({
+			key: cacheKey,
+			data: returnData,
+			cacheInRedis: true,
+		});
 		return returnData;
 	} catch (error: any) {
-		console.log("Error fetching stores for loblaws", error);
-		throw new Error(
-			`Error fetching stores for loblaws: ${error?.response?.statusText} | ${error}`
-		);
+		return error as Error;
 	}
 };
 
@@ -96,13 +101,15 @@ const filterDuplicates = (data: IStoreProps[]): IStoreProps[] => {
 				(Math.round(t.latitude * 100) / 100 ===
 					Math.round(store.latitude * 100) / 100 &&
 					Math.round(t.longitude * 100) / 100 ===
-						Math.round(store.longitude * 100) / 100)||
-
+						Math.round(store.longitude * 100) / 100) ||
 				// If store_name includes the text "testing" or delivery or closed
-				store.store_name.toLowerCase().includes("Colleague Testing".toLowerCase()) ||
-				store.store_name.toLowerCase().includes("Delivery".toLowerCase()) ||
+				store.store_name
+					.toLowerCase()
+					.includes("Colleague Testing".toLowerCase()) ||
+				store.store_name
+					.toLowerCase()
+					.includes("Delivery".toLowerCase()) ||
 				store.store_name.toLowerCase().includes("Closed".toLowerCase())
-
 		);
 
 		if (!existingStore) {

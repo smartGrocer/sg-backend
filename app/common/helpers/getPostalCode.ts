@@ -1,4 +1,7 @@
-import { getCachedData, saveToCache } from "../cache/localCache/localCache";
+import {
+	getLocalCachedData,
+	saveToLocalCache,
+} from "../cache/localCache/localCache";
 import { getPostalcode } from "../loadPostal";
 
 export interface IPostalData {
@@ -52,9 +55,9 @@ const formatPostalCode = (postalCode: string): string => {
 const getCachedPostalData = async (
 	postalCode: string
 ): Promise<IPostalData | null> => {
-	return await getCachedData(postalCode);
+	return await getLocalCachedData(postalCode);
 };
 
 const saveToPostalCache = (postalCode: string, data: IPostalData) => {
-	saveToCache(postalCode, data, 1000 * 60 * 60 * 24 * 7);
+	saveToLocalCache(postalCode, data, 1000 * 60 * 60 * 24 * 7);
 };

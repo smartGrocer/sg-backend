@@ -3,8 +3,8 @@ import * as cheerio from "cheerio";
 import { IStoreProps } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import {
-	getCachedStoreData,
-	saveToStoreCache,
+	getCachedData,
+	saveToCache,
 } from "../../../../common/cache/storeCache";
 
 interface IGetMetroStores {
@@ -16,6 +16,15 @@ const getMetroStores = async ({
 }: IGetMetroStores): Promise<IStoreProps[] | Error> => {
 	try {
 		const chain = chainName;
+		const cacheKey = `stores-${chainName}`;
+		const cachedData = await getCachedData({
+			key: cacheKey,
+			cacheInRedis: true,
+		});
+
+		if (cachedData) {
+			return cachedData;
+		}
 		const endpoint = `/find-a-grocery`;
 		const domain = `https://www.${chain}.ca`;
 		const url =
@@ -23,16 +32,6 @@ const getMetroStores = async ({
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
-		const cachedData = await getCachedStoreData(url);
-
-		if (cachedData) {
-			saveToStoreCache({
-				key: url,
-				data: cachedData,
-				cacheInRedis: !cachedData,
-			});
-			return await cachedData;
-		}
 		const response = await axios.get(url);
 
 		const resData = response.data;
@@ -84,17 +83,15 @@ const getMetroStores = async ({
 				});
 			});
 
-		saveToStoreCache({
-			key: url,
+		saveToCache({
+			key: cacheKey,
 			data: data,
-			cacheInRedis: !!cachedData,
+			cacheInRedis: true,
 		});
 
 		return data;
 	} catch (error: any) {
-		throw new Error(
-			`Error fetching stores for metro: ${error?.response?.statusText} | ${error}`
-		);
+		return error as Error;
 	}
 };
 

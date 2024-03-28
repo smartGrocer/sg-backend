@@ -1,5 +1,13 @@
 import { Response, Request } from "express";
-import { IProductPropsWithPagination, ISearchStore } from "../common/product";
+import {
+	IGetProduct,
+	IGetProductProps,
+	IProductPropsWithPagination,
+	ISearchReturn,
+	ISearchStore,
+} from "../common/product";
+import getLoblawsStores from "../../../crawler/fetch/stores/loblaws/getStore";
+import { IStoreProps } from "../common/store";
 
 export enum LoblawsChainName {
 	loblaw = "loblaw",
@@ -21,12 +29,8 @@ export interface ISearchLoblaws extends ISearchStore {
 	chainName: LoblawsChainName;
 }
 
-export interface ISearchLoblawsReturn {
-	message: string;
-	count?: number;
-	data?: IProductPropsWithPagination;
-	code: number;
-	availableOptions?: string | string[];
+export interface IGetProductLoblaws extends IGetProduct {
+	chainName: LoblawsChainName;
 }
 
 export const LoblawsChainAlternateName = (
@@ -158,4 +162,101 @@ export interface ILoblawsProductSrcProps {
 	uom: string;
 	taxes: null;
 	fees: null;
+}
+
+export const pickImage = (images: ILoblawsProductSrcProps["imageAssets"]) => {
+	return (
+		images.filter((img) => {
+			return (
+				img.imageUrl !== null ||
+				img.smallUrl !== null ||
+				img.mediumUrl !== null ||
+				img.largeUrl !== null
+			);
+		})[0]?.imageUrl ||
+		images.filter((img) => {
+			return (
+				img.imageUrl !== null ||
+				img.smallUrl !== null ||
+				img.mediumUrl !== null ||
+				img.largeUrl !== null
+			);
+		})[0]?.smallUrl ||
+		images.filter((img) => {
+			return (
+				img.imageUrl !== null ||
+				img.smallUrl !== null ||
+				img.mediumUrl !== null ||
+				img.largeUrl !== null
+			);
+		})[0]?.mediumUrl ||
+		images.filter((img) => {
+			return (
+				img.imageUrl !== null ||
+				img.smallUrl !== null ||
+				img.mediumUrl !== null ||
+				img.largeUrl !== null
+			);
+		})[0]?.largeUrl
+	);
+};
+
+export const validateLoblawsStoreId = async ({
+	storeId,
+	chainName,
+}: {
+	storeId: string;
+	chainName: string;
+}): Promise<{
+	message: string;
+	availableOptions?: string[];
+	code: number;
+}> => {
+	const stores = await getLoblawsStores({
+		chainName: chainName as LoblawsChainName,
+		showAllStores: false,
+	});
+
+	if (stores instanceof Error) {
+		return {
+			message: stores.message,
+			code: 500,
+		};
+	}
+
+	if (!storeId) {
+		return {
+			message: `Store ID is required as a query parameter like so: /search/:product_search?store_id=1234`,
+			availableOptions: [
+				// remove duplicates
+				...new Set<string>(
+					stores.map((store: IStoreProps) => store.store_id).sort()
+				),
+			],
+			code: 400,
+		};
+	}
+
+	if (!stores.find((store) => store.store_id === storeId)) {
+		return {
+			message: `Store ID: ${storeId} is not valid for chain: ${chainName}`,
+			availableOptions: [
+				// remove duplicates
+				...new Set<string>(
+					stores.map((store: IStoreProps) => store.store_id).sort()
+				),
+			],
+			code: 400,
+		};
+	}
+
+	return {
+		message: `Store ID: ${storeId} is valid for chain: ${chainName}`,
+		code: 200,
+	};
+};
+
+
+export interface IGetProductLoblawsProps extends IGetProductProps {
+	chainName: LoblawsChainName;
 }

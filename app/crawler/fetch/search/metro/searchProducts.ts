@@ -1,10 +1,16 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
 import {
 	IProductProps,
 	ISearchProducts,
+	PandaBrowserKeys,
 } from "../../../../common/types/common/product";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
+
+import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
+import {
+	getCachedData,
+	saveToCache,
+} from "../../../../common/cache/storeCache";
 
 const searchProducts = async ({
 	search_term,
@@ -12,21 +18,33 @@ const searchProducts = async ({
 	store_id,
 }: ISearchProducts): Promise<IProductProps[] | Error> => {
 	try {
+		const store_id = "all";
+		const cacheKey = `search-${chainName}-${store_id}-${search_term}`;
+
+		const cachedData = await getCachedData({
+			key: cacheKey,
+			cacheInRedis: true,
+		});
+
+		if (cachedData) {
+			return cachedData;
+		}
 		let url = `https://www.${chainName === "metro" ? "metro.ca/en/online-grocery" : "foodbasics.ca"}/search?filter=${search_term}`;
 
 		if (chainName === "metro") {
 			url += `&freeText=true`;
 		}
 
-		const response = await axios.get(url);
+		const { response, resData } = await usePandaBrowser({
+			url,
+			key: PandaBrowserKeys.metro_search_panda,
+		});
 
-		if (response.status === 500) {
+		if (response?.status === 500) {
 			throw new Error(
 				`Errors fetching products for metro, status: ${response.status}`
 			);
 		}
-
-		const resData = response.data;
 
 		const cleanData = resData.replace(/\n|\r|\t/g, "");
 
@@ -37,7 +55,6 @@ const searchProducts = async ({
 			.find("div.tile-product")
 			.each((i, el) => {
 				const product_id = $(el).attr("data-product-code") || "";
-				const store_id = "all";
 
 				const product_brand =
 					$(el).find(".head__brand").text().trim() || "";
@@ -168,10 +185,17 @@ const searchProducts = async ({
 				});
 			});
 
+		// save to cache
+		await saveToCache({
+			key: cacheKey,
+			data,
+			cacheInRedis: true,
+		});
+
 		return data;
 	} catch (e) {
 		console.log(`Error fetching products for metro: ${e}`);
-		return new Error(`Error fetching products for metro: ${e}`);
+		return e as Error;
 	}
 };
 

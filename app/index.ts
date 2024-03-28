@@ -30,12 +30,11 @@ app.use(
 	})
 );
 
-// on every response, add a header 
+// on every response, add a header
 app.use((req: Request, res: Response, next) => {
 	res.header("server", "crawler-service");
 	next();
 });
-
 
 // routes
 app.use("/api", routes);
