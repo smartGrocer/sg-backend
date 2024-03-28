@@ -193,7 +193,7 @@ router.get(
 					store_id,
 				});
 
-			return res.status(code).json({
+			return res.status("code").json({
 				message,
 				availableOptions,
 				count,
