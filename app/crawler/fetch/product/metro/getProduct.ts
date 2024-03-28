@@ -1,13 +1,16 @@
-import UserAgent from "user-agents";
-import { IProductProps } from "../../../../common/types/common/product";
+import {
+	IProductProps,
+	PandaBrowserKeys,
+} from "../../../../common/types/common/product";
 import { IGetProductMetroProps } from "../../../../common/types/metro/metro";
-import axios from "axios";
+
 import * as cheerio from "cheerio";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
 import {
 	getCachedData,
 	saveToCache,
 } from "../../../../common/cache/storeCache";
+import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
 
 const getProduct = async ({
 	product_id,
@@ -16,7 +19,6 @@ const getProduct = async ({
 	chainName,
 }: IGetProductMetroProps): Promise<IProductProps | Error> => {
 	let productData: IProductProps[] = [];
-	const userAgent = new UserAgent().toString();
 
 	try {
 		const cacheKey = `product-${chainName}-${store_id}-${product_id}-${url}`;
@@ -29,14 +31,13 @@ const getProduct = async ({
 		if (cachedData) {
 			return cachedData;
 		}
-		//TODO: use panda browser
-		const response = await axios.get(url as string, {
-			headers: {
-				"user-agent": userAgent,
-			},
-			withCredentials: true,
+
+		const { resData } = await usePandaBrowser({
+			url: url as string,
+			key: PandaBrowserKeys.metro_lookup_panda,
 		});
-		const product = response.data;
+
+		const product = resData;
 
 		// parse product data
 		const cleanData = product.replace(/\n|\r|\t/g, "");

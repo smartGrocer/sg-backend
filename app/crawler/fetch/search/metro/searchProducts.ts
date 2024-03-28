@@ -37,7 +37,7 @@ const searchProducts = async ({
 
 		const { response, resData } = await usePandaBrowser({
 			url,
-			key: PandaBrowserKeys.metro_panda,
+			key: PandaBrowserKeys.metro_search_panda,
 		});
 
 		if (response?.status === 500) {

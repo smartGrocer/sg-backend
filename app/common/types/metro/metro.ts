@@ -10,7 +10,7 @@ export interface ISearchMetro extends ISearchStore {
 }
 
 export interface IGetProductMetro extends IGetProduct {
-	url?: string;
+	url: string;
 	chainName: MetroChain;
 }
 

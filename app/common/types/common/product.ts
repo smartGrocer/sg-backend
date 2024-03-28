@@ -68,5 +68,6 @@ export interface IGetProductProps {
 }
 
 export enum PandaBrowserKeys {
-	metro_panda = "metro_panda",
+	metro_search_panda = "metro_search_panda",
+	metro_lookup_panda = "metro_lookup_panda",
 }
