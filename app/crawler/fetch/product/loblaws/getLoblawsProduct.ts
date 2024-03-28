@@ -42,14 +42,13 @@ const getLoblawsProduct = async ({
 
 	// if error
 	if (response instanceof Error) {
-
-        // if 404
-        if (response.message === "Request failed with status code 404") {
-            return {
-                message: `Product not found for product id: ${product_id}`,
-                code: 404,
-            };
-        }
+		// if 404
+		if (response.message === "Request failed with status code 404") {
+			return {
+				message: `Product not found for product id: ${product_id}`,
+				code: 404,
+			};
+		}
 
 		return {
 			message: response.message,
