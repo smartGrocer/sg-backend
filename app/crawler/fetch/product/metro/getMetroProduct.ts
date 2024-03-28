@@ -56,7 +56,7 @@ const getMetroProduct = async ({
 	}
 
 	return {
-		message: `Product fetched successfully for product id: ${product_id}`,
+		message: `Product fetched successfully for product id: ${product_id || url}`,
 		data: response,
 		code: 200,
 	};
