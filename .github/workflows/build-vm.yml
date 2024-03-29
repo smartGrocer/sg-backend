@@ -42,7 +42,7 @@ jobs:
 
             - name: Test
               id: npm-ci-test
-              run: npm run ci-test
+              run: npm run test:ci
     # This workflow contains a single job called "build"
     deploy:
         # The type of runner that the job will run on
