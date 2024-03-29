@@ -1,7 +1,6 @@
 import Redis from "ioredis";
 import getSecret from "../../helpers/getSecret";
 
-
 const redis = new Redis({
 	port: parseInt(getSecret("UPSTASH_PORT")),
 	host: getSecret("UPSTASH_ENDPOINT"),
@@ -32,8 +31,5 @@ redis.on("reconnecting", (err: any) => {
 redis.on("connect", (err: any) => {
 	if (!err) console.log("Connected to Redis Session Store!");
 });
-
-
-
 
 export default redis;

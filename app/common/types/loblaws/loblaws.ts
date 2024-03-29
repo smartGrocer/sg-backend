@@ -256,7 +256,6 @@ export const validateLoblawsStoreId = async ({
 	};
 };
 
-
 export interface IGetProductLoblawsProps extends IGetProductProps {
 	chainName: LoblawsChainName;
 }

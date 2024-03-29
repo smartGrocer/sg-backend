@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 
 const JSONInput = "app/data/CanadianPostalCodes.json";
 const data = fs.readFileSync(JSONInput, "utf-8");
