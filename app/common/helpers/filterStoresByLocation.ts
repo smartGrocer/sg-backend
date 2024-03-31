@@ -1,6 +1,6 @@
-import { IStoreProps } from "../types/common/store";
-import { IPostalData, IPostalDataWithDate } from "./getPostalCode";
 import { getDistance } from "geolib";
+import { IStoreProps } from "../types/common/store";
+import { IPostalData } from "./getPostalCode";
 
 interface IFilterStoresByLocation {
 	stores: IStoreProps[];

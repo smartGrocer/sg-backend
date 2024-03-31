@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from "axios";
 
+import UserAgent from "user-agents";
 import getSecret from "./getSecret";
 import {
 	getLocalCachedData,
 	saveToLocalCache,
 } from "../cache/localCache/localCache";
 import { PandaBrowserKeys } from "../types/common/product";
-import UserAgent from "user-agents";
 
 interface IUsePandaBrowserArgs {
 	url: string;
@@ -15,7 +15,7 @@ interface IUsePandaBrowserArgs {
 
 interface IUsePandaBrowserReturn {
 	response: AxiosResponse;
-	resData: any;
+	resData: string;
 }
 
 const usePandaBrowser = async ({
@@ -34,6 +34,7 @@ const usePandaBrowser = async ({
 		}
 		// throw error type
 		throw new Error("error-isDown");
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (e: any) {
 		// if 403 or if error type is "error-isDown"
 		if (e?.response?.status === 403 || e?.message === "error-isDown") {
@@ -41,9 +42,9 @@ const usePandaBrowser = async ({
 			const userAgent = new UserAgent().toString();
 			const params = `full-content=true&cache=false&stealth=true&user-agent=${userAgent}&resource=document,fetch,xhr`;
 			const pandaURL = `${getSecret("PANDA_BROWSER_URL")}/api/article?&url=${url}&${params}`;
-			response = await axios.get(pandaURL).catch((e) => {
+			response = await axios.get(pandaURL).catch((err) => {
 				throw new Error(
-					`Panda Service: Error fetching products for metro, status: ${e}`
+					`Panda Service: Error fetching products for metro, status: ${err}`
 				);
 			});
 			resData = response.data.fullContent;
