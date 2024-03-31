@@ -7,7 +7,7 @@ export const getLocalCachedData = async (key: string) => {
 	if (cachedData) {
 		console.log(`CACHE HIT:Local: ${key}`);
 		// remove destroy from the return object
-		const { destroy, updatedAt, ...data } = cachedData;
+		const { ...data } = cachedData;
 
 		return data.data;
 	}
@@ -16,7 +16,7 @@ export const getLocalCachedData = async (key: string) => {
 
 export const saveToLocalCache = async (
 	key: string,
-	data: any,
+	data: unknown,
 	ttl?: number
 ) => {
 	console.log(`CACHE SET:Local: ${key}`);

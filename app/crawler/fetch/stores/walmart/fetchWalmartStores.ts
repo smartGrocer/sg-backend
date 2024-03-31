@@ -1,7 +1,4 @@
-import { Request, Response } from "express";
 import getWalmartStores from "./getStore";
-import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
-import { IPostalDataWithDate } from "../../../../common/helpers/getPostalCode";
 import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";
 import {
 	IFetchStores,

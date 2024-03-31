@@ -1,7 +1,10 @@
+import { Request, Response } from "express";
 import { IPostalData } from "../../helpers/getPostalCode";
 import { TValidPostalCode } from "../../helpers/validatePostalCode";
-import { Request, Response } from "express";
+
+// eslint-disable-next-line import/no-cycle
 import { LoblawsChainName } from "../loblaws/loblaws";
+// eslint-disable-next-line import/no-cycle
 import { MetroChain } from "../metro/metro";
 
 export interface IStoreProps {
@@ -25,6 +28,7 @@ export interface IStoreResponse {
 	stores: IStoreProps[];
 }
 
+// eslint-disable-next-line no-shadow
 export enum AllStoreChainBrands {
 	all = "all",
 	loblaws = "loblaws",

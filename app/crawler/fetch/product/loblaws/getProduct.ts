@@ -1,6 +1,6 @@
+import axios from "axios";
 import UserAgent from "user-agents";
 import { IProductProps } from "../../../../common/types/common/product";
-import axios from "axios";
 import {
 	IGetProductLoblawsProps,
 	LoblawsChainAlternateName,

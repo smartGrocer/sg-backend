@@ -1,8 +1,5 @@
-import { Request, Response } from "express";
-import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
 import getMetroStores from "./getStore";
 import { MetroChain } from "../../../../common/types/metro/metro";
-import { IPostalDataWithDate } from "../../../../common/helpers/getPostalCode";
 import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";
 import {
 	IFetchStores,

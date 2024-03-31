@@ -85,12 +85,12 @@ const getMetroStores = async ({
 
 		saveToCache({
 			key: cacheKey,
-			data: data,
+			data,
 			cacheInRedis: true,
 		});
 
 		return data;
-	} catch (error: any) {
+	} catch (error: unknown) {
 		return error as Error;
 	}
 };

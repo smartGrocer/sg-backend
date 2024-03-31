@@ -12,11 +12,11 @@ export const getRedisCache = async (key: string) => {
 
 export const saveToRedisCache = async (
 	key: string,
-	data: any,
+	data: unknown,
 	ttl?: number
 ) => {
 	console.log(`CACHE SET:Redis: ${key}`);
-	return await redis.set(
+	return redis.set(
 		key,
 		JSON.stringify(data),
 		"EX",

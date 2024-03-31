@@ -35,7 +35,7 @@ export const saveToCache = async ({
 	cacheInRedis,
 }: {
 	key: string;
-	data: any;
+	data: unknown;
 	cacheInRedis: boolean;
 }) => {
 	await saveToLocalCache(key, data, CACHE_IN_LOCAL_MS);

@@ -58,7 +58,7 @@ const getWalmartStores = async ({
 				store_name: store.displayName,
 				latitude: store.geoPoint.latitude,
 				longitude: store.geoPoint.longitude,
-				formatted_address: formatted_address,
+				formatted_address,
 				city: store.address.city,
 				line1: store.address.address1,
 				line2: store.address.address6,
@@ -70,7 +70,7 @@ const getWalmartStores = async ({
 
 		await saveToCache({
 			key: cacheKey,
-			data: data,
+			data,
 			cacheInRedis: true,
 		});
 

@@ -15,7 +15,6 @@ import {
 const searchProducts = async ({
 	search_term,
 	chainName,
-	store_id,
 }: ISearchProducts): Promise<IProductProps[] | Error> => {
 	try {
 		const store_id = "all";
@@ -131,7 +130,7 @@ const searchProducts = async ({
 						? null
 						: parseQuantity(price_was_price_unit).unit || null;
 
-				let compare_pricing_parent = $(el).find(
+				const compare_pricing_parent = $(el).find(
 					".pricing__secondary-price"
 				);
 				const compare_price_first =

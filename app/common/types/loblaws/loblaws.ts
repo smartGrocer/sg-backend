@@ -1,21 +1,17 @@
-import { Response, Request } from "express";
-import {
-	IGetProduct,
-	IGetProductProps,
-	IProductPropsWithPagination,
-	ISearchReturn,
-	ISearchStore,
-} from "../common/product";
+// eslint-disable-next-line import/no-cycle
+import { IGetProduct, IGetProductProps, ISearchStore } from "../common/product";
+// eslint-disable-next-line import/no-cycle
 import getLoblawsStores from "../../../crawler/fetch/stores/loblaws/getStore";
 import { IStoreProps } from "../common/store";
 
+// eslint-disable-next-line no-shadow
 export enum LoblawsChainName {
 	loblaw = "loblaw",
 	zehrs = "zehrs",
 	valumart = "valumart",
 	nofrills = "nofrills",
-	rass = "rass", //atlantic superstore
-	dominion = "dominion", //newfoundlandgrocerystores
+	rass = "rass", // atlantic superstore
+	dominion = "dominion", // newfoundlandgrocerystores
 	wholesaleclub = "wholesaleclub",
 	independent = "independent",
 	fortinos = "fortinos",

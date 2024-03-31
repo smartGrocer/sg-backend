@@ -12,6 +12,7 @@ const redis = new Redis({
 });
 
 // Listen to 'error' events to the Redis connection
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 redis.on("error", (error: any) => {
 	if (error.code === "ECONNRESET") {
 		console.log("Connection to Redis Session Store timed out.");
@@ -21,13 +22,14 @@ redis.on("error", (error: any) => {
 });
 
 // Listen to 'reconnecting' event to Redis
-redis.on("reconnecting", (err: any) => {
+redis.on("reconnecting", () => {
 	if (redis.status === "reconnecting")
 		console.log("Reconnecting to Redis Session Store...");
 	else console.log("Error reconnecting to Redis Session Store.");
 });
 
 // Listen to the 'connect' event to Redis
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 redis.on("connect", (err: any) => {
 	if (!err) console.log("Connected to Redis Session Store!");
 });

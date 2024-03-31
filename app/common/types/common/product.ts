@@ -1,14 +1,5 @@
+// eslint-disable-next-line import/no-cycle
 import { IAllStoreChains } from "./store";
-
-export interface IProductPropsWithPagination {
-	results: IProductProps[];
-	pagination: {
-		totalResults: number;
-		pageNumber: number;
-		pageSize: number;
-		totalPages: number;
-	};
-}
 
 export interface ISearchStore {
 	search_term: string;
@@ -18,20 +9,6 @@ export interface ISearchStore {
 export interface IGetProduct {
 	product_id: string;
 	store_id: string;
-}
-export interface ISearchReturn {
-	message: string;
-	count?: number;
-	data?: IProductProps[] | IProductPropsWithPagination;
-	code: number;
-	availableOptions?: string | string[];
-}
-
-export interface IGetProductReturn {
-	message: string;
-	data?: IProductProps;
-	code: number;
-	availableOptions?: string | string[];
 }
 
 export interface IProductProps {
@@ -67,6 +44,31 @@ export interface IGetProductProps {
 	store_id: string;
 }
 
+export interface IProductPropsWithPagination {
+	results: IProductProps[];
+	pagination: {
+		totalResults: number;
+		pageNumber: number;
+		pageSize: number;
+		totalPages: number;
+	};
+}
+export interface ISearchReturn {
+	message: string;
+	count?: number;
+	data?: IProductProps[] | IProductPropsWithPagination;
+	code: number;
+	availableOptions?: string | string[];
+}
+
+export interface IGetProductReturn {
+	message: string;
+	data?: IProductProps;
+	code: number;
+	availableOptions?: string | string[];
+}
+
+// eslint-disable-next-line no-shadow
 export enum PandaBrowserKeys {
 	metro_search_panda = "metro_search_panda",
 	metro_lookup_panda = "metro_lookup_panda",

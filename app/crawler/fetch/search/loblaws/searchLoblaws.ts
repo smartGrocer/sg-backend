@@ -1,5 +1,4 @@
 import { ISearchReturn } from "../../../../common/types/common/product";
-import { IStoreProps } from "../../../../common/types/common/store";
 import {
 	ISearchLoblaws,
 	LoblawsChainName,
