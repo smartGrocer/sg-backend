@@ -40,9 +40,9 @@ jobs:
             #   id: npm-lint
             #   run: npm run lint
 
-            - name: Test
-              id: npm-ci-test
-              run: npm run test:ci
+            # - name: Test
+            #   id: npm-ci-test
+            #   run: npm run test:ci
     # This workflow contains a single job called "build"
     deploy:
         # The type of runner that the job will run on

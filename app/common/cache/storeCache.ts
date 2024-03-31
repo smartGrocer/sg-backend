@@ -11,18 +11,19 @@ export const getCachedData = async ({
 	key: string;
 	cacheInRedis: boolean;
 }) => {
+	console.log("RUNNING getCachedData");
 	const response = await getLocalCachedData(key);
 
 	if (response) {
 		return response;
 	}
 
-	const redisResponse = await getRedisCache(key);
-	if (redisResponse) {
-		if (cacheInRedis) {
+	if (cacheInRedis) {
+		const redisResponse = await getRedisCache(key);
+		if (redisResponse) {
 			await saveToLocalCache(key, redisResponse, CACHE_IN_LOCAL_MS);
+			return redisResponse;
 		}
-		return redisResponse;
 	}
 
 	console.log(`CACHE MISS: ${key}`);
@@ -38,6 +39,7 @@ export const saveToCache = async ({
 	data: unknown;
 	cacheInRedis: boolean;
 }) => {
+	console.log("RUNNING saveToCache");
 	await saveToLocalCache(key, data, CACHE_IN_LOCAL_MS);
 
 	// save to redis

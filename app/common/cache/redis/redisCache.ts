@@ -1,4 +1,5 @@
-import redis from "./connentRedis";
+// eslint-disable-next-line import/no-cycle
+import { redis } from "../../../index";
 
 export const getRedisCache = async (key: string) => {
 	const response = (await redis.get(key)) || null;

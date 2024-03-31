@@ -1,8 +1,5 @@
 import getPostalcode from "./loadPostal";
-import {
-	getLocalCachedData,
-	saveToLocalCache,
-} from "../cache/localCache/localCache";
+import { getCachedData, saveToCache } from "../cache/storeCache";
 
 export interface IPostalData {
 	postalCode: string;
@@ -21,11 +18,25 @@ export interface IPostalDataWithDate {
 const getCachedPostalData = async (
 	postalCode: string
 ): Promise<IPostalData | null> => {
-	return getLocalCachedData(postalCode);
+	// return getLocalCachedData(postalCode);
+
+	return getCachedData({
+		key: postalCode,
+		cacheInRedis: false,
+	});
 };
 
-const saveToPostalCache = (postalCode: string, data: IPostalData): void => {
-	saveToLocalCache(postalCode, data, 1000 * 60 * 60 * 24 * 7);
+const saveToPostalCache = async (
+	postalCode: string,
+	data: IPostalData
+): Promise<void> => {
+	// saveToLocalCache(postalCode, data, 1000 * 60 * 60 * 24 * 7);
+
+	await saveToCache({
+		key: postalCode,
+		data,
+		cacheInRedis: false,
+	});
 };
 
 const formatPostalCode = (postalCode: string): string => {
