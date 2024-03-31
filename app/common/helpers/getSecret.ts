@@ -1,4 +1,4 @@
-type SecretType =
+export type SecretType =
 	| "PORT"
 	| "UPSTASH_PORT"
 	| "UPSTASH_ENDPOINT"
