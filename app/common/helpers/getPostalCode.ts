@@ -1,16 +1,20 @@
-import getPostalcode, { IPostalDataImport } from "./loadPostal";
+import getPostalcode from "./loadPostal";
 import {
 	getLocalCachedData,
 	saveToLocalCache,
 } from "../cache/localCache/localCache";
 
-export interface IPostalData extends IPostalDataImport {
+export interface IPostalData {
 	postalCode: string;
 	formattedPostalCode: string;
+	lat?: string;
+	lng?: string;
+	city?: string;
+	province?: string;
 }
 
 export interface IPostalDataWithDate {
-	data: IPostalData;
+	data: IPostalData | null;
 	updatedAt: Date;
 }
 

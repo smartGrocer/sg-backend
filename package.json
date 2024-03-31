@@ -11,7 +11,7 @@
 		"format:check": "npx prettier --check .",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"test:ci": "jest --ci --coverage --verbose",
-		"test": "jest --watch --verbose --coverage",
+		"test": "jest --watch --verbose --coverage --watchAll",
 		"docker:dev": "docker compose -f docker-compose.dev.yml up --build",
 		"docker:prod": "docker compose -f docker-compose.prod.yml up --build -d",
 		"docker:prod:down": "docker compose -f docker-compose.prod.yml down",
