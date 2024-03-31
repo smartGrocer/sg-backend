@@ -1,6 +1,6 @@
 import getSecret, { SecretType } from "./getSecret";
 
-describe.skip("getSecret", () => {
+describe("getSecret", () => {
 	it("should return the secret when it exists", () => {
 		const secret = "my-secret";
 		process.env.PORT = secret;

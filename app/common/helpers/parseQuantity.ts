@@ -7,8 +7,17 @@ const normalizeUnit = (unit: string): string => {
 	const unitMap: { [key: string]: string } = {
 		kilo: "kg",
 		kilos: "kg",
+		kg: "kg",
+		k: "kg",
+		kgs: "kg",
 		gram: "g",
 		grams: "g",
+		g: "g",
+		gs: "g",
+		grms: "g",
+		grm: "g",
+		gms: "g",
+		gm: "g",
 		liter: "l",
 		liters: "l",
 		lt: "l",
@@ -16,6 +25,7 @@ const normalizeUnit = (unit: string): string => {
 		each: "un",
 		eaches: "un",
 		units: "un",
+		unit: "un",
 		ml: "ml",
 		milliliter: "ml",
 		milliliters: "ml",
@@ -31,8 +41,8 @@ const parseQuantity = (input: string): ParsedQuantity => {
 
 	const units = ["kg", "g", "ml", "l", "each", "un"];
 
-	let quantity: number;
-	let unit: string;
+	let quantity: number = 0;
+	let unit: string = "";
 
 	if (match) {
 		if (match[2] === "x" && match[3]) {
@@ -45,9 +55,6 @@ const parseQuantity = (input: string): ParsedQuantity => {
 		} else if (match[1] && !match[4]) {
 			quantity = parseFloat(match[1]);
 			unit = "un";
-		} else {
-			quantity = 1;
-			unit = match[4] || "un";
 		}
 	} else if (units.includes(input.trim().toLowerCase())) {
 		quantity = 1;

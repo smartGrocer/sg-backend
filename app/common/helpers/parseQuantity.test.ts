@@ -1,6 +1,6 @@
 import parseQuantity from "./parseQuantity";
 
-describe.skip("parseQuantity", () => {
+describe("parseQuantity", () => {
 	const runTest = (
 		testInputs: {
 			input: string;
@@ -8,7 +8,7 @@ describe.skip("parseQuantity", () => {
 		}[]
 	): void => {
 		testInputs.forEach(({ input, expected }) => {
-			it(`should return ${JSON.stringify(expected)} when input is ${input}`, () => {
+			it(`should return ${JSON.stringify(expected)} when input is "${input}"`, () => {
 				expect(parseQuantity(input)).toEqual(expected);
 			});
 		});
@@ -129,6 +129,16 @@ describe.skip("parseQuantity", () => {
 		const testInputs = [
 			{ input: "", expected: { quantity: 1, unit: "un" } },
 			{ input: "   ", expected: { quantity: 1, unit: "un" } },
+		];
+
+		runTest(testInputs);
+	});
+
+	describe("when the input is invalid", () => {
+		const testInputs = [
+			{ input: "1.5kgg", expected: { quantity: 1.5, unit: "kgg" } },
+			{ input: "xyz", expected: { quantity: 1, unit: "un" } },
+			{ input: "2x", expected: { quantity: 2, unit: "un" } },
 		];
 
 		runTest(testInputs);
