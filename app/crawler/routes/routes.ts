@@ -1,4 +1,6 @@
 import express, { Request, Response } from "express";
+
+// eslint-disable-next-line import/no-cycle
 import fetchLoblawsStores from "../fetch/stores/loblaws/fetchLoblawsStores";
 import {
 	AllStoreChainBrands,
@@ -281,13 +283,11 @@ router.get("*", (req, res) => {
 		message:
 			"Welcome to the Crawler Service. Please use one of the available routes",
 		availableRoutes: {
-			loblaws: {
-				stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
-				product_search:
-					"/product/search/:product_search?chain=chain_name&store_id=1234",
-				product_lookup:
-					"/product/lookup?product_id=1234&url=www.example.com/product/id/1234&chain=chain_name",
-			},
+			stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
+			product_search:
+				"/product/search/:product_search?chain=chain_name&store_id=1234",
+			product_lookup:
+				"/product/lookup?product_id=1234&url=www.example.com/product/id/1234&chain=chain_name",
 		},
 	});
 });

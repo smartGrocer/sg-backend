@@ -1,4 +1,5 @@
 import getPostalcode from "./loadPostal";
+// eslint-disable-next-line import/no-cycle
 import { getCachedData, saveToCache } from "../cache/storeCache";
 
 export interface IPostalData {
@@ -69,5 +70,6 @@ export const getCoordinatesFromPostal = async (
 	if (postalData) {
 		return returnData;
 	}
+
 	return null;
 };

@@ -12,9 +12,9 @@ export interface IPostalDataImport {
 }
 
 const getPostalcode = (postalcode: string): IPostalDataImport | null => {
-	const postalCode = postalDataMap[postalcode];
-	if (postalCode) {
-		return postalCode;
+	const postalCodeData = postalDataMap[postalcode];
+	if (postalCodeData) {
+		return postalCodeData;
 	}
 
 	return null;
