@@ -62,48 +62,6 @@ app.get("/ping", (req: Request, res: Response) => {
 	});
 });
 
-// export const startServer = async (): Promise<void> => {
-// 	try {
-// 		redis = await connectToRedis();
-
-// 		await connectToDb();
-
-// 		return new Promise<void>((resolve) => {
-// 			app.listen(port, () => {
-// 				resolve();
-// 			});
-// 		});
-// 	} catch (error) {
-// 		process.exit(1);
-// 		return Promise.reject();
-// 	}
-// };
-
-// export async function startServer(): Promise<void> {
-// 	try {
-// 		await connectToRedis();
-// 		redis = redisValue;
-
-// 		await connectToDb();
-
-// 		return new Promise<void>((resolve) => {
-// 			app.listen(port, () => {
-// 				console.log(
-// 					`Crawler-server running on ${
-// 						process.env.NODE_ENV === "production"
-// 							? port
-// 							: `http://localhost:${port}`
-// 					} `
-// 				);
-// 				resolve();
-// 			});
-// 		});
-// 	} catch (error) {
-// 		console.error(error);
-// 		process.exit(1);
-// 	}
-// }
-
 const startServer = async (): Promise<void> => {
 	try {
 		redis = await connectToRedis();
