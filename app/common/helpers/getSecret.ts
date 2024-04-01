@@ -9,13 +9,12 @@ const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables
 	const secret = process.env[secretType];
 
+	if (secretType === "PORT" && process.env.NODE_ENV === "test") {
+		return "6000";
+	}
 	// if the secret is not found, throw an error
 	if (!secret) {
 		throw new Error(`Secret not found: ${secretType}`);
-	}
-
-	if (secretType === "PORT" && process.env.NODE_ENV === "test") {
-		return "6000";
 	}
 
 	// return the secret
