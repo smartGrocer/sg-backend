@@ -2,6 +2,7 @@ import axios from "axios";
 import UserAgent from "user-agents";
 import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
 import { IStoreWalmartSrcProps } from "../../../../common/types/walmart/walmart";
+// eslint-disable-next-line import/no-cycle
 import { IStoreProps } from "../../../../common/types/common/store";
 import {
 	getCachedData,

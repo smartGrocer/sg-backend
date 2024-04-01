@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+// eslint-disable-next-line import/no-cycle
 import { IPostalData } from "../../helpers/getCoordinatesFromPostal";
 import { TValidPostalCode } from "../../helpers/validatePostalCode";
 

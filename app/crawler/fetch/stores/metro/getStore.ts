@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+// eslint-disable-next-line import/no-cycle
 import { IStoreProps } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import {

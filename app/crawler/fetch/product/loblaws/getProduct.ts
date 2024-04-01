@@ -1,5 +1,6 @@
 import axios from "axios";
 import UserAgent from "user-agents";
+// eslint-disable-next-line import/no-cycle
 import { IProductProps } from "../../../../common/types/common/product";
 import {
 	IGetProductLoblawsProps,

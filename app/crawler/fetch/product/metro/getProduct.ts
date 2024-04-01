@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+// eslint-disable-next-line import/no-cycle
 import {
 	IProductProps,
 	PandaBrowserKeys,

@@ -1,5 +1,6 @@
 import axios from "axios";
 import UserAgent from "user-agents";
+// eslint-disable-next-line import/no-cycle
 import {
 	ILoblawsProductSrcProps,
 	LoblawsChainAlternateName,

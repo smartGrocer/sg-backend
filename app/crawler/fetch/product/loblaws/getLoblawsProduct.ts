@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { IGetProductReturn } from "../../../../common/types/common/product";
 import {
 	IGetProductLoblaws,

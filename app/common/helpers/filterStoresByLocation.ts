@@ -1,4 +1,5 @@
 import { getDistance } from "geolib";
+// eslint-disable-next-line import/no-cycle
 import { IStoreProps } from "../types/common/store";
 import { IPostalData } from "./getCoordinatesFromPostal";
 

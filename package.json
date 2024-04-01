@@ -7,6 +7,7 @@
 		"build": "npx tsc",
 		"dev": "nodemon app/index.ts --host 0.0.0.0",
 		"start": "node dist/index.js",
+		"clean": "rimraf dist coverage node_modules package-lock.json",
 		"format:write": "npx prettier --write .",
 		"format:check": "npx prettier --check .",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -40,6 +41,7 @@
 		"express": "^4.18.2",
 		"geolib": "^3.3.4",
 		"ioredis": "^5.3.2",
+		"rimraf": "^5.0.5",
 		"user-agents": "^1.1.103"
 	},
 	"devDependencies": {

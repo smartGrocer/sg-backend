@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { ISearchReturn } from "../../../../common/types/common/product";
 import { ISearchMetro, MetroChain } from "../../../../common/types/metro/metro";
 import searchProducts from "./searchProducts";

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
 import getLoblawsStores from "./getStore";
 import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";

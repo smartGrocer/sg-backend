@@ -6,6 +6,7 @@ import {
 	LoblawsChainName,
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
+// eslint-disable-next-line import/no-cycle
 import { IStoreProps } from "../../../../common/types/common/store";
 import {
 	getCachedData,

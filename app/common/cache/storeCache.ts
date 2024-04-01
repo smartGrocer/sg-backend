@@ -1,4 +1,5 @@
 import { getLocalCachedData, saveToLocalCache } from "./localCache/localCache";
+// eslint-disable-next-line import/no-cycle
 import { getRedisCache, saveToRedisCache } from "./redis/redisCache";
 
 const CACHE_IN_REDIS_MS = 1000 * 60 * 60 * 24 * 30;
