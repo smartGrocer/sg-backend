@@ -11,7 +11,7 @@ export interface IPostalDataImport {
 	province: string;
 }
 
-const getPostalcode = (postalcode: string): IPostalDataImport | null => {
+const findPostalcode = (postalcode: string): IPostalDataImport | null => {
 	const postalCodeData = postalDataMap[postalcode];
 	if (postalCodeData) {
 		return postalCodeData;
@@ -20,4 +20,4 @@ const getPostalcode = (postalcode: string): IPostalDataImport | null => {
 	return null;
 };
 
-export default getPostalcode;
+export default findPostalcode;

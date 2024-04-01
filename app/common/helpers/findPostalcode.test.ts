@@ -1,6 +1,6 @@
-import getPostalcode, { IPostalDataImport } from "./getPostalcode";
+import findPostalcode, { IPostalDataImport } from "./findPostalcode";
 
-describe("getPostalcode", () => {
+describe("findPostalcode", () => {
 	const runTest = (
 		testInputs: {
 			input: string;
@@ -9,7 +9,7 @@ describe("getPostalcode", () => {
 	): void => {
 		testInputs.forEach(({ input, expected }) => {
 			it(`should return ${JSON.stringify(expected)} when input is "${input}"`, () => {
-				expect(getPostalcode(input)).toEqual(expected);
+				expect(findPostalcode(input)).toEqual(expected);
 			});
 		});
 	};

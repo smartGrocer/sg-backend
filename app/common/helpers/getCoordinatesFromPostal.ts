@@ -1,4 +1,4 @@
-import getPostalcode from "./getPostalcode";
+import findPostalcode from "./findPostalcode";
 // eslint-disable-next-line import/no-cycle
 import { getCachedData, saveToCache } from "../cache/storeCache";
 
@@ -61,7 +61,7 @@ export const getCoordinatesFromPostal = async (
 		return cachedData;
 	}
 
-	const postalData = getPostalcode(formatPostalCode(postalCode));
+	const postalData = findPostalcode(formatPostalCode(postalCode));
 
 	const formattedPostalCode = formatPostalCode(postalCode);
 
