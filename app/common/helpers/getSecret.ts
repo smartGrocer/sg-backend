@@ -14,6 +14,10 @@ const getSecret = (secretType: SecretType): string => {
 		throw new Error(`Secret not found: ${secretType}`);
 	}
 
+	if (secretType === "PORT" && process.env.NODE_ENV === "test") {
+		return "6000";
+	}
+
 	// return the secret
 	return secret;
 };

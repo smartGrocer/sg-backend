@@ -5,9 +5,6 @@ import connectToRedis from "../app/common/cache/redis/connentRedis";
 // For env File
 dotenv.config();
 
-process.env.NODE_ENV = "test";
-process.env.PORT = "6000";
-
 // setup mock for redis
 jest.mock("../app/common/cache/storeCache");
 jest.mock("../app/common/cache/redis/connentRedis", () => {
