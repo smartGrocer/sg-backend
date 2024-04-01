@@ -7,7 +7,8 @@ export const getLocalCachedData = async (key: string) => {
 	if (cachedData) {
 		console.log(`CACHE HIT:Local: ${key}`);
 		// remove destroy from the return object
-		const { ...data } = cachedData;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { destroy, updatedAt, ...data } = cachedData;
 
 		return data.data;
 	}
