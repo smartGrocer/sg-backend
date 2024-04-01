@@ -9,7 +9,7 @@ import {
 import fetchMetroStores from "../fetch/stores/metro/fetchMetroStores";
 import fetchWalmartStores from "../fetch/stores/walmart/fetchWalmartStores";
 import { validatePostalCode } from "../../common/helpers/validatePostalCode";
-import { getCoordinatesFromPostal } from "../../common/helpers/getPostalCode";
+import { getCoordinatesFromPostal } from "../../common/helpers/getCoordinatesFromPostal";
 import filterStoresByLocation from "../../common/helpers/filterStoresByLocation";
 import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
 import searchLoblaws from "../fetch/search/loblaws/searchLoblaws";

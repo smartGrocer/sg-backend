@@ -1,4 +1,4 @@
-import getPostalcode, { IPostalDataImport } from "./loadPostal";
+import getPostalcode, { IPostalDataImport } from "./getPostalcode";
 
 describe("getPostalcode", () => {
 	const runTest = (
@@ -16,12 +16,18 @@ describe("getPostalcode", () => {
 
 	describe("when an invalid postal code is inputted", () => {
 		const testInputs = [
+			{
+				input: "a1a1a1a",
+				expected: null as unknown as IPostalDataImport,
+			},
 			{ input: "1a1a1a", expected: null as unknown as IPostalDataImport },
-			{ input: "1a1a1", expected: null as unknown as IPostalDataImport },
-			{ input: "1a1a", expected: null as unknown as IPostalDataImport },
-			{ input: "1a1", expected: null as unknown as IPostalDataImport },
-			{ input: "1a", expected: null as unknown as IPostalDataImport },
+			{ input: "a1a1aa", expected: null as unknown as IPostalDataImport },
+			{ input: "a1a1a", expected: null as unknown as IPostalDataImport },
+			{ input: "a1a1", expected: null as unknown as IPostalDataImport },
+			{ input: "a1a", expected: null as unknown as IPostalDataImport },
+			{ input: "a1", expected: null as unknown as IPostalDataImport },
 			{ input: "1", expected: null as unknown as IPostalDataImport },
+			{ input: "a", expected: null as unknown as IPostalDataImport },
 			{ input: "", expected: null as unknown as IPostalDataImport },
 		];
 

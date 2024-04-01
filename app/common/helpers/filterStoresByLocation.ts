@@ -1,6 +1,6 @@
 import { getDistance } from "geolib";
 import { IStoreProps } from "../types/common/store";
-import { IPostalData } from "./getPostalCode";
+import { IPostalData } from "./getCoordinatesFromPostal";
 
 interface IFilterStoresByLocation {
 	stores: IStoreProps[];
