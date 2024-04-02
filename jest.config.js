@@ -14,4 +14,5 @@ module.exports = {
 		"!<rootDir>/node_modules/",
 		"!<rootDir>/coverage/",
 	],
+	reporters: ["default", "jest-junit"],
 };
