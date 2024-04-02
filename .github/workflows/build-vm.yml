@@ -46,9 +46,6 @@ jobs:
               id: npm-ci-test
               run: npm run test:ci
 
-            - name: Jest Coverage Comment
-              uses: MishaKav/jest-coverage-comment@main
-
     # This workflow contains a single job called "build"
     deploy:
         # The type of runner that the job will run on
