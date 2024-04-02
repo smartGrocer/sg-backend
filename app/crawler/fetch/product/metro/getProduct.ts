@@ -1,10 +1,10 @@
+import * as cheerio from "cheerio";
+// eslint-disable-next-line import/no-cycle
 import {
 	IProductProps,
 	PandaBrowserKeys,
 } from "../../../../common/types/common/product";
 import { IGetProductMetroProps } from "../../../../common/types/metro/metro";
-
-import * as cheerio from "cheerio";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
 import {
 	getCachedData,
@@ -18,7 +18,7 @@ const getProduct = async ({
 	store_id,
 	chainName,
 }: IGetProductMetroProps): Promise<IProductProps | Error> => {
-	let productData: IProductProps[] = [];
+	const productData: IProductProps[] = [];
 
 	try {
 		const cacheKey = `product-${chainName}-${store_id}-${product_id}-${url}`;
@@ -44,8 +44,8 @@ const getProduct = async ({
 		const $ = cheerio.load(cleanData);
 
 		$(".product-info").each((i, el) => {
-			const product_id = $(el).attr("data-product-code") || "";
-			const store_id = "all";
+			const product_id_2 = $(el).attr("data-product-code") || "";
+			const store_id_2 = "all";
 
 			const product_brand =
 				$(el).find(".head__brand").text().trim() || "";
@@ -120,7 +120,7 @@ const getProduct = async ({
 					? null
 					: parseQuantity(price_was_price_unit).unit || null;
 
-			let compare_pricing_parent = $(el).find(
+			const compare_pricing_parent = $(el).find(
 				".pricing__secondary-price"
 			);
 			const compare_price_first =
@@ -149,8 +149,8 @@ const getProduct = async ({
 				unit_soldby_type === "ea." ? "ea." : "pack";
 
 			productData.push({
-				product_id,
-				store_id,
+				product_id: product_id_2,
+				store_id: store_id_2,
 				chainName,
 				product_brand,
 				product_name,
@@ -181,7 +181,6 @@ const getProduct = async ({
 
 		return result;
 	} catch (error: unknown) {
-		console.log({ error });
 		return error as Error;
 	}
 };

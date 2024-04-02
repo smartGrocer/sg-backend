@@ -33,6 +33,7 @@ module.exports = {
 		radix: ["error", "as-needed"],
 		"no-restricted-syntax": "off",
 		"@typescript-eslint/explicit-function-return-type": "warn",
+		camelcase: "off",
 		"unused-imports/no-unused-imports": "error",
 		"import/no-extraneous-dependencies": [
 			"error",

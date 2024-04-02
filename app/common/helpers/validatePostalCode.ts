@@ -1,11 +1,16 @@
+export type TValidPostalCode = string | false;
+
 // postal code has to be A1A 1A1 format. Ensure that the postal code is in the correct format
 export const validatePostalCode = (postalCode: string): TValidPostalCode => {
-	const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
-	if (postalCodeRegex.test(postalCode)) {
-		// return postal code without the space
-		return postalCode.replace(" ", "");
-	}
-	return false;
-};
+	// Remove spaces from the input and convert to uppercase
+	const sanitizedInput = postalCode.replace(/\s/g, "").toUpperCase();
 
-export type TValidPostalCode = string | false;
+	// Check if the input matches the postal code pattern
+	const postalCodePattern = /^[A-Z]\d[A-Z]\d[A-Z]\d$/;
+	if (!postalCodePattern.test(sanitizedInput)) {
+		return false;
+	}
+
+	// If the input is valid, return the sanitized postal code
+	return sanitizedInput;
+};

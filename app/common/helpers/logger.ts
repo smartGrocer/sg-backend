@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Handle GET requests to /api route
-export default function logger(
-	req: Request,
-	res: Response,
-	next: NextFunction
-) {
+const logger = (req: Request, res: Response, next: NextFunction): void => {
 	// log time taken to process request
 	const start = Date.now();
 	res.on("finish", () => {
@@ -25,4 +21,6 @@ export default function logger(
 		);
 	});
 	next();
-}
+};
+
+export default logger;

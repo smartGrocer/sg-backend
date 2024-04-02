@@ -1,6 +1,7 @@
-import { IStoreProps } from "../types/common/store";
-import { IPostalData, IPostalDataWithDate } from "./getPostalCode";
 import { getDistance } from "geolib";
+// eslint-disable-next-line import/no-cycle
+import { IStoreProps } from "../types/common/store";
+import { IPostalData } from "./getCoordinatesFromPostal";
 
 interface IFilterStoresByLocation {
 	stores: IStoreProps[];

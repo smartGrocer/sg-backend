@@ -1,4 +1,6 @@
 import express, { Request, Response } from "express";
+
+// eslint-disable-next-line import/no-cycle
 import fetchLoblawsStores from "../fetch/stores/loblaws/fetchLoblawsStores";
 import {
 	AllStoreChainBrands,
@@ -7,14 +9,12 @@ import {
 import fetchMetroStores from "../fetch/stores/metro/fetchMetroStores";
 import fetchWalmartStores from "../fetch/stores/walmart/fetchWalmartStores";
 import { validatePostalCode } from "../../common/helpers/validatePostalCode";
-import { getCoordinatesFromPostal } from "../../common/helpers/getPostalCode";
+import { getCoordinatesFromPostal } from "../../common/helpers/getCoordinatesFromPostal";
 import filterStoresByLocation from "../../common/helpers/filterStoresByLocation";
 import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
 import searchLoblaws from "../fetch/search/loblaws/searchLoblaws";
 import { MetroChain } from "../../common/types/metro/metro";
-import searchProducts from "../fetch/search/metro/searchProducts";
 import searchMetro from "../fetch/search/metro/searchMetro";
-import getProduct from "../fetch/product/loblaws/getProduct";
 import getLoblawsProduct from "../fetch/product/loblaws/getLoblawsProduct";
 import getMetroProduct from "../fetch/product/metro/getMetroProduct";
 
@@ -24,7 +24,7 @@ const router = express.Router();
 router.get(
 	"/stores/:chain_brand?/:chain?",
 	async (req: Request, res: Response) => {
-		const params = req.params;
+		const { params } = req;
 		const chain_brand = params.chain_brand as AllStoreChainBrands;
 		const showAllStores = chain_brand === "all";
 
@@ -283,13 +283,11 @@ router.get("*", (req, res) => {
 		message:
 			"Welcome to the Crawler Service. Please use one of the available routes",
 		availableRoutes: {
-			loblaws: {
-				stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
-				product_search:
-					"/product/search/:product_search?chain=chain_name&store_id=1234",
-				product_lookup:
-					"/product/lookup?product_id=1234&url=www.example.com/product/id/1234&chain=chain_name",
-			},
+			stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
+			product_search:
+				"/product/search/:product_search?chain=chain_name&store_id=1234",
+			product_lookup:
+				"/product/lookup?product_id=1234&url=www.example.com/product/id/1234&chain=chain_name",
 		},
 	});
 });

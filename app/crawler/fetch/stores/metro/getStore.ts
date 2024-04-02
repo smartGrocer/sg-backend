@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+// eslint-disable-next-line import/no-cycle
 import { IStoreProps } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import {
@@ -85,12 +86,12 @@ const getMetroStores = async ({
 
 		saveToCache({
 			key: cacheKey,
-			data: data,
+			data,
 			cacheInRedis: true,
 		});
 
 		return data;
-	} catch (error: any) {
+	} catch (error: unknown) {
 		return error as Error;
 	}
 };

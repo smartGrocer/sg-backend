@@ -1,17 +1,18 @@
 import axios from "axios";
+import UserAgent from "user-agents";
+// eslint-disable-next-line import/no-cycle
 import {
 	ILoblawsProductSrcProps,
 	LoblawsChainAlternateName,
 	LoblawsChainName,
 	pickImage,
 } from "../../../../common/types/loblaws/loblaws";
-import UserAgent from "user-agents";
 import {
 	IProductProps,
 	IProductPropsWithPagination,
 	ISearchProducts,
 } from "../../../../common/types/common/product";
-import { parse } from "dotenv";
+
 import parseQuantity from "../../../../common/helpers/parseQuantity";
 import {
 	getCachedData,
@@ -47,7 +48,7 @@ const searchProducts = async ({
 			banner: chainName,
 			cartId: "02b57421-adcd-42a0-8af0-16514f0b9e0d",
 			lang: "en",
-			storeId: storeId,
+			storeId,
 			pickupType: "STORE",
 			offerType: "ALL",
 			term: search_term,
@@ -60,7 +61,7 @@ const searchProducts = async ({
 				return {
 					product_id: product.code,
 					store_id: storeId,
-					chainName: chainName,
+					chainName,
 					product_brand: product.brand,
 					product_name: product.name,
 					product_link: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`,

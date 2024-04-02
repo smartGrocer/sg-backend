@@ -1,5 +1,7 @@
+// eslint-disable-next-line import/no-cycle
 import { IGetProduct, IGetProductProps, ISearchStore } from "../common/product";
 
+// eslint-disable-next-line no-shadow
 export enum MetroChain {
 	metro = "metro",
 	foodbasics = "foodbasics",

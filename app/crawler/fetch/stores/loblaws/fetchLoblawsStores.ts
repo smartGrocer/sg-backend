@@ -1,8 +1,6 @@
-import { Request, Response } from "express";
-import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
+// eslint-disable-next-line import/no-cycle
 import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
 import getLoblawsStores from "./getStore";
-import { IPostalDataWithDate } from "../../../../common/helpers/getPostalCode";
 import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";
 import {
 	IFetchStores,
