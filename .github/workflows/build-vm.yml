@@ -46,6 +46,10 @@ jobs:
               id: npm-ci-test
               run: npm run test:ci
 
+            # - name: Build Docker Image
+            #   id: docker-build
+            #   run: docker-compose -f docker-compose.prod.yml build --no-cache node-app
+
     # This workflow contains a single job called "build"
     deploy:
         # The type of runner that the job will run on
