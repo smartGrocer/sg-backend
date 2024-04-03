@@ -1,51 +1,28 @@
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-// export const users = sqliteTable("users", {
-// 	id: integer("id").primaryKey(),
-// 	name: text("name").notNull(),
-// 	email: text("email").unique().notNull(),
-// });
-
-// export const posts = sqliteTable("posts", {
-// 	id: integer("id").primaryKey(),
-// 	title: text("title").notNull(),
-// 	content: text("content").notNull(),
-// 	userId: integer("user_id")
-// 		.notNull()
-// 		.references(() => users.id, { onDelete: "cascade" }),
-// 	createdAt: text("created_at")
-// 		.default(sql`CURRENT_TIMESTAMP`)
-// 		.notNull(),
-// });
-
-// export type InsertUser = typeof users.$inferInsert;
-// export type SelectUser = typeof users.$inferSelect;
-
-// export type InsertPost = typeof posts.$inferInsert;
-// export type SelectPost = typeof posts.$inferSelect;
-
-export const stores = sqliteTable("stores", {
+export const Store = sqliteTable("Store", {
 	id: text("id").primaryKey().unique(),
 	store_id: text("store_id").notNull(),
 	chain_name: text("chain_name").notNull(),
 	store_name: text("store_name").notNull(),
-	latitude: integer("latitude").notNull(),
-	longitude: integer("longitude").notNull(),
-	formatted_address: text("formatted_address").notNull(),
-	city: text("city").notNull(),
-	line1: text("line1").notNull(),
-	line2: text("line2").notNull(),
-	postal_code: text("postal_code").notNull(),
-	province: text("province").notNull(),
-	country: text("country").notNull(),
+	latitude: integer("latitude").notNull().default(0),
+	longitude: integer("longitude").notNull().default(0),
+	formatted_address: text("formatted_address"),
+	city: text("city"),
+	line1: text("line1"),
+	line2: text("line2"),
+	postal_code: text("postal_code"),
+	province: text("province"),
+	country: text("country"),
 	createdAt: text("created_at")
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull(),
 });
 
-export const products = sqliteTable("products", {
-	product_id: text("product_id").primaryKey(),
+export const Product = sqliteTable("Product", {
+	id: text("id").primaryKey().unique(),
+	product_id: text("product_id").notNull(),
 	store_id: text("store_id").notNull(),
 	chainName: text("chainName").notNull(),
 	product_brand: text("product_brand").notNull(),
@@ -61,14 +38,14 @@ export const products = sqliteTable("products", {
 		.notNull(),
 });
 
-export const prices = sqliteTable("prices", {
-	productId: text("product_id")
+export const Price = sqliteTable("Price", {
+	productId: text("productId")
 		.notNull()
-		.references(() => products.product_id),
+		.references(() => Product.id),
 
-	storeId: text("store_id")
+	storeId: text("storeId")
 		.notNull()
-		.references(() => stores.store_id),
+		.references(() => Store.id),
 	price: integer("price").notNull(),
 	price_unit: text("price_unit").notNull(),
 	price_was: integer("price_was"),

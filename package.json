@@ -20,7 +20,8 @@
 		"docker:panda:up": "docker compose -f docker-compose.panda.yml up --build -d",
 		"db:generate": "drizzle-kit generate:sqlite --schema ./app/common/db/schema.ts --out ./app/common/db/migrations",
 		"db:migrate": "npx tsx ./app/common/db/migrate.ts",
-		"db:studio": "npx drizzle-kit studio"
+		"db:studio": "npx drizzle-kit studio",
+		"db:push": "drizzle-kit push:sqlite"
 	},
 	"repository": {
 		"type": "git",

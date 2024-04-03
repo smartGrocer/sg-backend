@@ -60,7 +60,7 @@ const fetchLoblawsStores = async ({
 			});
 
 	// write stores to db
-	await writeStoreToDb({ stores: filteredStores });
+	await writeStoreToDb(filteredStores);
 
 	return {
 		message: `Stores fetched successfully for ${chainName}`,

@@ -89,19 +89,19 @@ const getLoblawsStores = async ({
 
 			const data = response.map((store: IStoreLoblawsSrcProps) => {
 				return {
-					id: store.id,
-					store_id: store.storeId,
-					chain_name: store.storeBannerId,
-					store_name: store.name,
-					latitude: store.geoPoint.latitude,
-					longitude: store.geoPoint.longitude,
-					formatted_address: store.address.formattedAddress,
-					city: store.address.town,
-					line1: store.address.line1,
-					line2: store.address.line2,
-					postal_code: store.address.postalCode,
-					province: store.address.region,
-					country: store.address.country,
+					id: store.id || "",
+					store_id: store.storeId || "",
+					chain_name: store.storeBannerId || "",
+					store_name: store.name || "",
+					latitude: store.geoPoint.latitude || 0,
+					longitude: store.geoPoint.longitude || 0,
+					formatted_address: store.address.formattedAddress || "",
+					city: store.address.town || "",
+					line1: store.address.line1 || "",
+					line2: store.address.line2 || "",
+					postal_code: store.address.postalCode || "",
+					province: store.address.region || "",
+					country: store.address.country || "",
 				};
 			});
 
