@@ -11,7 +11,7 @@ export interface IGetProduct {
 	store_id: string;
 }
 
-export interface IProductProps {
+export interface IProduct {
 	product_id: string;
 	store_id: string;
 	chainName: string;
@@ -23,6 +23,8 @@ export interface IProductProps {
 	product_size_quantity: number;
 	unit_soldby_type: string;
 	unit_soldby_unit: string;
+}
+export interface IPrice {
 	price: number;
 	price_unit: string;
 	price_was: number | null;
@@ -31,6 +33,7 @@ export interface IProductProps {
 	compare_price_unit: string | null;
 	compare_price_quantity: number | null;
 }
+export interface IProductProps extends IProduct, IPrice {}
 
 export interface ISearchProducts {
 	search_term: string;

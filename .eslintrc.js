@@ -34,6 +34,7 @@ module.exports = {
 		"no-restricted-syntax": "off",
 		"@typescript-eslint/explicit-function-return-type": "warn",
 		camelcase: "off",
+		"import/no-cycle": "off",
 		"unused-imports/no-unused-imports": "error",
 		"import/no-extraneous-dependencies": [
 			"error",

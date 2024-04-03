@@ -6,6 +6,7 @@ import {
 	IFetchStores,
 	IFetchStoresReturn,
 } from "../../../../common/types/common/store";
+import writeStoreToDb from "../../../../common/db/writeStoreToDB";
 
 interface IFetchLoblawsStores extends IFetchStores {}
 
@@ -57,6 +58,9 @@ const fetchLoblawsStores = async ({
 				distance,
 				userCoordinates,
 			});
+
+	// write stores to db
+	await writeStoreToDb({ stores: filteredStores });
 
 	return {
 		message: `Stores fetched successfully for ${chainName}`,

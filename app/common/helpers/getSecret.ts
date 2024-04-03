@@ -3,7 +3,10 @@ export type SecretType =
 	| "UPSTASH_PORT"
 	| "UPSTASH_ENDPOINT"
 	| "UPSTASH_PASSWORD"
-	| "PANDA_BROWSER_URL";
+	| "PANDA_BROWSER_URL"
+	| "TURSO_DB_NAME"
+	| "TURSO_CONNECTION_URL"
+	| "TURSO_AUTH_TOKEN";
 
 const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables
