@@ -1,59 +1,114 @@
-import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { relations, sql } from "drizzle-orm";
+import {
+	integer,
+	primaryKey,
+	sqliteTable,
+	text,
+	unique,
+} from "drizzle-orm/sqlite-core";
 
-export const Store = sqliteTable("Store", {
-	id: text("id").primaryKey().unique(),
-	store_id: text("store_id").notNull(),
-	chain_name: text("chain_name").notNull(),
-	store_name: text("store_name").notNull(),
-	latitude: integer("latitude").notNull().default(0),
-	longitude: integer("longitude").notNull().default(0),
-	formatted_address: text("formatted_address"),
-	city: text("city"),
-	line1: text("line1"),
-	line2: text("line2"),
-	postal_code: text("postal_code"),
-	province: text("province"),
-	country: text("country"),
-	createdAt: text("created_at")
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull(),
-});
+export const Store = sqliteTable(
+	"Store",
+	{
+		id: text("id").primaryKey().unique(),
+		store_num: text("store_num").notNull(),
+		chain_name: text("chain_name").notNull(),
+		store_name: text("store_name").notNull(),
+		latitude: integer("latitude").notNull().default(0),
+		longitude: integer("longitude").notNull().default(0),
+		formatted_address: text("formatted_address"),
+		city: text("city"),
+		line1: text("line1"),
+		line2: text("line2"),
+		postal_code: text("postal_code"),
+		province: text("province"),
+		country: text("country"),
+		createdAt: text("created_at")
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+	},
 
-export const Product = sqliteTable("Product", {
-	id: text("id").primaryKey().unique(),
-	product_id: text("product_id").notNull(),
-	store_id: text("store_id").notNull(),
-	chainName: text("chainName").notNull(),
-	product_brand: text("product_brand").notNull(),
-	product_name: text("product_name").notNull(),
-	product_link: text("product_link").notNull(),
-	product_image: text("product_image").notNull(),
-	product_size_unit: text("product_size_unit").notNull(),
-	product_size_quantity: integer("product_size_quantity").notNull(),
-	unit_soldby_type: text("unit_soldby_type").notNull(),
-	unit_soldby_unit: text("unit_soldby_unit").notNull(),
-	createdAt: text("created_at")
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull(),
-});
+	(t) => ({
+		unique: unique().on(t.store_num, t.chain_name),
+	})
+);
 
-export const Price = sqliteTable("Price", {
-	productId: text("productId")
-		.notNull()
-		.references(() => Product.id),
+export const Product = sqliteTable(
+	"Product",
+	{
+		id: text("id").primaryKey().unique(),
+		product_num: text("product_num").notNull(),
+		store_num: text("store_num")
+			.notNull()
+			.references(() => Store.store_num),
+		chainName: text("chainName").notNull(),
+		product_brand: text("product_brand").notNull(),
+		product_name: text("product_name").notNull(),
+		product_link: text("product_link").notNull(),
+		product_image: text("product_image").notNull(),
+		product_size_unit: text("product_size_unit").notNull(),
+		product_size_quantity: integer("product_size_quantity").notNull(),
+		unit_soldby_type: text("unit_soldby_type").notNull(),
+		unit_soldby_unit: text("unit_soldby_unit").notNull(),
+		createdAt: text("created_at")
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+	},
 
-	storeId: text("storeId")
-		.notNull()
-		.references(() => Store.id),
-	price: integer("price").notNull(),
-	price_unit: text("price_unit").notNull(),
-	price_was: integer("price_was"),
-	price_was_unit: text("price_was_unit"),
-	compare_price: integer("compare_price"),
-	compare_price_unit: text("compare_price_unit"),
-	compare_price_quantity: integer("compare_price_quantity"),
-	createdAt: text("created_at")
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull(),
-});
+	(t) => ({
+		unique: unique().on(t.product_num, t.store_num, t.chainName),
+	})
+);
+
+export const Price = sqliteTable(
+	"Price",
+	{
+		productId: text("productId")
+			.notNull()
+			.references(() => Product.id),
+
+		storeId: text("storeId")
+			.notNull()
+			.references(() => Store.id),
+		price: integer("price").notNull(),
+		price_unit: text("price_unit").notNull(),
+		price_was: integer("price_was"),
+		price_was_unit: text("price_was_unit"),
+		compare_price: integer("compare_price"),
+		compare_price_unit: text("compare_price_unit"),
+		compare_price_quantity: integer("compare_price_quantity"),
+		createdAt: text("created_at")
+			.default(sql`CURRENT_TIMESTAMP`)
+			.notNull(),
+	}
+	// unique constraint on productId, storeId
+);
+
+export const StoreProduct = sqliteTable(
+	"store_to_product",
+	{
+		storeId: text("storeId")
+			.notNull()
+			.references(() => Store.id),
+		productId: text("productId")
+			.notNull()
+			.references(() => Product.id),
+	},
+	(t) => ({
+		primary_key: primaryKey({ columns: [t.storeId, t.productId] }),
+	})
+);
+export const ProductRelations = relations(Product, ({ many, one }) => ({
+	StoreProduct: many(StoreProduct),
+	ProductPrice: one(Price),
+}));
+
+export const StoreRelations = relations(Store, ({ many }) => ({
+	StoreProduct: many(StoreProduct),
+	StorePrice: many(Price),
+}));
+
+export const PriceRelations = relations(Price, ({ one }) => ({
+	ProductPrice: one(Product),
+	StorePrice: one(Store),
+}));

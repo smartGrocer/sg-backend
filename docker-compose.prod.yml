@@ -22,7 +22,20 @@ services:
             - ./site:/srv
             - caddy_data:/data
             - caddy_config:/config
+    # redis:
+    #     image: redis:latest
+    #     restart: unless-stopped
+    #     ports:
+    #         - "6379:6379"
+    #     volumes:
+    #         # - /path/to/local/dаta:/root/redis
+    #         # - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    #         - redis_data:/data
 
+    #     environment:
+    #         - REDIS_PASSWORD=my-password
+    #         - REDIS_PORT=6379
+    #         - REDIS_DATABASES=16
 volumes:
     caddy_data:
     caddy_config:

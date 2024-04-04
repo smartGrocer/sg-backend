@@ -14,7 +14,6 @@ const writeStoreToDb = async (
 		/**
 		 * stores are duplicates if they have the same chainName and storeId
 		 */
-		console.log("Writing stores to db", stores);
 
 		if (!stores.length) {
 			return {
