@@ -10,7 +10,7 @@ import { MetroChain } from "../metro/metro";
 
 export interface IStoreProps {
 	id: string;
-	store_id: string;
+	store_num: string;
 	chain_name: string;
 	store_name: string;
 	latitude: number;

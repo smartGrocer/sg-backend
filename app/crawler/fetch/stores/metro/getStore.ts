@@ -69,7 +69,7 @@ const getMetroStores = async ({
 
 				data.push({
 					id: storeId,
-					store_id: storeId,
+					store_num: storeId,
 					chain_name: chainName,
 					store_name: storeName,
 					latitude: parseFloat(storeLatitude),

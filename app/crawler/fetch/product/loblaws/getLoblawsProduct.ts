@@ -8,9 +8,9 @@ import {
 import getProduct from "./getProduct";
 
 const getLoblawsProduct = async ({
-	product_id,
+	product_num,
 	chainName,
-	store_id,
+	store_num,
 }: IGetProductLoblaws): Promise<IGetProductReturn> => {
 	if (
 		!Object.values(LoblawsChainName).includes(chainName as LoblawsChainName)
@@ -23,7 +23,7 @@ const getLoblawsProduct = async ({
 	}
 
 	const { message, code, availableOptions } = await validateLoblawsStoreId({
-		storeId: store_id,
+		storeId: store_num,
 		chainName,
 	});
 
@@ -36,8 +36,8 @@ const getLoblawsProduct = async ({
 	}
 
 	const response = await getProduct({
-		product_id,
-		store_id,
+		product_num,
+		store_num,
 		chainName: chainName as LoblawsChainName,
 	});
 
@@ -46,7 +46,7 @@ const getLoblawsProduct = async ({
 		// if 404
 		if (response.message === "Request failed with status code 404") {
 			return {
-				message: `Product not found for product id: ${product_id}`,
+				message: `Product not found for product id: ${product_num}`,
 				code: 404,
 			};
 		}
@@ -58,7 +58,7 @@ const getLoblawsProduct = async ({
 	}
 
 	return {
-		message: `Product fetched successfully for product id: ${product_id}`,
+		message: `Product fetched successfully for product id: ${product_num}`,
 		data: response,
 		code: 200,
 	};

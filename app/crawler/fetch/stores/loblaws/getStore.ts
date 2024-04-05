@@ -17,7 +17,7 @@ const filterStoreDuplicates = (data: IStoreProps[]): IStoreProps[] => {
 	return data.reduce((acc: IStoreProps[], store: IStoreProps) => {
 		const existingStore = acc.find(
 			(t) =>
-				(t.store_id === store.store_id && t.line1 === store.line1) ||
+				(t.store_num === store.store_num && t.line1 === store.line1) ||
 				// when checking the formatted address, remove any spaces and compare
 				(t.formatted_address.replace(/\s/g, "") ===
 					store.formatted_address.replace(/\s/g, "") &&
@@ -90,7 +90,7 @@ const getLoblawsStores = async ({
 			const data = response.map((store: IStoreLoblawsSrcProps) => {
 				return {
 					id: store.id || "",
-					store_id: store.storeId || "",
+					store_num: store.storeId || "",
 					chain_name: store.storeBannerId || "",
 					store_name: store.name || "",
 					latitude: store.geoPoint.latitude || 0,
@@ -105,7 +105,7 @@ const getLoblawsStores = async ({
 				};
 			});
 
-			// filter duplicates if it has any of the following duplicate properties: store_id, latitude, longitude, line1
+			// filter duplicates if it has any of the following duplicate properties: store_num, latitude, longitude, line1
 			const filteredData = filterStoreDuplicates(data);
 
 			returnData.push(...filteredData);

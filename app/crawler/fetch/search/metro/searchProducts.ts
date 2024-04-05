@@ -18,8 +18,8 @@ const searchProducts = async ({
 	chainName,
 }: ISearchProducts): Promise<IProductProps[] | Error> => {
 	try {
-		const store_id = "all";
-		const cacheKey = `search-${chainName}-${store_id}-${search_term}`;
+		const store_num = "all";
+		const cacheKey = `search-${chainName}-${store_num}-${search_term}`;
 
 		const cachedData = await getCachedData({
 			key: cacheKey,
@@ -54,7 +54,7 @@ const searchProducts = async ({
 		$(".searchOnlineResults")
 			.find("div.tile-product")
 			.each((i, el) => {
-				const product_id = $(el).attr("data-product-code") || "";
+				const product_num = $(el).attr("data-product-code") || "";
 
 				const product_brand =
 					$(el).find(".head__brand").text().trim() || "";
@@ -163,8 +163,8 @@ const searchProducts = async ({
 					unit_soldby_type === "ea." ? "ea." : "pack";
 
 				data.push({
-					product_id,
-					store_id,
+					product_num,
+					store_num,
 					chainName,
 					product_brand,
 					product_name,

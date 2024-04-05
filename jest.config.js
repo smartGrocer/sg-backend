@@ -12,6 +12,6 @@ module.exports = {
 	collectCoverageFrom: [
 		"app/**/*.{js,jsx,ts,tsx}",
 		"!<rootDir>/node_modules/",
-		"!<rootDir>/coverage/",
+		"!<rootDir>/coverage/**",
 	],
 };

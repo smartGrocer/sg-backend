@@ -222,24 +222,24 @@ export const validateLoblawsStoreId = async ({
 
 	if (!storeId) {
 		return {
-			message: `Store ID is required as a query parameter like so: /search/:product_search?store_id=1234`,
+			message: `Store ID is required as a query parameter like so: /search/:product_search?store_num=1234`,
 			availableOptions: [
 				// remove duplicates
 				...new Set<string>(
-					stores.map((store: IStoreProps) => store.store_id).sort()
+					stores.map((store: IStoreProps) => store.store_num).sort()
 				),
 			],
 			code: 400,
 		};
 	}
 
-	if (!stores.find((store) => store.store_id === storeId)) {
+	if (!stores.find((store) => store.store_num === storeId)) {
 		return {
 			message: `Store ID: ${storeId} is not valid for chain: ${chainName}`,
 			availableOptions: [
 				// remove duplicates
 				...new Set<string>(
-					stores.map((store: IStoreProps) => store.store_id).sort()
+					stores.map((store: IStoreProps) => store.store_num).sort()
 				),
 			],
 			code: 400,

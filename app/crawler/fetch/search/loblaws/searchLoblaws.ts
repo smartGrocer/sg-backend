@@ -10,7 +10,7 @@ import searchProducts from "./searchProducts";
 const searchLoblaws = async ({
 	search_term,
 	chainName,
-	store_id,
+	store_num,
 }: ISearchLoblaws): Promise<ISearchReturn> => {
 	if (
 		!Object.values(LoblawsChainName).includes(chainName as LoblawsChainName)
@@ -23,7 +23,7 @@ const searchLoblaws = async ({
 	}
 
 	const { message, code, availableOptions } = await validateLoblawsStoreId({
-		storeId: store_id,
+		storeId: store_num,
 		chainName,
 	});
 
@@ -38,7 +38,7 @@ const searchLoblaws = async ({
 	const response = await searchProducts({
 		search_term,
 		chainName: chainName as LoblawsChainName,
-		store_id,
+		store_num,
 	});
 
 	// if error

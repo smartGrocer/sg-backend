@@ -3,17 +3,17 @@ import { IAllStoreChains } from "./store";
 
 export interface ISearchStore {
 	search_term: string;
-	store_id: string;
+	store_num: string;
 }
 
 export interface IGetProduct {
-	product_id: string;
-	store_id: string;
+	product_num: string;
+	store_num: string;
 }
 
 export interface IProduct {
-	product_id: string;
-	store_id: string;
+	product_num: string;
+	store_num: string;
 	chainName: string;
 	product_brand: string;
 	product_name: string;
@@ -38,13 +38,13 @@ export interface IProductProps extends IProduct, IPrice {}
 export interface ISearchProducts {
 	search_term: string;
 	chainName: IAllStoreChains;
-	store_id: string;
+	store_num: string;
 }
 
 export interface IGetProductProps {
 	url?: string;
-	product_id?: string;
-	store_id: string;
+	product_num?: string;
+	store_num: string;
 }
 
 export interface IProductPropsWithPagination {

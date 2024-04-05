@@ -13,15 +13,15 @@ import {
 import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
 
 const getProduct = async ({
-	product_id,
+	product_num,
 	url,
-	store_id,
+	store_num,
 	chainName,
 }: IGetProductMetroProps): Promise<IProductProps | Error> => {
 	const productData: IProductProps[] = [];
 
 	try {
-		const cacheKey = `product-${chainName}-${store_id}-${product_id}-${url}`;
+		const cacheKey = `product-${chainName}-${store_num}-${product_num}-${url}`;
 
 		const cachedData = await getCachedData({
 			key: cacheKey,
@@ -149,8 +149,8 @@ const getProduct = async ({
 				unit_soldby_type === "ea." ? "ea." : "pack";
 
 			productData.push({
-				product_id: product_id_2,
-				store_id: store_id_2,
+				product_num: product_id_2,
+				store_num: store_id_2,
 				chainName,
 				product_brand,
 				product_name,

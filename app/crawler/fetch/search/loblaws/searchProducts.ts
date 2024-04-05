@@ -22,10 +22,10 @@ import {
 const searchProducts = async ({
 	search_term,
 	chainName,
-	store_id,
+	store_num,
 }: ISearchProducts): Promise<IProductPropsWithPagination | Error> => {
 	try {
-		const cacheKey = `search-${chainName}-${store_id}-${search_term}`;
+		const cacheKey = `search-${chainName}-${store_num}-${search_term}`;
 		const cachedData = await getCachedData({
 			key: cacheKey,
 			cacheInRedis: true,
@@ -37,7 +37,7 @@ const searchProducts = async ({
 		const userAgent = new UserAgent().toString();
 
 		const url = `https://api.pcexpress.ca/pcx-bff/api/v1/products/search`;
-		const storeId = store_id;
+		const storeId = store_num;
 		const headers = {
 			"x-apikey": "C1xujSegT5j3ap3yexJjqhOfELwGKYvz",
 			"Content-Type": "application/json",
@@ -59,8 +59,8 @@ const searchProducts = async ({
 		const products = response.data.results.map(
 			(product: ILoblawsProductSrcProps): IProductProps => {
 				return {
-					product_id: product.code,
-					store_id: storeId,
+					product_num: product.code,
+					store_num: storeId,
 					chainName,
 					product_brand: product.brand,
 					product_name: product.name,

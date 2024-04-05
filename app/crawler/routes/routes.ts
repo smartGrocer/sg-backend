@@ -152,7 +152,7 @@ router.get(
 			| LoblawsChainName
 			| MetroChain
 			| "walmart";
-		const store_id = req.query.store_id as string;
+		const store_num = req.query.store_num as string;
 
 		if (!search_term) {
 			return res.status(400).json({
@@ -174,7 +174,7 @@ router.get(
 				await searchLoblaws({
 					search_term,
 					chainName: chainName as LoblawsChainName,
-					store_id,
+					store_num,
 				});
 
 			return res.status(code).json({
@@ -190,7 +190,7 @@ router.get(
 				await searchMetro({
 					search_term,
 					chainName: chainName as MetroChain,
-					store_id,
+					store_num,
 				});
 
 			return res.status(code).json({
@@ -213,22 +213,22 @@ router.get(
 );
 
 router.get("/product/lookup", async (req: Request, res: Response) => {
-	const product_id = req.query.product_id as string;
+	const product_num = req.query.product_num as string;
 	const link_to_product = req.query.url as string;
 	const chainName = req.query.chain as
 		| LoblawsChainName
 		| MetroChain
 		| "walmart";
-	const store_id = req.query.store_id as string;
+	const store_num = req.query.store_num as string;
 
-	if (!product_id && !link_to_product) {
+	if (!product_num && !link_to_product) {
 		return res.status(400).json({
-			message: `Either product_id or url is required as a query param, please provide one like so: /product/lookup?product_id=1234&url=www.example.com/product/id/1234`,
+			message: `Either product_num or url is required as a query param, please provide one like so: /product/lookup?product_num=1234&url=www.example.com/product/id/1234`,
 			availableOptions: [
-				"/product/lookup?product_id=1234",
+				"/product/lookup?product_num=1234",
 				"/product/lookup?url=www.example.com/product/id/1234",
-				"/product/lookup?product_id=1234&url=www.example.com/product/id/1234",
-				"/product/lookup?product_id=1234&chain=chain_name",
+				"/product/lookup?product_num=1234&url=www.example.com/product/id/1234",
+				"/product/lookup?product_num=1234&chain=chain_name",
 				"/product/lookup?url=www.example.com/product/id/1234&chain=chain_name",
 			],
 		});
@@ -239,8 +239,8 @@ router.get("/product/lookup", async (req: Request, res: Response) => {
 	) {
 		const { message, data, code, availableOptions } =
 			await getLoblawsProduct({
-				product_id,
-				store_id,
+				product_num,
+				store_num,
 				chainName: chainName as LoblawsChainName,
 			});
 
@@ -254,10 +254,10 @@ router.get("/product/lookup", async (req: Request, res: Response) => {
 	if (Object.values(MetroChain).includes(chainName as MetroChain)) {
 		const { message, data, code, availableOptions } = await getMetroProduct(
 			{
-				product_id,
+				product_num,
 				url: link_to_product,
 				chainName: chainName as MetroChain,
-				store_id,
+				store_num,
 			}
 		);
 
@@ -269,7 +269,7 @@ router.get("/product/lookup", async (req: Request, res: Response) => {
 	}
 
 	return res.status(400).json({
-		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /product/id/:product_id?chain=chain_name`,
+		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /product/id/:product_num?chain=chain_name`,
 		availableOptions: [
 			...Object.values(LoblawsChainName),
 			...Object.values(MetroChain),
@@ -285,9 +285,9 @@ router.get("*", (req, res) => {
 		availableRoutes: {
 			stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
 			product_search:
-				"/product/search/:product_search?chain=chain_name&store_id=1234",
+				"/product/search/:product_search?chain=chain_name&store_num=1234",
 			product_lookup:
-				"/product/lookup?product_id=1234&url=www.example.com/product/id/1234&chain=chain_name",
+				"/product/lookup?product_num=1234&url=www.example.com/product/id/1234&chain=chain_name",
 		},
 	});
 });

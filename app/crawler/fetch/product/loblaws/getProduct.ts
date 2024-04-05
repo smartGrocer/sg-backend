@@ -15,11 +15,11 @@ import {
 } from "../../../../common/cache/storeCache";
 
 const getProduct = async ({
-	product_id,
-	store_id,
+	product_num,
+	store_num,
 	chainName,
 }: IGetProductLoblawsProps): Promise<IProductProps | Error> => {
-	const cacheKey = `product-${chainName}-${store_id}-${product_id}`;
+	const cacheKey = `product-${chainName}-${store_num}-${product_num}`;
 
 	const cachedData = await getCachedData({
 		key: cacheKey,
@@ -38,7 +38,7 @@ const getProduct = async ({
 		.reverse()
 		.join("");
 
-	const url_get = `https://api.pcexpress.ca/pcx-bff/api/v1/products/${product_id}?lang=en&date=${date}&pickupType=STORE&storeId=${store_id}&banner=${chainName}`;
+	const url_get = `https://api.pcexpress.ca/pcx-bff/api/v1/products/${product_num}?lang=en&date=${date}&pickupType=STORE&storeId=${store_num}&banner=${chainName}`;
 
 	const headers = {
 		"x-apikey": "C1xujSegT5j3ap3yexJjqhOfELwGKYvz",
@@ -51,8 +51,8 @@ const getProduct = async ({
 
 		const product = response.data;
 
-		productData.product_id = product.code;
-		productData.store_id = store_id;
+		productData.product_num = product.code;
+		productData.store_num = store_num;
 		productData.chainName = chainName;
 		productData.product_brand = product.brand;
 		productData.product_name = product.name;

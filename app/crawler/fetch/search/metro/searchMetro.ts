@@ -6,7 +6,7 @@ import searchProducts from "./searchProducts";
 const searchMetro = async ({
 	search_term,
 	chainName,
-	store_id,
+	store_num,
 }: ISearchMetro): Promise<ISearchReturn> => {
 	if (!Object.values(MetroChain).includes(chainName as MetroChain)) {
 		return {
@@ -19,7 +19,7 @@ const searchMetro = async ({
 	const response = await searchProducts({
 		search_term,
 		chainName: chainName as MetroChain,
-		store_id,
+		store_num,
 	});
 
 	// if error

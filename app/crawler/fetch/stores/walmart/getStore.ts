@@ -54,7 +54,7 @@ const getWalmartStores = async ({
 
 			return {
 				id: store.id,
-				store_id: store.id,
+				store_num: store.id,
 				chain_name: "walmart",
 				store_name: store.displayName,
 				latitude: store.geoPoint.latitude,
