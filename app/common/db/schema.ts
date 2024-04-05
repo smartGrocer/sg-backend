@@ -10,7 +10,9 @@ import {
 export const Store = sqliteTable(
 	"Store",
 	{
-		id: text("id").primaryKey().unique(),
+		id: integer("id", { mode: "number" }).primaryKey({
+			autoIncrement: true,
+		}),
 		store_num: text("store_num").notNull(),
 		chain_name: text("chain_name").notNull(),
 		store_name: text("store_name").notNull(),
@@ -36,7 +38,9 @@ export const Store = sqliteTable(
 export const Product = sqliteTable(
 	"Product",
 	{
-		id: text("id").primaryKey().unique(),
+		id: integer("id", { mode: "number" }).primaryKey({
+			autoIncrement: true,
+		}),
 		product_num: text("product_num").notNull(),
 		product_brand: text("product_brand").notNull(),
 		store_num: text("store_num").notNull(),
@@ -61,6 +65,9 @@ export const Product = sqliteTable(
 export const Price = sqliteTable(
 	"Price",
 	{
+		id: integer("id", { mode: "number" }).primaryKey({
+			autoIncrement: true,
+		}),
 		productId: text("productId")
 			.notNull()
 			.references(() => Product.id),
@@ -68,7 +75,6 @@ export const Price = sqliteTable(
 		storeId: text("storeId")
 			.notNull()
 			.references(() => Store.id),
-		id: text("id").primaryKey().unique(),
 		price: integer("price").notNull(),
 		price_unit: text("price_unit").notNull(),
 		price_was: integer("price_was"),

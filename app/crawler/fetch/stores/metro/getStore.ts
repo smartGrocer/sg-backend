@@ -68,7 +68,6 @@ const getMetroStores = async ({
 				const storeCountry = "Canada";
 
 				data.push({
-					id: storeId,
 					store_num: storeId,
 					chain_name: chainName,
 					store_name: storeName,

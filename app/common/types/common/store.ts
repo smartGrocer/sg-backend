@@ -9,7 +9,7 @@ import { LoblawsChainName } from "../loblaws/loblaws";
 import { MetroChain } from "../metro/metro";
 
 export interface IStoreProps {
-	id: string;
+	// id: string;
 	store_num: string;
 	chain_name: string;
 	store_name: string;

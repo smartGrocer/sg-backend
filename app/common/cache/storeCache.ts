@@ -44,6 +44,9 @@ export const saveToCache = async ({
 	data: unknown;
 	cacheInRedis: boolean;
 }) => {
+	if (getSecret("USE_REDIS") === "false") {
+		return;
+	}
 	await saveToLocalCache(key, data, CACHE_IN_LOCAL_MS);
 
 	// save to redis

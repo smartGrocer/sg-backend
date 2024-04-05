@@ -87,23 +87,24 @@ const getLoblawsStores = async ({
 
 			const response = (await axios.get(fetchUrl)).data;
 
-			const data = response.map((store: IStoreLoblawsSrcProps) => {
-				return {
-					id: store.id || "",
-					store_num: store.storeId || "",
-					chain_name: store.storeBannerId || "",
-					store_name: store.name || "",
-					latitude: store.geoPoint.latitude || 0,
-					longitude: store.geoPoint.longitude || 0,
-					formatted_address: store.address.formattedAddress || "",
-					city: store.address.town || "",
-					line1: store.address.line1 || "",
-					line2: store.address.line2 || "",
-					postal_code: store.address.postalCode || "",
-					province: store.address.region || "",
-					country: store.address.country || "",
-				};
-			});
+			const data: IStoreProps[] = response.map(
+				(store: IStoreLoblawsSrcProps) => {
+					return {
+						store_num: store.storeId || "",
+						chain_name: store.storeBannerId || "",
+						store_name: store.name || "",
+						latitude: store.geoPoint.latitude || 0,
+						longitude: store.geoPoint.longitude || 0,
+						formatted_address: store.address.formattedAddress || "",
+						city: store.address.town || "",
+						line1: store.address.line1 || "",
+						line2: store.address.line2 || "",
+						postal_code: store.address.postalCode || "",
+						province: store.address.region || "",
+						country: store.address.country || "",
+					};
+				}
+			);
 
 			// filter duplicates if it has any of the following duplicate properties: store_num, latitude, longitude, line1
 			const filteredData = filterStoreDuplicates(data);

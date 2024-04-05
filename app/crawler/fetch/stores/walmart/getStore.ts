@@ -40,34 +40,35 @@ const getWalmartStores = async ({
 			})
 		).data.payload.stores;
 
-		const data = response.map((store: IStoreWalmartSrcProps) => {
-			const formatted_address = [
-				store.address.address1,
-				store.address.address6,
-				store.address.city,
-				store.address.state,
-				store.address.postalCode,
-				store.address.country,
-			]
-				.join(", ")
-				.replace(/,\s+/g, ", ");
+		const data: IStoreProps[] = response.map(
+			(store: IStoreWalmartSrcProps) => {
+				const formatted_address = [
+					store.address.address1,
+					store.address.address6,
+					store.address.city,
+					store.address.state,
+					store.address.postalCode,
+					store.address.country,
+				]
+					.join(", ")
+					.replace(/,\s+/g, ", ");
 
-			return {
-				id: store.id,
-				store_num: store.id,
-				chain_name: "walmart",
-				store_name: store.displayName,
-				latitude: store.geoPoint.latitude,
-				longitude: store.geoPoint.longitude,
-				formatted_address,
-				city: store.address.city,
-				line1: store.address.address1,
-				line2: store.address.address6,
-				postal_code: store.address.postalCode,
-				province: store.address.state,
-				country: store.address.country,
-			};
-		});
+				return {
+					store_num: store.id,
+					chain_name: "walmart",
+					store_name: store.displayName,
+					latitude: store.geoPoint.latitude,
+					longitude: store.geoPoint.longitude,
+					formatted_address,
+					city: store.address.city,
+					line1: store.address.address1,
+					line2: store.address.address6,
+					postal_code: store.address.postalCode,
+					province: store.address.state,
+					country: store.address.country,
+				};
+			}
+		);
 
 		await saveToCache({
 			key: cacheKey,
