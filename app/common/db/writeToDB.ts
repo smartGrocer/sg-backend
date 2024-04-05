@@ -7,14 +7,10 @@ interface IWriteStoreToDbReturn {
 	count: number;
 }
 
-const writeStoreToDb = async (
+export const writeStoreToDb = async (
 	stores: IStoreProps[]
 ): Promise<IWriteStoreToDbReturn> => {
 	try {
-		/**
-		 * stores are duplicates if they have the same chainName and storeId
-		 */
-
 		if (!stores.length) {
 			return {
 				message: "No stores to write to db",
@@ -45,5 +41,3 @@ const writeStoreToDb = async (
 		};
 	}
 };
-
-export default writeStoreToDb;

@@ -43,8 +43,9 @@ export const Product = sqliteTable(
 		}),
 		product_num: text("product_num").notNull(),
 		product_brand: text("product_brand").notNull(),
-		store_num: text("store_num").notNull(),
-		chain_name: text("chain_name").notNull(),
+		storeId: text("storeId")
+			.notNull()
+			.references(() => Store.id),
 		product_name: text("product_name").notNull(),
 		product_link: text("product_link").notNull(),
 		product_image: text("product_image").notNull(),
@@ -58,7 +59,7 @@ export const Product = sqliteTable(
 	},
 
 	(t) => ({
-		unique: unique().on(t.product_num, t.store_num, t.chain_name),
+		unique: unique().on(t.product_num, t.storeId),
 	})
 );
 

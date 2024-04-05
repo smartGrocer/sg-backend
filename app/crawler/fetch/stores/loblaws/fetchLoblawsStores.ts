@@ -6,7 +6,7 @@ import {
 	IFetchStores,
 	IFetchStoresReturn,
 } from "../../../../common/types/common/store";
-import writeStoreToDb from "../../../../common/db/writeStoreToDB";
+import { writeStoreToDb } from "../../../../common/db/writeToDB";
 
 interface IFetchLoblawsStores extends IFetchStores {}
 
