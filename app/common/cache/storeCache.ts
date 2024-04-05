@@ -1,3 +1,4 @@
+import getSecret from "../helpers/getSecret";
 import { getLocalCachedData, saveToLocalCache } from "./localCache/localCache";
 // eslint-disable-next-line import/no-cycle
 import { getRedisCache, saveToRedisCache } from "./redis/redisCache";
@@ -12,7 +13,10 @@ export const getCachedData = async ({
 	key: string;
 	cacheInRedis: boolean;
 }) => {
-	console.log("RUNNING getCachedData");
+	if (getSecret("USE_REDIS") === "false") {
+		return null;
+	}
+
 	const response = await getLocalCachedData(key);
 
 	if (response) {
@@ -40,7 +44,6 @@ export const saveToCache = async ({
 	data: unknown;
 	cacheInRedis: boolean;
 }) => {
-	console.log("RUNNING saveToCache");
 	await saveToLocalCache(key, data, CACHE_IN_LOCAL_MS);
 
 	// save to redis

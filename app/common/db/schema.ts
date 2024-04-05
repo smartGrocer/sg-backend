@@ -38,11 +38,9 @@ export const Product = sqliteTable(
 	{
 		id: text("id").primaryKey().unique(),
 		product_num: text("product_num").notNull(),
-		store_num: text("store_num")
-			.notNull()
-			.references(() => Store.store_num),
-		chainName: text("chainName").notNull(),
 		product_brand: text("product_brand").notNull(),
+		store_num: text("store_num").notNull(),
+		chain_name: text("chain_name").notNull(),
 		product_name: text("product_name").notNull(),
 		product_link: text("product_link").notNull(),
 		product_image: text("product_image").notNull(),
@@ -56,7 +54,7 @@ export const Product = sqliteTable(
 	},
 
 	(t) => ({
-		unique: unique().on(t.product_num, t.store_num, t.chainName),
+		unique: unique().on(t.product_num, t.store_num, t.chain_name),
 	})
 );
 
@@ -70,6 +68,7 @@ export const Price = sqliteTable(
 		storeId: text("storeId")
 			.notNull()
 			.references(() => Store.id),
+		id: text("id").primaryKey().unique(),
 		price: integer("price").notNull(),
 		price_unit: text("price_unit").notNull(),
 		price_was: integer("price_was"),
@@ -100,7 +99,10 @@ export const StoreProduct = sqliteTable(
 );
 export const ProductRelations = relations(Product, ({ many, one }) => ({
 	StoreProduct: many(StoreProduct),
-	ProductPrice: one(Price),
+	ProductPrice: one(Price, {
+		fields: [Product.id],
+		references: [Price.productId],
+	}),
 }));
 
 export const StoreRelations = relations(Store, ({ many }) => ({
@@ -109,6 +111,33 @@ export const StoreRelations = relations(Store, ({ many }) => ({
 }));
 
 export const PriceRelations = relations(Price, ({ one }) => ({
-	ProductPrice: one(Product),
-	StorePrice: one(Store),
+	ProductPrice: one(Product, {
+		fields: [Price.productId],
+		references: [Product.id],
+	}),
+	StorePrice: one(Store, {
+		fields: [Price.storeId],
+		references: [Store.id],
+	}),
 }));
+
+export const StoreProductRelations = relations(StoreProduct, ({ one }) => ({
+	Store: one(Store, {
+		fields: [StoreProduct.storeId],
+		references: [Store.id],
+	}),
+	Product: one(Product, {
+		fields: [StoreProduct.productId],
+		references: [Product.id],
+	}),
+}));
+
+/**
+drop table Product;
+drop table Price;
+drop table Store;
+drop table store_to_product;
+drop table __old_push_Product;
+drop table Product;
+.tables
+ */

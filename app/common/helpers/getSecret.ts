@@ -6,7 +6,8 @@ export type SecretType =
 	| "PANDA_BROWSER_URL"
 	| "TURSO_DB_NAME"
 	| "TURSO_CONNECTION_URL"
-	| "TURSO_AUTH_TOKEN";
+	| "TURSO_AUTH_TOKEN"
+	| "USE_REDIS";
 
 const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables
