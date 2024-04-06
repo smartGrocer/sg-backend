@@ -76,3 +76,21 @@ export enum PandaBrowserKeys {
 	metro_search_panda = "metro_search_panda",
 	metro_lookup_panda = "metro_lookup_panda",
 }
+
+export interface IPriceData extends IPrice {
+	productId: number;
+	storeId: number;
+}
+
+export interface IProductData {
+	storeId: number;
+	product_num: string;
+	product_brand: string;
+	product_name: string;
+	product_link: string;
+	product_image: string;
+	product_size_unit: string;
+	product_size_quantity: number;
+	unit_soldby_type: string;
+	unit_soldby_unit: string;
+}

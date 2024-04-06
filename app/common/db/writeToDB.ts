@@ -2,7 +2,12 @@ import { eq } from "drizzle-orm";
 import db from "./db";
 import { Price, Product, Store } from "./schema";
 import { IStoreProps } from "../types/common/store";
-import { IProductProps } from "../types/common/product";
+import {
+	IPriceData,
+	IProductData,
+	IProductProps,
+} from "../types/common/product";
+import chunkedByStores from "../helpers/chunkedByStores";
 
 interface IWriteStoreToDbReturn {
 	message: string;
@@ -54,71 +59,68 @@ export const writeToDb = async (
 				count: 0,
 			};
 		}
-		// find store by store_num
-		const existingStore = await db
-			.select()
-			.from(Store)
-			.where(eq(Store.store_num, products[0].store_num))
-			.limit(1);
 
-		const productData = products.map((product) => {
-			return {
-				storeId: existingStore[0].id,
-				product_num: product.product_num,
-				product_brand: product.product_brand,
-				product_name: product.product_name,
-				product_link: product.product_link,
-				product_image: product.product_image,
-				product_size_unit: product.product_size_unit,
-				product_size_quantity: product.product_size_quantity,
-				unit_soldby_type: product.unit_soldby_type,
-				unit_soldby_unit: product.unit_soldby_unit,
-			};
-		})[0];
+		const chunkByStores = chunkedByStores(products);
 
-		const insertedProducts = await db
-			.insert(Product)
-			.values(productData)
-			.returning({ id: Product.id })
-			.onConflictDoNothing();
+		chunkByStores.forEach(async (storeChunk) => {
+			const existingStore = await db
+				.select()
+				.from(Store)
+				.where(eq(Store.store_num, storeChunk[0].store_num))
+				.limit(1);
 
-		console.log({
-			insertedProducts,
-			insertedProducts2: insertedProducts[0],
+			const productData: IProductData[] = products.map((product) => {
+				return {
+					storeId: existingStore[0].id,
+					product_num: product.product_num,
+					product_brand: product.product_brand,
+					product_name: product.product_name,
+					product_link: product.product_link,
+					product_image: product.product_image,
+					product_size_unit: product.product_size_unit,
+					product_size_quantity: product.product_size_quantity,
+					unit_soldby_type: product.unit_soldby_type,
+					unit_soldby_unit: product.unit_soldby_unit,
+				};
+			});
+
+			const insertedProducts = await db
+				.insert(Product)
+				.values(productData)
+				.returning({
+					id: Product.id,
+					product_num: Product.product_num,
+					storeId: Product.storeId,
+				})
+				.onConflictDoNothing();
+
+			if (insertedProducts instanceof Error) {
+				console.error("Error writing products to db", insertedProducts);
+				return {
+					message: insertedProducts.message,
+					count: 0,
+				};
+			}
+
+			// eslint-disable-next-line no-use-before-define
+			const updatedPriceData = await updatePriceData(
+				insertedProducts,
+				products
+			);
+
+			const insertedPrices = await db
+				.insert(Price)
+				.values(updatedPriceData)
+				.onConflictDoNothing();
+
+			if (insertedPrices instanceof Error) {
+				console.error("Error writing prices to db", insertedPrices);
+				return {
+					message: insertedPrices.message,
+					count: 0,
+				};
+			}
 		});
-		const priceData = products.map((product) => {
-			return {
-				storeId: existingStore[0].id,
-				productId: insertedProducts[0].id,
-				price: product.price,
-				price_unit: product.price_unit,
-				price_was: product.price_was,
-				price_was_unit: product.price_was_unit,
-				compare_price: product.compare_price,
-				compare_price_unit: product.compare_price_unit,
-				compare_price_quantity: product.compare_price_quantity,
-			};
-		})[0];
-
-		// console.log({ priceData, productData, products: products[0] });
-
-		const insertedPrices = await db
-			.insert(Price)
-			.values(priceData)
-			.onConflictDoNothing();
-
-		if (insertedPrices instanceof Error) {
-			return {
-				message: insertedPrices.message,
-				count: 0,
-			};
-		}
-		if (insertedProducts instanceof Error) {
-			return {
-				message: insertedProducts.message,
-				count: 0,
-			};
-		}
 
 		return {
 			message: "Products written to db",
@@ -131,4 +133,41 @@ export const writeToDb = async (
 			count: 0,
 		};
 	}
+};
+
+// take insertedProducts and priceData and make an array of arrays of priceData with priceData with productId, storeId but without product_num
+const updatePriceData = async (
+	insertedProducts: {
+		id: number;
+		storeId: number;
+		product_num: string;
+	}[],
+	products: IProductProps[]
+): Promise<IPriceData[]> => {
+	const updatedPriceData = products.map((product) => {
+		const productData = insertedProducts.find(
+			(insertedProduct) =>
+				insertedProduct.product_num === product.product_num
+		);
+
+		if (!productData) {
+			return null;
+		}
+
+		return {
+			productId: productData.id,
+			storeId: productData.storeId,
+			price: product.price,
+			price_unit: product.price_unit,
+			price_was: product.price_was,
+			price_was_unit: product.price_was_unit,
+			compare_price: product.compare_price,
+			compare_price_unit: product.compare_price_unit,
+			compare_price_quantity: product.compare_price_quantity,
+		};
+	});
+
+	return updatedPriceData.filter(
+		(priceData) => priceData !== null
+	) as IPriceData[];
 };
