@@ -41,18 +41,18 @@ export const Product = sqliteTable(
 		id: integer("id", { mode: "number" }).primaryKey({
 			autoIncrement: true,
 		}),
-		product_num: text("product_num").notNull(),
-		product_brand: text("product_brand").notNull(),
-		storeId: text("storeId")
+		storeId: integer("storeId")
 			.notNull()
 			.references(() => Store.id),
-		product_name: text("product_name").notNull(),
-		product_link: text("product_link").notNull(),
-		product_image: text("product_image").notNull(),
-		product_size_unit: text("product_size_unit").notNull(),
-		product_size_quantity: integer("product_size_quantity").notNull(),
-		unit_soldby_type: text("unit_soldby_type").notNull(),
-		unit_soldby_unit: text("unit_soldby_unit").notNull(),
+		product_num: text("product_num").notNull(),
+		product_brand: text("product_brand"),
+		product_name: text("product_name"),
+		product_link: text("product_link"),
+		product_image: text("product_image"),
+		product_size_unit: text("product_size_unit"),
+		product_size_quantity: integer("product_size_quantity"),
+		unit_soldby_type: text("unit_soldby_type"),
+		unit_soldby_unit: text("unit_soldby_unit"),
 		createdAt: text("created_at")
 			.default(sql`CURRENT_TIMESTAMP`)
 			.notNull(),
@@ -69,15 +69,15 @@ export const Price = sqliteTable(
 		id: integer("id", { mode: "number" }).primaryKey({
 			autoIncrement: true,
 		}),
-		productId: text("productId")
+		productId: integer("productId")
 			.notNull()
 			.references(() => Product.id),
 
-		storeId: text("storeId")
+		storeId: integer("storeId")
 			.notNull()
 			.references(() => Store.id),
-		price: integer("price").notNull(),
-		price_unit: text("price_unit").notNull(),
+		price: integer("price"),
+		price_unit: text("price_unit"),
 		price_was: integer("price_was"),
 		price_was_unit: text("price_was_unit"),
 		compare_price: integer("compare_price"),
@@ -93,10 +93,10 @@ export const Price = sqliteTable(
 export const StoreProduct = sqliteTable(
 	"store_to_product",
 	{
-		storeId: text("storeId")
+		storeId: integer("storeId")
 			.notNull()
 			.references(() => Store.id),
-		productId: text("productId")
+		productId: integer("productId")
 			.notNull()
 			.references(() => Product.id),
 	},

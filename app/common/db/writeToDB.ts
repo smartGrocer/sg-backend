@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import db from "./db";
 import { Price, Product, Store } from "./schema";
 import { IStoreProps } from "../types/common/store";
@@ -53,24 +54,16 @@ export const writeToDb = async (
 				count: 0,
 			};
 		}
-
-		const priceData = products.map((product) => {
-			return {
-				price: product.price,
-				price_unit: product.price_unit,
-				price_was: product.price_was,
-				price_was_unit: product.price_was_unit,
-				compare_price: product.compare_price,
-				compare_price_unit: product.compare_price_unit,
-				compare_price_quantity: product.compare_price_quantity,
-				storeId: product.store_num,
-				productId: product.product_num,
-			};
-		});
+		// find store by store_num
+		const existingStore = await db
+			.select()
+			.from(Store)
+			.where(eq(Store.store_num, products[0].store_num))
+			.limit(1);
 
 		const productData = products.map((product) => {
 			return {
-				storeId: product.store_num,
+				storeId: existingStore[0].id,
 				product_num: product.product_num,
 				product_brand: product.product_brand,
 				product_name: product.product_name,
@@ -81,16 +74,37 @@ export const writeToDb = async (
 				unit_soldby_type: product.unit_soldby_type,
 				unit_soldby_unit: product.unit_soldby_unit,
 			};
-		});
-
-		const insertedPrices = await db
-			.insert(Price)
-			.values(priceData[0])
-			.onConflictDoNothing();
+		})[0];
 
 		const insertedProducts = await db
 			.insert(Product)
-			.values(productData[0])
+			.values(productData)
+			.returning({ id: Product.id })
+			.onConflictDoNothing();
+
+		console.log({
+			insertedProducts,
+			insertedProducts2: insertedProducts[0],
+		});
+		const priceData = products.map((product) => {
+			return {
+				storeId: existingStore[0].id,
+				productId: insertedProducts[0].id,
+				price: product.price,
+				price_unit: product.price_unit,
+				price_was: product.price_was,
+				price_was_unit: product.price_was_unit,
+				compare_price: product.compare_price,
+				compare_price_unit: product.compare_price_unit,
+				compare_price_quantity: product.compare_price_quantity,
+			};
+		})[0];
+
+		// console.log({ priceData, productData, products: products[0] });
+
+		const insertedPrices = await db
+			.insert(Price)
+			.values(priceData)
 			.onConflictDoNothing();
 
 		if (insertedPrices instanceof Error) {
