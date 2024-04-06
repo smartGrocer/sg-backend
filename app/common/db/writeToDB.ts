@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import db from "./db";
-import { Price, Product, Store } from "./schema";
+import { Price, Product, Store, StoreProduct } from "./schema";
 import { IStoreProps } from "../types/common/store";
 import {
 	IPriceData,
@@ -111,6 +111,11 @@ export const writeToDb = async (
 			const insertedPrices = await db
 				.insert(Price)
 				.values(updatedPriceData)
+				.returning({
+					id: Price.id,
+					productId: Price.productId,
+					storeId: Price.storeId,
+				})
 				.onConflictDoNothing();
 
 			if (insertedPrices instanceof Error) {
@@ -120,6 +125,18 @@ export const writeToDb = async (
 					count: 0,
 				};
 			}
+
+			await db.insert(StoreProduct).values(
+				insertedProducts.map((product) => ({
+					storeId: product.storeId,
+					productId: product.id,
+				}))
+			);
+
+			return {
+				message: "Products written to db",
+				count: products.length,
+			};
 		});
 
 		return {
