@@ -84,6 +84,7 @@ export interface IPriceData extends IPrice {
 
 export interface IProductData {
 	storeId: number;
+	chain_name: string;
 	product_num: string;
 	product_brand: string;
 	product_name: string;
