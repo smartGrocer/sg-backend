@@ -86,8 +86,11 @@ export const Price = sqliteTable(
 		createdAt: text("created_at")
 			.default(sql`CURRENT_TIMESTAMP`)
 			.notNull(),
-	}
+	},
 	// unique constraint on productId, storeId
+	(t) => ({
+		unique: unique().on(t.productId, t.storeId),
+	})
 );
 
 export const StoreProduct = sqliteTable(

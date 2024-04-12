@@ -1,4 +1,4 @@
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import db from "./db";
 import { Price, Product, Store, StoreProduct } from "./schema";
 import { IStoreProps } from "../types/common/store";
@@ -203,50 +203,6 @@ const writeProductsToDb = async ({
 		const returnedProduct = insertedProduct || existingProduct;
 		writtenProducts.push(returnedProduct);
 
-		// eslint-disable-next-line no-use-before-define
-		const updatedPriceData = await updatePriceData({
-			insertedProducts: returnedProduct,
-			products,
-		});
-
-		const existingPrice = await db
-			.select()
-			.from(Price)
-			.orderBy(desc(Price.createdAt))
-			.where(
-				and(
-					eq(Price.productId, returnedProduct[0].id),
-					eq(Price.storeId, returnedProduct[0].storeId)
-				)
-			)
-			.limit(1);
-
-		let insertedPrice;
-		if (
-			!existingPrice.length ||
-			existingPrice[0].price !== updatedPriceData[0].price
-		) {
-			insertedPrice = await db
-				.insert(Price)
-				.values(updatedPriceData)
-				.returning({
-					id: Price.id,
-					productId: Price.productId,
-					storeId: Price.storeId,
-				})
-				.onConflictDoNothing();
-		}
-
-		if (insertedPrice instanceof Error) {
-			console.error("Error writing prices to db", insertedPrice);
-			return {
-				message: insertedPrice.message,
-				count: 0,
-			};
-		}
-
-		writtenPrices.push(insertedPrice);
-
 		await db
 			.insert(StoreProduct)
 			.values(
@@ -257,10 +213,71 @@ const writeProductsToDb = async ({
 			)
 			.onConflictDoNothing();
 
-		console.log(
-			"wrote product and price to db",
-			returnedProduct[0].product_num
-		);
+		// eslint-disable-next-line no-use-before-define
+		const updatedPriceData = await updatePriceData({
+			insertedProducts: returnedProduct,
+			products,
+		});
+
+		// const existingPrice = await db
+		// 	.select()
+		// 	.from(Price)
+		// 	.orderBy(desc(Price.createdAt))
+		// 	.where(
+		// 		and(
+		// 			eq(Price.productId, returnedProduct[0].id),
+		// 			eq(Price.storeId, returnedProduct[0].storeId)
+		// 		)
+		// 	)
+		// 	.limit(1);
+
+		// let insertedPrice;
+		// if (
+		// 	!existingPrice.length ||
+		// 	existingPrice[0].price !== updatedPriceData[0].price
+		// ) {
+		// 	insertedPrice = await db
+		// 		.insert(Price)
+		// 		.values(updatedPriceData)
+		// 		.returning({
+		// 			id: Price.id,
+		// 			productId: Price.productId,
+		// 			storeId: Price.storeId,
+		// 		})
+		// 		.onConflictDoNothing();
+		// }
+
+		// if (insertedPrice instanceof Error) {
+		// 	console.error("Error writing prices to db", insertedPrice);
+		// 	return {
+		// 		message: insertedPrice.message,
+		// 		count: 0,
+		// 	};
+		// }
+
+		const insertedPrice = await db
+			.insert(Price)
+			.values(updatedPriceData)
+			.onConflictDoUpdate({
+				target: [Price.productId, Price.storeId],
+				set: {
+					price: sql`${Price.price}`,
+					price_unit: sql`${Price.price_unit}`,
+					price_was: sql`${Price.price_was}`,
+					price_was_unit: sql`${Price.price_was_unit}`,
+					compare_price: sql`${Price.compare_price}`,
+					compare_price_unit: sql`${Price.compare_price_unit}`,
+					compare_price_quantity: sql`${Price.compare_price_quantity}`,
+				},
+				where: sql`${Price.price} <> EXCLUDED.price`,
+			});
+
+		writtenPrices.push(insertedPrice);
+
+		// console.log(
+		// 	"wrote product and price to db",
+		// 	returnedProduct[0].product_num
+		// );
 	}
 
 	console.log("wrote products and prices to db", {
