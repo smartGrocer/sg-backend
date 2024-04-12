@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import db from "./db";
 import { Price, Product, Store, StoreProduct } from "./schema";
 import { IStoreProps } from "../types/common/store";
@@ -108,40 +108,74 @@ export const writeToDb = async (
 };
 
 // take insertedProducts and priceData and make an array of arrays of priceData with priceData with productId, storeId but without product_num
-const updatePriceData = async (
+const updatePriceData = async ({
+	insertedProducts,
+	products,
+}: {
 	insertedProducts: {
 		id: number;
 		storeId: number;
 		product_num: string;
-	}[],
-	products: IProductProps[]
-): Promise<IPriceData[]> => {
-	const updatedPriceData = products.map((product) => {
-		const productData = insertedProducts.find(
-			(insertedProduct) =>
-				insertedProduct.product_num === product.product_num
-		);
+	}[];
+	products: IProductProps[];
+}): Promise<IPriceData[]> => {
+	if (!insertedProducts.length) {
+		throw new Error("No insertedProducts found");
+	}
 
-		if (!productData) {
-			return null;
-		}
+	if (insertedProducts.length > 1) {
+		throw new Error("More than one insertedProducts found");
+	}
+	const currentInsertedProduct = insertedProducts[0];
 
-		return {
-			productId: productData.id,
-			storeId: productData.storeId,
-			price: product.price,
-			price_unit: product.price_unit,
-			price_was: product.price_was,
-			price_was_unit: product.price_was_unit,
-			compare_price: product.compare_price,
-			compare_price_unit: product.compare_price_unit,
-			compare_price_quantity: product.compare_price_quantity,
-		};
-	});
+	const currentProduct = products.find(
+		(product) => product.product_num === currentInsertedProduct.product_num
+	);
 
-	return updatedPriceData.filter(
-		(priceData) => priceData !== null
-	) as IPriceData[];
+	if (!currentProduct) {
+		throw new Error("No currentProduct found");
+	}
+
+	return [
+		{
+			productId: currentInsertedProduct.id,
+			storeId: currentInsertedProduct.storeId,
+			price: currentProduct.price,
+			price_unit: currentProduct.price_unit,
+			price_was: currentProduct.price_was,
+			price_was_unit: currentProduct.price_was_unit,
+			compare_price: currentProduct.compare_price,
+			compare_price_unit: currentProduct.compare_price_unit,
+			compare_price_quantity: currentProduct.compare_price_quantity,
+		},
+	];
+
+	// const updatedPriceData = products.map((product) => {
+	// 	const productData = insertedProducts.find(
+	// 		(insertedProduct) =>
+	// 			insertedProduct.product_num === product.product_num
+	// 	);
+
+	// 	if (!productData) {
+	// 		return null;
+	// 	}
+
+	// 	return {
+	// 		productId: productData.id,
+	// 		storeId: productData.storeId,
+	// 		price: product.price,
+	// 		price_unit: product.price_unit,
+	// 		price_was: product.price_was,
+	// 		price_was_unit: product.price_was_unit,
+	// 		compare_price: product.compare_price,
+	// 		compare_price_unit: product.compare_price_unit,
+	// 		compare_price_quantity: product.compare_price_quantity,
+	// 	};
+	// });
+
+	// return updatedPriceData.filter(
+	// 	(priceData) => priceData !== null
+	// ) as IPriceData[];
 };
 
 const writeProductsToDb = async ({
@@ -268,30 +302,48 @@ const writeProductsToDb = async ({
 		writtenProducts.push(returnedProduct);
 
 		// eslint-disable-next-line no-use-before-define
-		const updatedPriceData = await updatePriceData(
-			[...returnedProduct],
-			products
-		);
+		const updatedPriceData = await updatePriceData({
+			insertedProducts: returnedProduct,
+			products,
+		});
 
-		const insertedPrices = await db
-			.insert(Price)
-			.values(updatedPriceData)
-			.returning({
-				id: Price.id,
-				productId: Price.productId,
-				storeId: Price.storeId,
-			})
-			.onConflictDoNothing();
+		const existingPrice = await db
+			.select()
+			.from(Price)
+			.orderBy(desc(Price.createdAt))
+			.where(
+				and(
+					eq(Price.productId, returnedProduct[0].id),
+					eq(Price.storeId, returnedProduct[0].storeId)
+				)
+			)
+			.limit(1);
 
-		if (insertedPrices instanceof Error) {
-			console.error("Error writing prices to db", insertedPrices);
+		let insertedPrice;
+		if (
+			!existingPrice.length ||
+			existingPrice[0].price !== updatedPriceData[0].price
+		) {
+			insertedPrice = await db
+				.insert(Price)
+				.values(updatedPriceData)
+				.returning({
+					id: Price.id,
+					productId: Price.productId,
+					storeId: Price.storeId,
+				})
+				.onConflictDoNothing();
+		}
+
+		if (insertedPrice instanceof Error) {
+			console.error("Error writing prices to db", insertedPrice);
 			return {
-				message: insertedPrices.message,
+				message: insertedPrice.message,
 				count: 0,
 			};
 		}
 
-		writtenPrices.push(insertedPrices);
+		writtenPrices.push(insertedPrice);
 
 		await db
 			.insert(StoreProduct)
