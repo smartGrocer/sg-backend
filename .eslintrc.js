@@ -35,6 +35,7 @@ module.exports = {
 		"@typescript-eslint/explicit-function-return-type": "warn",
 		camelcase: "off",
 		"import/no-cycle": "off",
+		"no-use-before-define": "warn",
 		"unused-imports/no-unused-imports": "error",
 		"import/no-extraneous-dependencies": [
 			"error",
