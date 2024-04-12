@@ -149,33 +149,6 @@ const updatePriceData = async ({
 			compare_price_quantity: currentProduct.compare_price_quantity,
 		},
 	];
-
-	// const updatedPriceData = products.map((product) => {
-	// 	const productData = insertedProducts.find(
-	// 		(insertedProduct) =>
-	// 			insertedProduct.product_num === product.product_num
-	// 	);
-
-	// 	if (!productData) {
-	// 		return null;
-	// 	}
-
-	// 	return {
-	// 		productId: productData.id,
-	// 		storeId: productData.storeId,
-	// 		price: product.price,
-	// 		price_unit: product.price_unit,
-	// 		price_was: product.price_was,
-	// 		price_was_unit: product.price_was_unit,
-	// 		compare_price: product.compare_price,
-	// 		compare_price_unit: product.compare_price_unit,
-	// 		compare_price_quantity: product.compare_price_quantity,
-	// 	};
-	// });
-
-	// return updatedPriceData.filter(
-	// 	(priceData) => priceData !== null
-	// ) as IPriceData[];
 };
 
 const writeProductsToDb = async ({
@@ -185,77 +158,6 @@ const writeProductsToDb = async ({
 	productData: IProductData[];
 	products: IProductProps[];
 }): Promise<IWriteStoreToDbReturn> => {
-	// productData.forEach(async (product) => {
-	// 	if (!product.storeId) {
-	// 		console.error("Error writing products to db, no storeId found");
-	// 		return {
-	// 			message: "Error writing products to db, no storeId found",
-	// 			count: 0,
-	// 		};
-	// 	}
-	// 	const existingProduct = await db
-	// 		.select()
-	// 		.from(Product)
-	// 		.where(
-	// 			and(
-	// 				eq(Product.storeId, product.storeId),
-	// 				eq(Product.product_num, product.product_num)
-	// 			)
-	// 		)
-	// 		.limit(1);
-	// 	let insertedProduct;
-	// 	if (!existingProduct.length) {
-	// 		// insert product
-	// 		insertedProduct = await db
-	// 			.insert(Product)
-	// 			.values(product)
-	// 			.returning({
-	// 				id: Product.id,
-	// 				product_num: Product.product_num,
-	// 				storeId: Product.storeId,
-	// 			})
-	// 			.onConflictDoNothing();
-	// 	}
-	// 	if (insertedProduct instanceof Error) {
-	// 		console.error("Error writing products to db", insertedProduct);
-	// 		return {
-	// 			message: insertedProduct.message,
-	// 			count: 0,
-	// 		};
-	// 	}
-	// 	const returnedProduct = insertedProduct || existingProduct;
-	// 	// eslint-disable-next-line no-use-before-define
-	// 	const updatedPriceData = await updatePriceData(
-	// 		[...returnedProduct],
-	// 		products
-	// 	);
-	// 	const insertedPrices = await db
-	// 		.insert(Price)
-	// 		.values(updatedPriceData)
-	// 		.returning({
-	// 			id: Price.id,
-	// 			productId: Price.productId,
-	// 			storeId: Price.storeId,
-	// 		})
-	// 		.onConflictDoNothing();
-	// 	if (insertedPrices instanceof Error) {
-	// 		console.error("Error writing prices to db", insertedPrices);
-	// 		return {
-	// 			message: insertedPrices.message,
-	// 			count: 0,
-	// 		};
-	// 	}
-	// 	await db.insert(StoreProduct).values(
-	// 		returnedProduct.map((prod) => ({
-	// 			storeId: prod.storeId,
-	// 			productId: prod.id,
-	// 		}))
-	// 	);
-	// 	return {
-	// 		message: "Product and Price written to db",
-	// 		count: products.length,
-	// 	};
-	// });
 	const writtenProducts = [];
 	const writtenPrices = [];
 
