@@ -7,7 +7,10 @@ import {
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
-import { IStoreProps } from "../../../../common/types/common/store";
+import {
+	AllStoreChainBrands,
+	IStoreProps,
+} from "../../../../common/types/common/store";
 import {
 	getCachedData,
 	saveToCache,
@@ -85,13 +88,15 @@ const getLoblawsStores = async ({
 			const bannerId = iStore;
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
 
-			const response = (await axios.get(fetchUrl)).data;
+			const response = (await axios.get(fetchUrl))
+				.data as IStoreLoblawsSrcProps[];
 
 			const data: IStoreProps[] = response.map(
 				(store: IStoreLoblawsSrcProps) => {
 					return {
 						store_num: store.storeId || "",
 						chain_name: store.storeBannerId || "",
+						chain_brand: AllStoreChainBrands.loblaws,
 						store_name: store.name || "",
 						latitude: store.geoPoint.latitude || 0,
 						longitude: store.geoPoint.longitude || 0,

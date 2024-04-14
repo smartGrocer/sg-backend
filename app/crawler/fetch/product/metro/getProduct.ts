@@ -11,6 +11,7 @@ import {
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
+import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
 const getProduct = async ({
 	product_num,
@@ -151,7 +152,11 @@ const getProduct = async ({
 			productData.push({
 				product_num: product_id_2,
 				store_num: store_id_2,
-				chainName,
+				chain_brand:
+					chainName === "metro"
+						? AllStoreChainBrands.metro
+						: AllStoreChainBrands.foodbasics,
+				chain_name: chainName,
 				product_brand,
 				product_name,
 				product_link,

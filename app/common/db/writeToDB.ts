@@ -1,7 +1,7 @@
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import db from "./db";
 import { Price, Product, Store, StoreProduct } from "./schema";
-import { IStoreProps } from "../types/common/store";
+import { AllStoreChainBrands, IStoreProps } from "../types/common/store";
 import {
 	IPriceData,
 	IProductData,
@@ -52,59 +52,66 @@ export const writeStoreToDb = async (
 export const writeToDb = async (
 	products: IProductProps[]
 ): Promise<IWriteStoreToDbReturn> => {
-	try {
-		if (!products.length) {
-			return {
-				message: "No products to write to db",
-				count: 0,
-			};
-		}
-
-		const chunkByStores = chunkedByStores(products);
-
-		for await (const storeChunk of chunkByStores) {
-			// chunkByStores.forEach(async (storeChunk) => {
-			const existingStore = await db
-				.select()
-				.from(Store)
-				.where(eq(Store.store_num, storeChunk[0].store_num))
-				.limit(1);
-
-			const productData: IProductData[] = products.map((product) => {
-				return {
-					storeId: existingStore[0]?.id,
-					chain_name: existingStore[0]?.chain_name,
-					product_num: product.product_num,
-					product_brand: product.product_brand,
-					product_name: product.product_name,
-					product_link: product.product_link,
-					product_image: product.product_image,
-					product_size_unit: product.product_size_unit,
-					product_size_quantity: product.product_size_quantity,
-					unit_soldby_type: product.unit_soldby_type,
-					unit_soldby_unit: product.unit_soldby_unit,
-				};
-			});
-
-			// eslint-disable-next-line no-use-before-define
-			await writeProductsToDb({
-				productData,
-				products,
-			});
-		}
-		// });
-
+	// try {
+	if (!products.length) {
 		return {
-			message: "Store and products written to db",
-			count: products.length,
-		};
-	} catch (e) {
-		console.error("Error writing products to db", e);
-		return {
-			message: "Error writing products to db",
+			message: "No products to write to db",
 			count: 0,
 		};
 	}
+
+	const chunkByStores = chunkedByStores(products);
+
+	for await (const storeChunk of chunkByStores) {
+		// chunkByStores.forEach(async (storeChunk) => {
+		const existingStore = await db
+			.select()
+			.from(Store)
+			.where(
+				and(
+					eq(Store.store_num, storeChunk[0].store_num),
+					eq(Store.chain_brand, storeChunk[0].chain_brand)
+				)
+			)
+			.limit(1);
+
+		const productData: IProductData[] = products.map((product) => {
+			return {
+				storeId: existingStore[0]?.id,
+				// chain_name: existingStore[0]?.chain_name,
+				chain_brand: existingStore[0]
+					?.chain_brand as AllStoreChainBrands,
+				product_num: product.product_num,
+				product_brand: product.product_brand,
+				product_name: product.product_name,
+				product_link: product.product_link,
+				product_image: product.product_image,
+				product_size_unit: product.product_size_unit,
+				product_size_quantity: product.product_size_quantity,
+				unit_soldby_type: product.unit_soldby_type,
+				unit_soldby_unit: product.unit_soldby_unit,
+			};
+		});
+
+		// eslint-disable-next-line no-use-before-define
+		await writeProductsToDb({
+			productData,
+			products,
+		});
+	}
+	// });
+
+	return {
+		message: "Store and products written to db",
+		count: products.length,
+	};
+	// } catch (e) {
+	// 	console.error("Error writing products to db", e);
+	// 	return {
+	// 		message: "Error writing products to db",
+	// 		count: 0,
+	// 	};
+	// }
 };
 
 // take insertedProducts and priceData and make an array of arrays of priceData with priceData with productId, storeId but without product_num
@@ -116,6 +123,7 @@ const updatePriceData = async ({
 		id: number;
 		storeId: number;
 		product_num: string;
+		chain_brand: string;
 	}[];
 	products: IProductProps[];
 }): Promise<IPriceData[]> => {
@@ -140,6 +148,7 @@ const updatePriceData = async ({
 		{
 			productId: currentInsertedProduct.id,
 			storeId: currentInsertedProduct.storeId,
+			chain_brand: currentProduct.chain_brand,
 			price: currentProduct.price,
 			price_unit: currentProduct.price_unit,
 			price_was: currentProduct.price_was,
@@ -174,7 +183,7 @@ const writeProductsToDb = async ({
 			.from(Product)
 			.where(
 				and(
-					eq(Product.storeId, product.storeId),
+					eq(Product.chain_brand, product.chain_brand),
 					eq(Product.product_num, product.product_num)
 				)
 			)
@@ -182,6 +191,7 @@ const writeProductsToDb = async ({
 
 		let insertedProduct;
 		if (!existingProduct.length) {
+			console.log("inserting product", product.product_num);
 			// insert product
 			insertedProduct = await db
 				.insert(Product)
@@ -190,6 +200,7 @@ const writeProductsToDb = async ({
 					id: Product.id,
 					product_num: Product.product_num,
 					storeId: Product.storeId,
+					chain_brand: Product.chain_brand,
 				})
 				.onConflictDoNothing();
 		}
@@ -203,12 +214,15 @@ const writeProductsToDb = async ({
 		const returnedProduct = insertedProduct || existingProduct;
 		writtenProducts.push(returnedProduct);
 
+		// console.log("returnedProduct", returnedProduct);
+
 		await db
 			.insert(StoreProduct)
 			.values(
 				returnedProduct.map((prod) => ({
 					storeId: prod.storeId,
 					productId: prod.id,
+					chain_brand: prod.chain_brand,
 				}))
 			)
 			.onConflictDoNothing();
@@ -219,60 +233,55 @@ const writeProductsToDb = async ({
 			products,
 		});
 
-		// const existingPrice = await db
-		// 	.select()
-		// 	.from(Price)
-		// 	.orderBy(desc(Price.createdAt))
-		// 	.where(
-		// 		and(
-		// 			eq(Price.productId, returnedProduct[0].id),
-		// 			eq(Price.storeId, returnedProduct[0].storeId)
-		// 		)
-		// 	)
-		// 	.limit(1);
+		// 		// Get the latest price for the given product and chain brand
+		// 		const latestPriceQuery = sql`
+		//     SELECT ${Price.price}
+		//     FROM ${Price}
+		//     WHERE ${Price.productId} = ${updatedPriceData.productId}
+		//     AND ${Price.chain_brand} = ${updatedPriceData.chain_brand}
+		//     ORDER BY ${Price.createdAt} DESC
+		//     LIMIT 1
+		// `;
 
-		// let insertedPrice;
-		// if (
-		// 	!existingPrice.length ||
-		// 	existingPrice[0].price !== updatedPriceData[0].price
-		// ) {
-		// 	insertedPrice = await db
-		// 		.insert(Price)
-		// 		.values(updatedPriceData)
-		// 		.returning({
-		// 			id: Price.id,
-		// 			productId: Price.productId,
-		// 			storeId: Price.storeId,
-		// 		})
-		// 		.onConflictDoNothing();
-		// }
+		// Execute the query to get the latest price
+		const latestPriceResult = await db
+			.select()
+			.from(Price)
+			.where(
+				and(
+					eq(Price.productId, updatedPriceData[0].productId),
+					eq(Price.chain_brand, updatedPriceData[0].chain_brand)
+				)
+			)
+			.orderBy(desc(Price.createdAt))
+			.limit(1)
+			.execute();
 
-		// if (insertedPrice instanceof Error) {
-		// 	console.error("Error writing prices to db", insertedPrice);
-		// 	return {
-		// 		message: insertedPrice.message,
-		// 		count: 0,
-		// 	};
-		// }
-
-		const insertedPrice = await db
-			.insert(Price)
-			.values(updatedPriceData)
-			.onConflictDoUpdate({
-				target: [Price.productId, Price.storeId],
-				set: {
-					price: sql`${Price.price}`,
-					price_unit: sql`${Price.price_unit}`,
-					price_was: sql`${Price.price_was}`,
-					price_was_unit: sql`${Price.price_was_unit}`,
-					compare_price: sql`${Price.compare_price}`,
-					compare_price_unit: sql`${Price.compare_price_unit}`,
-					compare_price_quantity: sql`${Price.compare_price_quantity}`,
-				},
-				where: sql`${Price.price} <> EXCLUDED.price`,
-			});
+		let insertedPrice;
+		if (
+			!latestPriceResult.length ||
+			latestPriceResult[0].price !== updatedPriceData[0].price
+		) {
+			insertedPrice = await db
+				.insert(Price)
+				.values(updatedPriceData)
+				.returning({
+					id: Price.id,
+					productId: Price.productId,
+					storeId: Price.storeId,
+				});
+			// .onConflictDoNothing();
+		}
 
 		writtenPrices.push(insertedPrice);
+
+		if (insertedPrice instanceof Error) {
+			console.error("Error writing price to db", insertedPrice);
+			return {
+				message: insertedPrice.message,
+				count: 0,
+			};
+		}
 
 		// console.log(
 		// 	"wrote product and price to db",

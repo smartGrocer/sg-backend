@@ -12,6 +12,7 @@ import {
 	getCachedData,
 	saveToCache,
 } from "../../../../common/cache/storeCache";
+import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
 const searchProducts = async ({
 	search_term,
@@ -165,7 +166,11 @@ const searchProducts = async ({
 				data.push({
 					product_num,
 					store_num,
-					chainName,
+					chain_name: chainName,
+					chain_brand:
+						chainName === "metro"
+							? AllStoreChainBrands.metro
+							: AllStoreChainBrands.foodbasics,
 					product_brand,
 					product_name,
 					product_link,

@@ -13,6 +13,7 @@ import {
 	getCachedData,
 	saveToCache,
 } from "../../../../common/cache/storeCache";
+import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
 const getProduct = async ({
 	product_num,
@@ -53,7 +54,8 @@ const getProduct = async ({
 
 		productData.product_num = product.code;
 		productData.store_num = store_num;
-		productData.chainName = chainName;
+		productData.chain_name = chainName;
+		productData.chain_brand = AllStoreChainBrands.loblaws;
 		productData.product_brand = product.brand;
 		productData.product_name = product.name;
 		productData.product_link = `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`;

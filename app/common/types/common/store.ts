@@ -8,9 +8,18 @@ import { LoblawsChainName } from "../loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
 import { MetroChain } from "../metro/metro";
 
+// eslint-disable-next-line no-shadow
+export enum AllStoreChainBrands {
+	all = "all",
+	loblaws = "loblaws",
+	walmart = "walmart",
+	metro = "metro",
+	foodbasics = "foodbasics",
+}
 export interface IStoreProps {
 	// id: string;
 	store_num: string;
+	chain_brand: AllStoreChainBrands;
 	chain_name: string;
 	store_name: string;
 	latitude: number;
@@ -27,14 +36,6 @@ export interface IStoreProps {
 export interface IStoreResponse {
 	count: number;
 	stores: IStoreProps[];
-}
-
-// eslint-disable-next-line no-shadow
-export enum AllStoreChainBrands {
-	all = "all",
-	loblaws = "loblaws",
-	walmart = "walmart",
-	metro = "metro",
 }
 
 export interface IFetchStores {

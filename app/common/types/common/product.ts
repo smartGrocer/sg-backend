@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { IAllStoreChains } from "./store";
+import { AllStoreChainBrands, IAllStoreChains } from "./store";
 
 export interface ISearchStore {
 	search_term: string;
@@ -14,7 +14,8 @@ export interface IGetProduct {
 export interface IProduct {
 	product_num: string;
 	store_num: string;
-	chainName: string;
+	chain_brand: AllStoreChainBrands;
+	chain_name: string;
 	product_brand: string;
 	product_name: string;
 	product_link: string;
@@ -80,11 +81,12 @@ export enum PandaBrowserKeys {
 export interface IPriceData extends IPrice {
 	productId: number;
 	storeId: number;
+	chain_brand: AllStoreChainBrands;
 }
 
 export interface IProductData {
 	storeId: number;
-	chain_name: string;
+	chain_brand: AllStoreChainBrands;
 	product_num: string;
 	product_brand: string;
 	product_name: string;

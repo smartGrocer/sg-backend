@@ -15,6 +15,7 @@ export const Store = sqliteTable(
 		}),
 		store_num: text("store_num").notNull(),
 		chain_name: text("chain_name").notNull(),
+		chain_brand: text("chain_brand").notNull(),
 		store_name: text("store_name").notNull(),
 		latitude: integer("latitude").notNull().default(0),
 		longitude: integer("longitude").notNull().default(0),
@@ -45,6 +46,7 @@ export const Product = sqliteTable(
 			.notNull()
 			.references(() => Store.id),
 		product_num: text("product_num").notNull(),
+		chain_brand: text("chain_brand").notNull(),
 		product_brand: text("product_brand"),
 		product_name: text("product_name"),
 		product_link: text("product_link"),
@@ -59,7 +61,7 @@ export const Product = sqliteTable(
 	},
 
 	(t) => ({
-		unique: unique().on(t.product_num, t.storeId),
+		unique: unique().on(t.product_num, t.chain_brand),
 	})
 );
 
@@ -76,6 +78,7 @@ export const Price = sqliteTable(
 		storeId: integer("storeId")
 			.notNull()
 			.references(() => Store.id),
+		chain_brand: text("chain_brand").notNull(),
 		price: integer("price"),
 		price_unit: text("price_unit"),
 		price_was: integer("price_was"),
@@ -86,11 +89,12 @@ export const Price = sqliteTable(
 		createdAt: text("created_at")
 			.default(sql`CURRENT_TIMESTAMP`)
 			.notNull(),
-	},
+	}
+	// ,
 	// unique constraint on productId, storeId
-	(t) => ({
-		unique: unique().on(t.productId, t.storeId),
-	})
+	// (t) => ({
+	// 	unique: unique().on(t.productId, t.chain_brand),
+	// })
 );
 
 export const StoreProduct = sqliteTable(
@@ -143,11 +147,9 @@ export const StoreProductRelations = relations(StoreProduct, ({ one }) => ({
 }));
 
 /**
-drop table Product;
 drop table Price;
-drop table Store;
 drop table store_to_product;
-drop table __old_push_Product;
 drop table Product;
+drop table Store;
 .tables
  */

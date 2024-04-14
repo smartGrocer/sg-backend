@@ -18,6 +18,7 @@ import {
 	getCachedData,
 	saveToCache,
 } from "../../../../common/cache/storeCache";
+import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
 const searchProducts = async ({
 	search_term,
@@ -61,7 +62,8 @@ const searchProducts = async ({
 				return {
 					product_num: product.code,
 					store_num: storeId,
-					chainName,
+					chain_name: chainName,
+					chain_brand: AllStoreChainBrands.loblaws,
 					product_brand: product.brand,
 					product_name: product.name,
 					product_link: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`,

@@ -3,7 +3,10 @@ import UserAgent from "user-agents";
 import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode";
 import { IStoreWalmartSrcProps } from "../../../../common/types/walmart/walmart";
 // eslint-disable-next-line import/no-cycle
-import { IStoreProps } from "../../../../common/types/common/store";
+import {
+	AllStoreChainBrands,
+	IStoreProps,
+} from "../../../../common/types/common/store";
 import {
 	getCachedData,
 	saveToCache,
@@ -38,7 +41,7 @@ const getWalmartStores = async ({
 					"user-agent": userAgent,
 				},
 			})
-		).data.payload.stores;
+		).data.payload.stores as IStoreWalmartSrcProps[];
 
 		const data: IStoreProps[] = response.map(
 			(store: IStoreWalmartSrcProps) => {
@@ -55,6 +58,7 @@ const getWalmartStores = async ({
 
 				return {
 					store_num: store.id,
+					chain_brand: AllStoreChainBrands.walmart,
 					chain_name: "walmart",
 					store_name: store.displayName,
 					latitude: store.geoPoint.latitude,
