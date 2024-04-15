@@ -118,14 +118,16 @@ export const writeToDb = async (
 const updatePriceData = async ({
 	insertedProducts,
 	products,
+	storeId,
 }: {
 	insertedProducts: {
 		id: number;
-		storeId: number;
+		// storeId: number;
 		product_num: string;
 		chain_brand: string;
 	}[];
 	products: IProductProps[];
+	storeId: number;
 }): Promise<IPriceData[]> => {
 	if (!insertedProducts.length) {
 		throw new Error("No insertedProducts found");
@@ -147,7 +149,7 @@ const updatePriceData = async ({
 	return [
 		{
 			productId: currentInsertedProduct.id,
-			storeId: currentInsertedProduct.storeId,
+			storeId,
 			chain_brand: currentProduct.chain_brand,
 			price: currentProduct.price,
 			price_unit: currentProduct.price_unit,
@@ -179,7 +181,12 @@ const writeProductsToDb = async ({
 			};
 		}
 		const existingProduct = await db
-			.select()
+			.select({
+				id: Product.id,
+				product_num: Product.product_num,
+				// storeId: Product.storeId,
+				chain_brand: Product.chain_brand,
+			})
 			.from(Product)
 			.where(
 				and(
@@ -199,7 +206,7 @@ const writeProductsToDb = async ({
 				.returning({
 					id: Product.id,
 					product_num: Product.product_num,
-					storeId: Product.storeId,
+					// storeId: Product.storeId,
 					chain_brand: Product.chain_brand,
 				})
 				.onConflictDoNothing();
@@ -214,16 +221,18 @@ const writeProductsToDb = async ({
 		const returnedProduct = insertedProduct || existingProduct;
 		writtenProducts.push(returnedProduct);
 
-		// console.log("returnedProduct", returnedProduct);
-
 		await db
 			.insert(StoreProduct)
 			.values(
-				returnedProduct.map((prod) => ({
-					storeId: prod.storeId,
-					productId: prod.id,
-					chain_brand: prod.chain_brand,
-				}))
+				// returnedProduct.map((prod) => ({
+				// 	storeId: prod.storeId,
+				// 	productId: prod.id,
+				// 	// chain_brand: prod.chain_brand,
+				// }))
+				{
+					storeId: product.storeId,
+					productId: returnedProduct[0].id,
+				}
 			)
 			.onConflictDoNothing();
 
@@ -231,6 +240,7 @@ const writeProductsToDb = async ({
 		const updatedPriceData = await updatePriceData({
 			insertedProducts: returnedProduct,
 			products,
+			storeId: product.storeId,
 		});
 
 		// 		// Get the latest price for the given product and chain brand

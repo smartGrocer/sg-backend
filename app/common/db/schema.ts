@@ -42,9 +42,9 @@ export const Product = sqliteTable(
 		id: integer("id", { mode: "number" }).primaryKey({
 			autoIncrement: true,
 		}),
-		storeId: integer("storeId")
-			.notNull()
-			.references(() => Store.id),
+		// storeId: integer("storeId")
+		// 	.notNull()
+		// 	.references(() => Store.id),
 		product_num: text("product_num").notNull(),
 		chain_brand: text("chain_brand").notNull(),
 		product_brand: text("product_brand"),
