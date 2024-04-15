@@ -50,7 +50,7 @@ const searchLoblaws = async ({
 		};
 	}
 
-	await writeToDb(response.results);
+	writeToDb(response.results);
 
 	return {
 		message: `Products fetched successfully for search term: ${search_term}`,

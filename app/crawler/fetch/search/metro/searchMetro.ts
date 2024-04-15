@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-// import { writeToDb } from "../../../../common/db/writeToDB";
+import { writeToDb } from "../../../../common/db/writeToDB";
 import { ISearchReturn } from "../../../../common/types/common/product";
 import { ISearchMetro, MetroChain } from "../../../../common/types/metro/metro";
 import searchProducts from "./searchProducts";
@@ -30,7 +30,7 @@ const searchMetro = async ({
 			code: 500,
 		};
 	}
-	// await writeToDb(response);
+	writeToDb(response);
 
 	return {
 		message: `Products fetched successfully for search term: ${search_term}`,

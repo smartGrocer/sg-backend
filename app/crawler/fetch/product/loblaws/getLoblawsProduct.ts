@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/no-cycle
+import { writeToDb } from "../../../../common/db/writeToDB";
 import { IGetProductReturn } from "../../../../common/types/common/product";
 import {
 	IGetProductLoblaws,
@@ -56,6 +57,8 @@ const getLoblawsProduct = async ({
 			code: 500,
 		};
 	}
+
+	writeToDb([response]);
 
 	return {
 		message: `Product fetched successfully for product id: ${product_num}`,
