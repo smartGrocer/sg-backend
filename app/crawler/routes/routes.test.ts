@@ -1,18 +1,20 @@
 import supertest from "supertest";
-import {
-	mockGetCachedData,
-	mockSaveToCache,
-	mockConnectToRedis,
-} from "../../../.jest/setupEnv";
+// import {
+// 	mockGetCachedData,
+// 	mockSaveToCache,
+// 	mockConnectToRedis,
+// 	mockDb,
+// } from "../../../.jest/setupEnv";
 import app from "../../index";
 import { AllStoreChainBrands } from "../../common/types/common/store";
 
 describe("Route /store", () => {
-	beforeAll(() => {
-		mockGetCachedData.mockImplementation(() => null);
-		mockSaveToCache.mockImplementation(() => null);
-		mockConnectToRedis.mockImplementation(() => null);
-	});
+	// beforeAll(() => {
+	// 	// mockGetCachedData.mockImplementation(() => null);
+	// 	// mockSaveToCache.mockImplementation(() => null);
+	// 	// mockConnectToRedis.mockImplementation(() => null);
+	// 	// mockDb.mockImplementation(() => null);
+	// });
 	describe("GET /api", () => {
 		it("should return a message", async () => {
 			const response = await supertest(app).get("/api");

@@ -1,19 +1,19 @@
-import {
-	mockConnectToRedis,
-	mockGetCachedData,
-	mockSaveToCache,
-} from "../../../.jest/setupEnv";
+// import {
+// 	mockConnectToRedis,
+// 	mockGetCachedData,
+// 	mockSaveToCache,
+// } from "../../../.jest/setupEnv";
 import {
 	formatPostalCode,
 	getCoordinatesFromPostal,
 } from "./getCoordinatesFromPostal";
 
 describe("getCoordinatesFromPostal", () => {
-	beforeAll(() => {
-		mockGetCachedData.mockImplementation(() => null);
-		mockSaveToCache.mockImplementation(() => null);
-		mockConnectToRedis.mockImplementation(() => null);
-	});
+	// beforeAll(() => {
+	// 	mockGetCachedData.mockImplementation(() => null);
+	// 	mockSaveToCache.mockImplementation(() => null);
+	// 	mockConnectToRedis.mockImplementation(() => null);
+	// });
 
 	describe("formatPostalCode", () => {
 		it("should format the postal code correctly", () => {
