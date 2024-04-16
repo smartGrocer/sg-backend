@@ -42,9 +42,6 @@ export const Product = sqliteTable(
 		id: integer("id", { mode: "number" }).primaryKey({
 			autoIncrement: true,
 		}),
-		// storeId: integer("storeId")
-		// 	.notNull()
-		// 	.references(() => Store.id),
 		product_num: text("product_num").notNull(),
 		chain_brand: text("chain_brand").notNull(),
 		product_brand: text("product_brand"),
@@ -65,37 +62,29 @@ export const Product = sqliteTable(
 	})
 );
 
-export const Price = sqliteTable(
-	"Price",
-	{
-		id: integer("id", { mode: "number" }).primaryKey({
-			autoIncrement: true,
-		}),
-		productId: integer("productId")
-			.notNull()
-			.references(() => Product.id),
+export const Price = sqliteTable("Price", {
+	id: integer("id", { mode: "number" }).primaryKey({
+		autoIncrement: true,
+	}),
+	productId: integer("productId")
+		.notNull()
+		.references(() => Product.id),
 
-		storeId: integer("storeId")
-			.notNull()
-			.references(() => Store.id),
-		chain_brand: text("chain_brand").notNull(),
-		price: integer("price"),
-		price_unit: text("price_unit"),
-		price_was: integer("price_was"),
-		price_was_unit: text("price_was_unit"),
-		compare_price: integer("compare_price"),
-		compare_price_unit: text("compare_price_unit"),
-		compare_price_quantity: integer("compare_price_quantity"),
-		createdAt: text("created_at")
-			.default(sql`CURRENT_TIMESTAMP`)
-			.notNull(),
-	}
-	// ,
-	// unique constraint on productId, storeId
-	// (t) => ({
-	// 	unique: unique().on(t.productId, t.chain_brand),
-	// })
-);
+	storeId: integer("storeId")
+		.notNull()
+		.references(() => Store.id),
+	chain_brand: text("chain_brand").notNull(),
+	price: integer("price"),
+	price_unit: text("price_unit"),
+	price_was: integer("price_was"),
+	price_was_unit: text("price_was_unit"),
+	compare_price: integer("compare_price"),
+	compare_price_unit: text("compare_price_unit"),
+	compare_price_quantity: integer("compare_price_quantity"),
+	createdAt: text("created_at")
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull(),
+});
 
 export const StoreProduct = sqliteTable(
 	"store_to_product",

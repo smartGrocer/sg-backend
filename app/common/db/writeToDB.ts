@@ -52,66 +52,64 @@ export const writeStoreToDb = async (
 export const writeToDb = async (
 	products: IProductProps[]
 ): Promise<IWriteStoreToDbReturn> => {
-	// try {
-	if (!products.length) {
+	try {
+		if (!products.length) {
+			return {
+				message: "No products to write to db",
+				count: 0,
+			};
+		}
+
+		const chunkByStores = chunkedByStores(products);
+
+		for await (const storeChunk of chunkByStores) {
+			const existingStore = await db
+				.select()
+				.from(Store)
+				.where(
+					and(
+						eq(Store.store_num, storeChunk[0].store_num),
+						eq(Store.chain_brand, storeChunk[0].chain_brand)
+					)
+				)
+				.limit(1);
+
+			const productData: IProductData[] = products.map((product) => {
+				return {
+					storeId: existingStore[0]?.id,
+					// chain_name: existingStore[0]?.chain_name,
+					chain_brand: existingStore[0]
+						?.chain_brand as AllStoreChainBrands,
+					product_num: product.product_num,
+					product_brand: product.product_brand,
+					product_name: product.product_name,
+					product_link: product.product_link,
+					product_image: product.product_image,
+					product_size_unit: product.product_size_unit,
+					product_size_quantity: product.product_size_quantity,
+					unit_soldby_type: product.unit_soldby_type,
+					unit_soldby_unit: product.unit_soldby_unit,
+				};
+			});
+
+			// eslint-disable-next-line no-use-before-define
+			await writeProductsToDb({
+				productData,
+				products,
+			});
+		}
+
 		return {
-			message: "No products to write to db",
+			message: "Store and products written to db",
+			count: products.length,
+		};
+	} catch (e) {
+		console.error("Error writing products to db", e);
+		return {
+			message: "Error writing products to db",
 			count: 0,
 		};
 	}
-
-	const chunkByStores = chunkedByStores(products);
-
-	for await (const storeChunk of chunkByStores) {
-		// chunkByStores.forEach(async (storeChunk) => {
-		const existingStore = await db
-			.select()
-			.from(Store)
-			.where(
-				and(
-					eq(Store.store_num, storeChunk[0].store_num),
-					eq(Store.chain_brand, storeChunk[0].chain_brand)
-				)
-			)
-			.limit(1);
-
-		const productData: IProductData[] = products.map((product) => {
-			return {
-				storeId: existingStore[0]?.id,
-				// chain_name: existingStore[0]?.chain_name,
-				chain_brand: existingStore[0]
-					?.chain_brand as AllStoreChainBrands,
-				product_num: product.product_num,
-				product_brand: product.product_brand,
-				product_name: product.product_name,
-				product_link: product.product_link,
-				product_image: product.product_image,
-				product_size_unit: product.product_size_unit,
-				product_size_quantity: product.product_size_quantity,
-				unit_soldby_type: product.unit_soldby_type,
-				unit_soldby_unit: product.unit_soldby_unit,
-			};
-		});
-
-		// eslint-disable-next-line no-use-before-define
-		await writeProductsToDb({
-			productData,
-			products,
-		});
-	}
-	// });
-
-	return {
-		message: "Store and products written to db",
-		count: products.length,
-	};
-	// } catch (e) {
-	// 	console.error("Error writing products to db", e);
-	// 	return {
-	// 		message: "Error writing products to db",
-	// 		count: 0,
-	// 	};
-	// }
 };
 
 // take insertedProducts and priceData and make an array of arrays of priceData with priceData with productId, storeId but without product_num
@@ -122,7 +120,6 @@ const updatePriceData = async ({
 }: {
 	insertedProducts: {
 		id: number;
-		// storeId: number;
 		product_num: string;
 		chain_brand: string;
 	}[];
@@ -184,7 +181,6 @@ const writeProductsToDb = async ({
 			.select({
 				id: Product.id,
 				product_num: Product.product_num,
-				// storeId: Product.storeId,
 				chain_brand: Product.chain_brand,
 			})
 			.from(Product)
@@ -198,15 +194,13 @@ const writeProductsToDb = async ({
 
 		let insertedProduct;
 		if (!existingProduct.length) {
-			console.log("inserting product", product.product_num);
-			// insert product
 			insertedProduct = await db
 				.insert(Product)
 				.values(product)
 				.returning({
 					id: Product.id,
 					product_num: Product.product_num,
-					// storeId: Product.storeId,
+
 					chain_brand: Product.chain_brand,
 				})
 				.onConflictDoNothing();
@@ -223,17 +217,10 @@ const writeProductsToDb = async ({
 
 		await db
 			.insert(StoreProduct)
-			.values(
-				// returnedProduct.map((prod) => ({
-				// 	storeId: prod.storeId,
-				// 	productId: prod.id,
-				// 	// chain_brand: prod.chain_brand,
-				// }))
-				{
-					storeId: product.storeId,
-					productId: returnedProduct[0].id,
-				}
-			)
+			.values({
+				storeId: product.storeId,
+				productId: returnedProduct[0].id,
+			})
 			.onConflictDoNothing();
 
 		// eslint-disable-next-line no-use-before-define
@@ -242,16 +229,6 @@ const writeProductsToDb = async ({
 			products,
 			storeId: product.storeId,
 		});
-
-		// 		// Get the latest price for the given product and chain brand
-		// 		const latestPriceQuery = sql`
-		//     SELECT ${Price.price}
-		//     FROM ${Price}
-		//     WHERE ${Price.productId} = ${updatedPriceData.productId}
-		//     AND ${Price.chain_brand} = ${updatedPriceData.chain_brand}
-		//     ORDER BY ${Price.createdAt} DESC
-		//     LIMIT 1
-		// `;
 
 		// Execute the query to get the latest price
 		const latestPriceResult = await db
@@ -292,11 +269,6 @@ const writeProductsToDb = async ({
 				count: 0,
 			};
 		}
-
-		// console.log(
-		// 	"wrote product and price to db",
-		// 	returnedProduct[0].product_num
-		// );
 	}
 
 	console.log("wrote products and prices to db", {
