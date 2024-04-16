@@ -84,7 +84,11 @@ router.get(
 		}
 
 		// if the chain brand is metro or foodbasics
-		if (chain_brand === AllStoreChainBrands.metro || showAllStores) {
+		if (
+			chain_brand === AllStoreChainBrands.metro ||
+			chain_brand === AllStoreChainBrands.foodbasics ||
+			showAllStores
+		) {
 			const { message, count, data, code, availableOptions } =
 				await fetchMetroStores({
 					req,
