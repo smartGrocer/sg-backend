@@ -10,6 +10,6 @@ COPY . ./
 ENV PORT 8000
 EXPOSE $PORT
 
-RUN npm run build
+RUN npm run build -- --prod
 
 USER node
