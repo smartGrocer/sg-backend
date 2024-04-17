@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/no-cycle
+import { writeToDb } from "../../../../common/db/writeToDB";
 import { ISearchReturn } from "../../../../common/types/common/product";
 import {
 	ISearchLoblaws,
@@ -10,7 +11,7 @@ import searchProducts from "./searchProducts";
 const searchLoblaws = async ({
 	search_term,
 	chainName,
-	store_id,
+	store_num,
 }: ISearchLoblaws): Promise<ISearchReturn> => {
 	if (
 		!Object.values(LoblawsChainName).includes(chainName as LoblawsChainName)
@@ -23,7 +24,7 @@ const searchLoblaws = async ({
 	}
 
 	const { message, code, availableOptions } = await validateLoblawsStoreId({
-		storeId: store_id,
+		storeId: store_num,
 		chainName,
 	});
 
@@ -38,7 +39,7 @@ const searchLoblaws = async ({
 	const response = await searchProducts({
 		search_term,
 		chainName: chainName as LoblawsChainName,
-		store_id,
+		store_num,
 	});
 
 	// if error
@@ -48,6 +49,8 @@ const searchLoblaws = async ({
 			code: 500,
 		};
 	}
+
+	writeToDb(response.results);
 
 	return {
 		message: `Products fetched successfully for search term: ${search_term}`,

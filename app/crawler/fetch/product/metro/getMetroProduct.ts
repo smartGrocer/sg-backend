@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/no-cycle
+import { writeToDb } from "../../../../common/db/writeToDB";
 import { IGetProductReturn } from "../../../../common/types/common/product";
 import {
 	IGetProductMetro,
@@ -7,10 +8,10 @@ import {
 import getProduct from "./getProduct";
 
 const getMetroProduct = async ({
-	product_id,
+	product_num,
 	url,
 	chainName,
-	store_id,
+	store_num,
 }: IGetProductMetro): Promise<IGetProductReturn> => {
 	if (!Object.values(MetroChain).includes(chainName as MetroChain)) {
 		return {
@@ -25,8 +26,8 @@ const getMetroProduct = async ({
 			message: `Invalid url, please provide a valid url as a query parameter like so: /product/lookup?url=url`,
 			availableOptions: [
 				"/product/lookup?url=url",
-				"/product/lookup?product_id=product_id",
-				"/product/lookup?product_id=product_id&chain=chain_name",
+				"/product/lookup?product_num=product_num",
+				"/product/lookup?product_num=product_num&chain=chain_name",
 				"/product/lookup?url=https://www.metro.ca/en/online-grocery/aisles/meat-fish/poultry/chicken-thighs-drumsticks/00007",
 			],
 			code: 400,
@@ -34,9 +35,9 @@ const getMetroProduct = async ({
 	}
 
 	const response = await getProduct({
-		product_id,
+		product_num,
 		url,
-		store_id,
+		store_num,
 		chainName: chainName as MetroChain,
 	});
 
@@ -45,7 +46,7 @@ const getMetroProduct = async ({
 		// if 404
 		if (response.message === "Request failed with status code 404") {
 			return {
-				message: `Product not found for product id: ${product_id}`,
+				message: `Product not found for product id: ${product_num}`,
 				code: 404,
 			};
 		}
@@ -55,9 +56,10 @@ const getMetroProduct = async ({
 			code: 500,
 		};
 	}
+	writeToDb([response]);
 
 	return {
-		message: `Product fetched successfully for product id: ${product_id || url}`,
+		message: `Product fetched successfully for product id: ${product_num || url}`,
 		data: response,
 		code: 200,
 	};

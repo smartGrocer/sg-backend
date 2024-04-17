@@ -131,3 +131,6 @@ dist
 
 /data
 /letsencrypt
+local.db
+local.db-shm
+local.db-wal

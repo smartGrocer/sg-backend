@@ -7,7 +7,7 @@ const logger = (req: Request, res: Response, next: NextFunction): void => {
 	res.on("finish", () => {
 		const elapsed = Date.now() - start;
 		console.log(
-			`${req.method}: '${req.protocol}://${req.get("host")}${
+			`${req.method}:${res.statusCode}: '${req.protocol}://${req.get("host")}${
 				req.originalUrl
 			}' at: '${new Date().toLocaleString("en-US", {
 				timeZone: "America/New_York",
@@ -17,7 +17,7 @@ const logger = (req: Request, res: Response, next: NextFunction): void => {
 				req.socket.remoteAddress ||
 				req.ip ||
 				null
-			} | ${elapsed}ms`
+			} | ${elapsed}ms | ${res.get("Content-Length") || 0} b`
 		);
 	});
 	next();

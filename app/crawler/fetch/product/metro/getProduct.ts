@@ -11,17 +11,18 @@ import {
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
+import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
 const getProduct = async ({
-	product_id,
+	product_num,
 	url,
-	store_id,
+	store_num,
 	chainName,
 }: IGetProductMetroProps): Promise<IProductProps | Error> => {
 	const productData: IProductProps[] = [];
 
 	try {
-		const cacheKey = `product-${chainName}-${store_id}-${product_id}-${url}`;
+		const cacheKey = `product-${chainName}-${store_num}-${product_num}-${url}`;
 
 		const cachedData = await getCachedData({
 			key: cacheKey,
@@ -149,9 +150,13 @@ const getProduct = async ({
 				unit_soldby_type === "ea." ? "ea." : "pack";
 
 			productData.push({
-				product_id: product_id_2,
-				store_id: store_id_2,
-				chainName,
+				product_num: product_id_2,
+				store_num: store_id_2,
+				chain_brand:
+					chainName === "metro"
+						? AllStoreChainBrands.metro
+						: AllStoreChainBrands.foodbasics,
+				chain_name: chainName,
 				product_brand,
 				product_name,
 				product_link,

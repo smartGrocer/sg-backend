@@ -1,20 +1,21 @@
 // eslint-disable-next-line import/no-cycle
-import { IAllStoreChains } from "./store";
+import { AllStoreChainBrands, IAllStoreChains } from "./store";
 
 export interface ISearchStore {
 	search_term: string;
-	store_id: string;
+	store_num: string;
 }
 
 export interface IGetProduct {
-	product_id: string;
-	store_id: string;
+	product_num: string;
+	store_num: string;
 }
 
-export interface IProductProps {
-	product_id: string;
-	store_id: string;
-	chainName: string;
+export interface IProduct {
+	product_num: string;
+	store_num: string;
+	chain_brand: AllStoreChainBrands;
+	chain_name: string;
 	product_brand: string;
 	product_name: string;
 	product_link: string;
@@ -23,6 +24,8 @@ export interface IProductProps {
 	product_size_quantity: number;
 	unit_soldby_type: string;
 	unit_soldby_unit: string;
+}
+export interface IPrice {
 	price: number;
 	price_unit: string;
 	price_was: number | null;
@@ -31,17 +34,18 @@ export interface IProductProps {
 	compare_price_unit: string | null;
 	compare_price_quantity: number | null;
 }
+export interface IProductProps extends IProduct, IPrice {}
 
 export interface ISearchProducts {
 	search_term: string;
 	chainName: IAllStoreChains;
-	store_id: string;
+	store_num: string;
 }
 
 export interface IGetProductProps {
 	url?: string;
-	product_id?: string;
-	store_id: string;
+	product_num?: string;
+	store_num: string;
 }
 
 export interface IProductPropsWithPagination {
@@ -72,4 +76,24 @@ export interface IGetProductReturn {
 export enum PandaBrowserKeys {
 	metro_search_panda = "metro_search_panda",
 	metro_lookup_panda = "metro_lookup_panda",
+}
+
+export interface IPriceData extends IPrice {
+	productId: number;
+	storeId: number;
+	chain_brand: AllStoreChainBrands;
+}
+
+export interface IProductData {
+	storeId: number;
+	chain_brand: AllStoreChainBrands;
+	product_num: string;
+	product_brand: string;
+	product_name: string;
+	product_link: string;
+	product_image: string;
+	product_size_unit: string;
+	product_size_quantity: number;
+	unit_soldby_type: string;
+	unit_soldby_unit: string;
 }

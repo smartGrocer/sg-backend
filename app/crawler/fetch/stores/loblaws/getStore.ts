@@ -7,7 +7,10 @@ import {
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
-import { IStoreProps } from "../../../../common/types/common/store";
+import {
+	AllStoreChainBrands,
+	IStoreProps,
+} from "../../../../common/types/common/store";
 import {
 	getCachedData,
 	saveToCache,
@@ -17,7 +20,7 @@ const filterStoreDuplicates = (data: IStoreProps[]): IStoreProps[] => {
 	return data.reduce((acc: IStoreProps[], store: IStoreProps) => {
 		const existingStore = acc.find(
 			(t) =>
-				(t.store_id === store.store_id && t.line1 === store.line1) ||
+				(t.store_num === store.store_num && t.line1 === store.line1) ||
 				// when checking the formatted address, remove any spaces and compare
 				(t.formatted_address.replace(/\s/g, "") ===
 					store.formatted_address.replace(/\s/g, "") &&
@@ -85,27 +88,30 @@ const getLoblawsStores = async ({
 			const bannerId = iStore;
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
 
-			const response = (await axios.get(fetchUrl)).data;
+			const response = (await axios.get(fetchUrl))
+				.data as IStoreLoblawsSrcProps[];
 
-			const data = response.map((store: IStoreLoblawsSrcProps) => {
-				return {
-					id: store.id,
-					store_id: store.storeId,
-					chain_name: store.storeBannerId,
-					store_name: store.name,
-					latitude: store.geoPoint.latitude,
-					longitude: store.geoPoint.longitude,
-					formatted_address: store.address.formattedAddress,
-					city: store.address.town,
-					line1: store.address.line1,
-					line2: store.address.line2,
-					postal_code: store.address.postalCode,
-					province: store.address.region,
-					country: store.address.country,
-				};
-			});
+			const data: IStoreProps[] = response.map(
+				(store: IStoreLoblawsSrcProps) => {
+					return {
+						store_num: store.storeId || "",
+						chain_name: store.storeBannerId || "",
+						chain_brand: AllStoreChainBrands.loblaws,
+						store_name: store.name || "",
+						latitude: store.geoPoint.latitude || 0,
+						longitude: store.geoPoint.longitude || 0,
+						formatted_address: store.address.formattedAddress || "",
+						city: store.address.town || "",
+						line1: store.address.line1 || "",
+						line2: store.address.line2 || "",
+						postal_code: store.address.postalCode || "",
+						province: store.address.region || "",
+						country: store.address.country || "",
+					};
+				}
+			);
 
-			// filter duplicates if it has any of the following duplicate properties: store_id, latitude, longitude, line1
+			// filter duplicates if it has any of the following duplicate properties: store_num, latitude, longitude, line1
 			const filteredData = filterStoreDuplicates(data);
 
 			returnData.push(...filteredData);

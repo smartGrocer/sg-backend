@@ -1,7 +1,10 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 // eslint-disable-next-line import/no-cycle
-import { IStoreProps } from "../../../../common/types/common/store";
+import {
+	AllStoreChainBrands,
+	IStoreProps,
+} from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import {
 	getCachedData,
@@ -68,8 +71,11 @@ const getMetroStores = async ({
 				const storeCountry = "Canada";
 
 				data.push({
-					id: storeId,
-					store_id: storeId,
+					store_num: storeId,
+					chain_brand:
+						chainName === "metro"
+							? AllStoreChainBrands.metro
+							: AllStoreChainBrands.foodbasics,
 					chain_name: chainName,
 					store_name: storeName,
 					latitude: parseFloat(storeLatitude),

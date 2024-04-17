@@ -3,7 +3,7 @@ import { Redis } from "ioredis";
 import dotenv from "dotenv";
 import cors from "cors";
 import getSecret from "./common/helpers/getSecret";
-import connectToDb from "./common/db/db";
+
 // For env File
 dotenv.config();
 
@@ -65,8 +65,6 @@ app.get("/ping", (req: Request, res: Response) => {
 const startServer = async (): Promise<void> => {
 	try {
 		redis = await connectToRedis();
-
-		await connectToDb();
 
 		return new Promise<void>((resolve) => {
 			app.listen(port, () => {

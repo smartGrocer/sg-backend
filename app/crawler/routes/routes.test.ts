@@ -1,18 +1,20 @@
 import supertest from "supertest";
-import {
-	mockGetCachedData,
-	mockSaveToCache,
-	mockConnectToRedis,
-} from "../../../.jest/setupEnv";
+// import {
+// 	mockGetCachedData,
+// 	mockSaveToCache,
+// 	mockConnectToRedis,
+// 	mockDb,
+// } from "../../../.jest/setupEnv";
 import app from "../../index";
 import { AllStoreChainBrands } from "../../common/types/common/store";
 
 describe("Route /store", () => {
-	beforeAll(() => {
-		mockGetCachedData.mockImplementation(() => null);
-		mockSaveToCache.mockImplementation(() => null);
-		mockConnectToRedis.mockImplementation(() => null);
-	});
+	// beforeAll(() => {
+	// 	// mockGetCachedData.mockImplementation(() => null);
+	// 	// mockSaveToCache.mockImplementation(() => null);
+	// 	// mockConnectToRedis.mockImplementation(() => null);
+	// 	// mockDb.mockImplementation(() => null);
+	// });
 	describe("GET /api", () => {
 		it("should return a message", async () => {
 			const response = await supertest(app).get("/api");
@@ -24,9 +26,9 @@ describe("Route /store", () => {
 			expect(response.body.availableRoutes).toMatchObject({
 				stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
 				product_search:
-					"/product/search/:product_search?chain=chain_name&store_id=1234",
+					"/product/search/:product_search?chain=chain_name&store_num=1234",
 				product_lookup:
-					"/product/lookup?product_id=1234&url=www.example.com/product/id/1234&chain=chain_name",
+					"/product/lookup?product_num=1234&url=www.example.com/product/id/1234&chain=chain_name",
 			});
 		});
 

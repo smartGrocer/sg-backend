@@ -19,8 +19,6 @@ export interface IPostalDataWithDate {
 const getCachedPostalData = async (
 	postalCode: string
 ): Promise<IPostalData | null> => {
-	// return getLocalCachedData(postalCode);
-
 	return getCachedData({
 		key: postalCode,
 		cacheInRedis: false,
@@ -31,8 +29,6 @@ const saveToPostalCache = async (
 	postalCode: string,
 	data: IPostalData
 ): Promise<void> => {
-	// saveToLocalCache(postalCode, data, 1000 * 60 * 60 * 24 * 7);
-
 	await saveToCache({
 		key: postalCode,
 		data,

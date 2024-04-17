@@ -1,7 +1,16 @@
-const connectToDb = async (): Promise<void> => {
-	// connect to db
-	console.log("Connected to db");
-	return Promise.resolve();
-};
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
+import * as schema from "./schema";
 
-export default connectToDb;
+const client = createClient({
+	url: process.env.TURSO_CONNECTION_URL!,
+	authToken: process.env.TURSO_AUTH_TOKEN!,
+});
+
+const db = drizzle(client, {
+	schema,
+	// logger: true,
+});
+
+export default db;
