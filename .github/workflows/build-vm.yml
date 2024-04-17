@@ -1,8 +1,6 @@
 name: Deploy
 
-# Controls when the action will run.
 on:
-    # Triggers the workflow on push or pull request events but only for the master branch
     push:
         branches: [main]
     pull_request:
@@ -10,9 +8,7 @@ on:
         paths-ignore:
             - "README.md"
             - "LICENSE"
-            - app/api/**
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
     tests:
         name: build and test
@@ -46,18 +42,36 @@ jobs:
               id: npm-ci-test
               run: npm run test:ci
 
-            # - name: Build Docker Image
-            #   id: docker-build
-            #   run: docker-compose -f docker-compose.prod.yml build --no-cache node-app
-
-    # This workflow contains a single job called "build"
-    deploy:
-        # The type of runner that the job will run on
+    build_publish_docker:
+        name: Build and Publish Docker Image
         runs-on: ubuntu-latest
         needs: tests
-        # do it only on push to main branch
+        permissions:
+            packages: write
+            contents: read
+
         if: github.ref == 'refs/heads/main'
-        # Steps represent a sequence of tasks that will be executed as part of the job
+
+        steps:
+            - name: Checkout
+              id: checkout
+              uses: actions/checkout@v4
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.DOCKER_TOKEN_GIT_REG }}
+
+            - name: Build and push Docker Image
+              run: docker build . -t ghcr.io/smartgrocer/sg-backend:latest --push
+
+    deploy:
+        runs-on: ubuntu-latest
+        needs: build_publish_docker
+        if: github.ref == 'refs/heads/main'
+
         steps:
             - name: Deploy using ssh
               uses: appleboy/ssh-action@master
@@ -70,5 +84,7 @@ jobs:
                       cd sg-backend
                       git checkout HEAD .
                       git pull
+                      docker login ghcr.io -u nmpereira -p ${{ secrets.DOCKER_TOKEN_GIT_REG }}
+                      docker pull ghcr.io/smartgrocer/sg-backend:latest
                       echo ${{ secrets.VM_PASSWORD }} | sudo -S -k docker compose -f docker-compose.prod.yml down 
-                      echo ${{ secrets.VM_PASSWORD }} | sudo -S -k docker compose -f docker-compose.prod.yml up --build -d
+                      echo ${{ secrets.VM_PASSWORD }} | sudo -S -k docker compose -f docker-compose.prod.yml up --build -d --remove-orphans
