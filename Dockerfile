@@ -4,8 +4,7 @@
 ARG NODE_VERSION=20
 
 FROM node:${NODE_VERSION}-bullseye-slim as base
-# RUN apk add --no-cache gcompat libstdc++
-# RUN apt-get update && apt-get install -y libstdc++6 && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /usr/src/app
 
 FROM base as deps
