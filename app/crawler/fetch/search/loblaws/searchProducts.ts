@@ -1,5 +1,6 @@
 import axios from "axios";
 import UserAgent from "user-agents";
+import crypto from "crypto";
 // eslint-disable-next-line import/no-cycle
 import {
 	ILoblawsProductSrcProps,
@@ -44,10 +45,12 @@ const searchProducts = async ({
 			"Content-Type": "application/json",
 			"user-agent": userAgent,
 		};
+
+		const cartId = crypto.randomUUID();
 		const body = {
 			pagination: { from: 0, size: 299 },
 			banner: chainName,
-			cartId: "02b57421-adcd-42a0-8af0-16514f0b9e0d",
+			cartId,
 			lang: "en",
 			storeId,
 			pickupType: "STORE",

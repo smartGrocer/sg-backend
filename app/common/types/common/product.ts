@@ -67,7 +67,7 @@ export interface ISearchReturn {
 
 export interface IGetProductReturn {
 	message: string;
-	data?: IProductProps;
+	data?: IProductProps | IProductProps[];
 	code: number;
 	availableOptions?: string | string[];
 }
