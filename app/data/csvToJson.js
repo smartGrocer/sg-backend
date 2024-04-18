@@ -1,16 +1,15 @@
-var csvFilePath = "app/data/CanadianPostalCodes.csv";
-const saveJsonFilePath = "app/data/CanadianPostalCodes.json";
-var csv = require("csvtojson");
-const fs = require("fs");
+import csv from "csvtojson";
+import fs from "fs";
 
-var count = 0;
+const csvFilePath = "app/data/CanadianPostalCodes.csv";
+const saveJsonFilePath = "app/data/CanadianPostalCodes.json";
 
 const outputJson = {};
 
 csv()
 	.fromFile(csvFilePath)
-	.then(function (jsonObj) {
-		jsonObj.forEach(function (element) {
+	.then((jsonObj) => {
+		jsonObj.forEach((element) => {
 			outputJson[element.POSTAL_CODE] = {
 				lat: element.LATITUDE,
 				lng: element.LONGITUDE,
@@ -19,21 +18,11 @@ csv()
 			};
 		});
 	})
-	.then(function () {
+	.then(() => {
 		// save to json file
-		fs.writeFile(
-			saveJsonFilePath,
-			JSON.stringify(outputJson),
-			function (err) {
-				if (err) {
-					console.log(err);
-				}
+		fs.writeFile(saveJsonFilePath, JSON.stringify(outputJson), (err) => {
+			if (err) {
+				console.log(err);
 			}
-		);
+		});
 	});
-
-// // Async / await usage
-// (async () => {
-// 	// const jsonArray = await csv().fromFile(csvFilePath);
-//     console.log(jsonArray);
-// })();
