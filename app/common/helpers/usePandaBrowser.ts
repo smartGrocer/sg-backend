@@ -49,7 +49,7 @@ const usePandaBrowser = async ({
 			});
 			const userAgent = new UserAgent().toString();
 			const params = `full-content=true&cache=false&stealth=true&user-agent=${userAgent}&resource=document,fetch,xhr`;
-			const pandaURL = `${getSecret("PANDA_BROWSER_URL")}/api/article?&url=${url}&${params}`;
+			const pandaURL = `${getSecret("PANDA_BROWSER_URL")}/api/page?&url=${url}&${params}&server_token=pandapaw`;
 			response = await axios.get(pandaURL).catch((err) => {
 				throw new Error(
 					`Panda Service: Error fetching products for metro, status: ${err}`

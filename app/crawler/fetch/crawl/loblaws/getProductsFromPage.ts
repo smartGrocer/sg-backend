@@ -9,7 +9,7 @@ const getProductsFromPage = async ({
 	chainName,
 	page,
 }: {
-	store_num: number;
+	store_num: string;
 	chainName: LoblawsChainName;
 	page: number;
 }): Promise<AxiosResponse | Error> => {
@@ -24,7 +24,7 @@ const getProductsFromPage = async ({
 			"x-apikey": "C1xujSegT5j3ap3yexJjqhOfELwGKYvz",
 			"x-application-type": "Web",
 			"x-loblaw-tenant-id": "ONLINE_GROCERIES",
-			// Origin_Session_Header: "B",
+			Origin_Session_Header: "B",
 		};
 
 		const cartId = crypto.randomUUID();
@@ -42,7 +42,7 @@ const getProductsFromPage = async ({
 				pagination: { from: page },
 				includeFiltersInResponse: true,
 			},
-			banner: `${chainName}`,
+			banner: `loblaw`,
 		};
 
 		const response = await axios.post(url, body, { headers });

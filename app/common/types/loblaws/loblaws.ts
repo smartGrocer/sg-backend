@@ -160,6 +160,65 @@ export interface ILoblawsProductSrcProps {
 	fees: null;
 }
 
+export interface ILoblawsAllFoodProps {
+	productId: string;
+	productImage: {
+		imageUrl: string;
+		smallUrl: string;
+		mediumUrl: string;
+		largeUrl: string;
+		smallRetinaUrl: string;
+		mediumRetinaUrl: string;
+		largeRetinaUrl: string;
+	}[];
+	brand: string | null;
+	title: string;
+	description: string | null;
+	packageSizing: string;
+	pricing: {
+		price: string;
+		wasPrice: null;
+		displayPrice: string;
+		memberOnlyPrice: null;
+		mopDisplayPrice: null;
+	};
+	pricingUnits: {
+		type: string;
+		unit: string;
+		interval: number;
+		minOrderQuantity: number;
+		maxOrderQuantity: number;
+		weighted: boolean;
+	};
+	deal: {
+		type: string;
+		text: string;
+		points: number;
+		name: string;
+		expiryDate: string;
+		dealPrice: null;
+	} | null;
+	mopDeal: null;
+	pcoDeal: null;
+	inventoryIndicator: null;
+	offerType: string;
+	offerId: string;
+	action: null;
+	isVariant: boolean;
+	link: string;
+	productVendor: null;
+	productVariant: null;
+	textBadge: string;
+	variantTheme: null;
+	articleNumber: string;
+	uom: string;
+	sponsoredCreative: null;
+	isSponsored: boolean;
+	isComplementarySponsored: boolean;
+	complementarySponsoredBadgeText: null;
+	productBadge: null;
+}
+
 export const pickImage = (images: ILoblawsProductSrcProps["imageAssets"]) => {
 	return (
 		images.filter((img) => {
