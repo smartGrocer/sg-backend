@@ -4,7 +4,12 @@ describe("parseQuantity", () => {
 	const runTest = (
 		testInputs: {
 			input: string;
-			expected: { quantity: number; unit: string };
+			expected: {
+				quantity: number;
+				unit: string;
+				price?: number;
+				price_unit?: string;
+			};
 		}[]
 	): void => {
 		testInputs.forEach(({ input, expected }) => {
@@ -141,6 +146,102 @@ describe("parseQuantity", () => {
 			{ input: "2x", expected: { quantity: 2, unit: "un" } },
 		];
 
+		runTest(testInputs);
+	});
+
+	describe("when the input includes price and price unit", () => {
+		const testInputs = [
+			{
+				input: "$1.52/1kg",
+				expected: {
+					quantity: 1,
+					unit: "kg",
+					price: 1.52,
+					price_unit: "kg",
+				},
+			},
+			{
+				input: "1 ea, $1.99/1ea",
+				expected: {
+					quantity: 1,
+					unit: "un",
+					price: 1.99,
+					price_unit: "un",
+				},
+			},
+			{
+				input: "454 g, $0.44/100g",
+				expected: {
+					quantity: 454,
+					unit: "g",
+					price: 0.44,
+					price_unit: "100g",
+				},
+			},
+			{
+				input: "12 ea, $0.32/1ea",
+				expected: {
+					quantity: 12,
+					unit: "un",
+					price: 0.32,
+					price_unit: "un",
+				},
+			},
+			{
+				input: "$4.39/1kg $1.99/1lb",
+				expected: {
+					quantity: 1,
+					unit: "kg",
+					price: 4.39,
+					price_unit: "kg",
+				},
+			},
+			{
+				input: "1.36 kg, $0.29/100g",
+				expected: {
+					quantity: 1.36,
+					unit: "kg",
+					price: 0.29,
+					price_unit: "100g",
+				},
+			},
+			{
+				input: "3 pack, $1.83/1ea",
+				expected: {
+					quantity: 3,
+					unit: "un",
+					price: 1.83,
+					price_unit: "un",
+				},
+			},
+			{
+				input: "1 bunch, $1.49/1ea",
+				expected: {
+					quantity: 1,
+					unit: "un",
+					price: 1.49,
+					price_unit: "un",
+				},
+			},
+			{
+				input: "$5.49/1kg $2.49/1lb",
+				expected: {
+					quantity: 1,
+					unit: "kg",
+					price: 5.49,
+					price_unit: "kg",
+				},
+			},
+			{
+				input: "4 l, $0.15/100ml",
+				expected: {
+					quantity: 4,
+					unit: "l",
+					price: 0.15,
+					price_unit: "100ml",
+				},
+			},
+		];
 		runTest(testInputs);
 	});
 });

@@ -27,7 +27,7 @@ const extractProductData = (
 			product_name: product.title,
 			store_num,
 			chain_brand: AllStoreChainBrands.loblaws,
-			chain_name: chainName,
+			chain_name: chainName, // loblaw not loblaws
 			product_brand: product.brand || "",
 			product_link:
 				`https://www.${LoblawsChainAlternateName(

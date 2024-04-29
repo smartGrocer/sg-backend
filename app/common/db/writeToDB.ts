@@ -12,6 +12,8 @@ import chunkedByStores from "../helpers/chunkedByStores";
 interface IWriteStoreToDbReturn {
 	message: string;
 	count: number;
+	writtenProducts?: number;
+	writtenPrices?: number;
 }
 
 export const writeStoreToDb = async (
@@ -62,6 +64,9 @@ export const writeToDb = async (
 
 		const chunkByStores = chunkedByStores(products);
 
+		let temp_writtenProducts;
+		let temp_writtenPrices;
+
 		for await (const storeChunk of chunkByStores) {
 			const existingStore = await db
 				.select()
@@ -93,15 +98,20 @@ export const writeToDb = async (
 			});
 
 			// eslint-disable-next-line no-use-before-define
-			await writeProductsToDb({
+			const { writtenProducts, writtenPrices } = await writeProductsToDb({
 				productData,
 				products,
 			});
+
+			temp_writtenProducts = writtenProducts || 0;
+			temp_writtenPrices = writtenPrices || 0;
 		}
 
 		return {
 			message: "Store and products written to db",
 			count: products.length,
+			writtenProducts: temp_writtenProducts,
+			writtenPrices: temp_writtenPrices,
 		};
 	} catch (e) {
 		console.error("Error writing products to db", e);
@@ -237,7 +247,8 @@ const writeProductsToDb = async ({
 			.where(
 				and(
 					eq(Price.productId, updatedPriceData[0].productId),
-					eq(Price.chain_brand, updatedPriceData[0].chain_brand)
+					eq(Price.chain_brand, updatedPriceData[0].chain_brand),
+					eq(Price.storeId, updatedPriceData[0].storeId)
 				)
 			)
 			.orderBy(desc(Price.createdAt))
@@ -271,13 +282,10 @@ const writeProductsToDb = async ({
 		}
 	}
 
-	console.log("wrote products and prices to db", {
-		writtenProducts: writtenProducts.length,
-		writtenPrices: writtenPrices.length,
-	});
-
 	return {
 		message: "Product and Price written to db",
 		count: products.length,
+		writtenProducts: writtenProducts.length,
+		writtenPrices: writtenPrices.length,
 	};
 };

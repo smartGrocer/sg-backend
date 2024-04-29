@@ -8,7 +8,7 @@ import { Store } from "../../../../common/db/schema";
 import extractProductData, {
 	IExtractProductDataProps,
 } from "./extractProductData";
-// import { writeToDb } from "../../../../common/db/writeToDB";
+import { writeToDb } from "../../../../common/db/writeToDB";
 
 interface IScrapeLoblawsArgs {
 	store_num: string;
@@ -50,13 +50,12 @@ const scrapeStore = async ({
 		for await (const page of Array.from({ length: totalPages }).map(
 			(_, i) => i + 1
 		)) {
+			const time_start = new Date().getTime();
 			const response = await getProductsFromPage({
 				page,
 				store_num,
 				chainName,
 			});
-
-			console.log({ scraped: AllProducts.length });
 
 			if (response instanceof Error) {
 				console.error(response);
@@ -67,18 +66,20 @@ const scrapeStore = async ({
 				response.data
 			) as IExtractProductDataProps;
 
-			console.log({ cleanData: cleanData.productTiles.length });
-
 			const data = extractProductData(cleanData, chainName, store_num);
 
 			// console.log({ sample: data[0] });
 			AllProducts.push(...(data || []));
 
-			// await writeToDb(AllProducts);
+			const { writtenProducts, writtenPrices } = await writeToDb(data);
 
+			console.log(
+				// `Scraped ${chainName} ${store_num} page ${page} of ${totalPages} with ${data.length} products. Total: ${AllProducts.length} products.`
+				`Took ${(new Date().getTime() - time_start) / 1000}s to scrape ${chainName} ${store_num} pg ${page}/${totalPages} with ${writtenProducts} products | ${writtenPrices} prices. Total: ${AllProducts.length} products.`
+			);
 			// // sleep for 5 seconds
 			// await new Promise((resolve) => {
-			// 	setTimeout(resolve, 1000);
+			// 	setTimeout(resolve, 10000);
 			// });
 		}
 
