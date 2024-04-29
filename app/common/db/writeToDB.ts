@@ -260,14 +260,12 @@ const writeProductsToDb = async ({
 			!latestPriceResult.length ||
 			latestPriceResult[0].price !== updatedPriceData[0].price
 		) {
-			insertedPrice = await db
-				.insert(Price)
-				.values(updatedPriceData)
-				.returning({
-					id: Price.id,
-					productId: Price.productId,
-					storeId: Price.storeId,
-				});
+			insertedPrice = await db.insert(Price).values(updatedPriceData);
+			// .returning({
+			// 	id: Price.id,
+			// 	productId: Price.productId,
+			// 	storeId: Price.storeId,
+			// });
 			// .onConflictDoNothing();
 		}
 

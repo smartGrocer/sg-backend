@@ -75,11 +75,11 @@ export const Price = sqliteTable(
 		}),
 		productId: integer("productId")
 			.notNull()
-			.references(() => Product.id),
+			.references(() => Product.id, { onDelete: "cascade" }),
 
 		storeId: integer("storeId")
 			.notNull()
-			.references(() => Store.id),
+			.references(() => Store.id, { onDelete: "cascade" }),
 		chain_brand: text("chain_brand").notNull(),
 		price: integer("price"),
 		price_unit: text("price_unit"),
@@ -93,12 +93,17 @@ export const Price = sqliteTable(
 			.notNull(),
 	},
 	(t) => {
+		// ```sql CREATE INDEX `price_productId_chain_brand_storeId_createdAt_idx` ON `Price` (`productId`, `chain_brand`, `storeId`, `created_at` DESC); ```
 		return {
 			prod_chain_store_idx: index("prod_chain_store_idx").on(
 				t.productId,
 				t.chain_brand,
-				t.storeId
+				t.storeId,
+				t.createdAt
 			),
+			productIdIdx: index("productIdIdx").on(t.productId),
+			storeIdIdx: index("storeIdIdx").on(t.storeId),
+			createdAtIdx: index("createdAtIdx").on(t.createdAt),
 		};
 	}
 );
@@ -108,13 +113,14 @@ export const StoreProduct = sqliteTable(
 	{
 		storeId: integer("storeId")
 			.notNull()
-			.references(() => Store.id),
+			.references(() => Store.id, { onDelete: "cascade" }),
 		productId: integer("productId")
 			.notNull()
-			.references(() => Product.id),
+			.references(() => Product.id, { onDelete: "cascade" }),
 	},
 	(t) => ({
 		primary_key: primaryKey({ columns: [t.storeId, t.productId] }),
+		storeProductIdx: index("storeProductIdx").on(t.storeId, t.productId),
 	})
 );
 export const ProductRelations = relations(Product, ({ many, one }) => ({
@@ -151,11 +157,3 @@ export const StoreProductRelations = relations(StoreProduct, ({ one }) => ({
 		references: [Product.id],
 	}),
 }));
-
-/**
-drop table Price;
-drop table store_to_product;
-drop table Product;
-drop table Store;
-.tables
- */
