@@ -109,24 +109,32 @@ export const writeToDb = async (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const bulkOperations: any[] = [];
 		for await (const product of products) {
+			product.price += 200;
 			const existingProduct = await Product.findOne({
 				product_num: product.product_num,
 			});
 			const priceHistory: {
 				store_num: string;
-				date: Date;
-				amount: number;
+				history: { date: Date; amount: number }[];
 			}[] = existingProduct ? existingProduct.priceHistory : [];
 
-			const currentStorePrices = priceHistory.filter(
-				(price) => price.store_num === product.store_num
+			let storeHistory = priceHistory.find(
+				(history) => history.store_num === product.store_num
 			);
+
+			if (!storeHistory) {
+				storeHistory = {
+					store_num: product.store_num,
+					history: [],
+				};
+				priceHistory.push(storeHistory);
+			}
+
 			const latestPrice =
-				currentStorePrices[currentStorePrices.length - 1];
+				storeHistory.history[storeHistory.history.length - 1];
 
 			if (!latestPrice || latestPrice.amount !== product.price) {
-				priceHistory.push({
-					store_num: product.store_num,
+				storeHistory.history.push({
 					date: new Date(),
 					amount: product.price,
 				});
@@ -148,10 +156,8 @@ export const writeToDb = async (
 			bulkOperations as unknown as AnyBulkWriteOperation<IProductProps>[]
 		);
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { upsertedCount, modifiedCount } = result;
 
-		// sleep for 5 seconds
 		await new Promise((resolve) => {
 			setTimeout(resolve, 5000);
 		});

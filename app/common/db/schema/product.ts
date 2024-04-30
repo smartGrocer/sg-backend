@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
 
-const priceHistorySchema = new mongoose.Schema({
-	store_num: {
-		type: String,
-		required: true,
-	},
+const priceEntrySchema = new mongoose.Schema({
 	date: {
 		type: Date,
 		required: true,
@@ -12,6 +8,17 @@ const priceHistorySchema = new mongoose.Schema({
 	amount: {
 		type: Number,
 		required: true,
+	},
+});
+
+const priceHistorySchema = new mongoose.Schema({
+	store_num: {
+		type: String,
+		required: true,
+	},
+	history: {
+		type: [priceEntrySchema],
+		default: [],
 	},
 });
 
