@@ -41,7 +41,6 @@ const productSchema = new mongoose.Schema({
 		type: String,
 	},
 	priceHistory: {
-		type: Map,
 		of: [priceHistorySchema],
 		default: {},
 	},
@@ -56,5 +55,6 @@ const productSchema = new mongoose.Schema({
 });
 
 const Product = mongoose.model("Product", productSchema);
+const PriceHistory = mongoose.model("PriceHistory", priceHistorySchema);
 
-export default Product;
+export { Product, PriceHistory };

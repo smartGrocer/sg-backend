@@ -1,15 +1,8 @@
-import { eq, and, desc } from "drizzle-orm";
-import db from "./db";
-// import { Price, Product, Store, StoreProduct } from "./schema";
-import { AllStoreChainBrands, IStoreProps } from "../types/common/store";
-import {
-	IPriceData,
-	IProductData,
-	IProductProps,
-} from "../types/common/product";
-import chunkedByStores from "../helpers/chunkedByStores";
+import { IStoreProps } from "../types/common/store";
+import { IProductProps } from "../types/common/product";
+
 import Store from "./schema/store";
-import Product from "./schema/product";
+import { Product, PriceHistory } from "./schema/product";
 
 interface IWriteStoreToDbReturn {
 	message: string;
@@ -112,80 +105,38 @@ export const writeToDb = async (
 			};
 		}
 
-		// const bulkOperations = products.map((product) => ({
-		// 	updateOne: {
-		// 		filter: { product_num: product.product_num },
-		// 		update: {
-		// 			$setOnInsert: product, // Set all product fields
-		// 			$addToSet: {
-		// 				// Add to priceHistory if it doesn't exist
-		// 				priceHistory: {
-		// 					store_num: product.store_num,
-		// 					history: [
-		// 						{
-		// 							date: new Date(), // Set current date
-		// 							amount: product.price, // Set initial price
-		// 						},
-		// 					],
-		// 				},
-		// 			},
-		// 			$set: {
-		// 				// Update updatedAt field
-		// 				updatedAt: new Date(),
-		// 			},
-		// 		},
-		// 		upsert: true,
-		// 	},
-		// }));
-
 		const bulkOperations = products.map((product) => ({
 			updateOne: {
 				filter: { product_num: product.product_num },
 				update: {
-					$setOnInsert: product,
-					$addToSet: {
+					$set: product,
+					$push: {
 						priceHistory: {
-							store_num: { $each: [product.store_num] }, // Ensure store_num is an object
-							history: {
-								$each: [
-									{
-										date: new Date(),
-										amount: 2,
-									},
-								],
-							},
+							$each: [
+								{ date: new Date(), amount: product.price + 1 },
+							],
+							$slice: -10, // keep the last 10 price history records
 						},
-					},
-					$set: {
-						updatedAt: new Date(),
 					},
 				},
 				upsert: true,
 			},
 		}));
 
-		const insertedProducts = await Product.bulkWrite(bulkOperations);
+		const result = await Product.bulkWrite(bulkOperations);
 
-		if (insertedProducts instanceof Error) {
-			return {
-				message: insertedProducts.message,
-				count: 0,
-			};
-		}
+		console.log("Bulk write result:", result);
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { upsertedIds, ...logdata } = insertedProducts;
-
-		console.log("insertedProducts", logdata);
+		const { upsertedCount, modifiedCount } = result;
 
 		return {
 			message: "Store and products written to db",
 			count: products.length,
-			writtenProducts: 0,
-			writtenPrices: 0,
+			writtenProducts: upsertedCount || 0,
+			writtenPrices: modifiedCount || 0,
 		};
-	} catch (e) {
-		console.error("Error writing products to db", e);
+	} catch (error) {
+		console.error("Error writing products to db", error);
 		return {
 			message: "Error writing products to db",
 			count: 0,
