@@ -7,7 +7,8 @@ export type SecretType =
 	| "TURSO_DB_NAME"
 	| "TURSO_CONNECTION_URL"
 	| "TURSO_AUTH_TOKEN"
-	| "USE_REDIS";
+	| "USE_REDIS"
+	| "MONGO_URI";
 
 const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables
