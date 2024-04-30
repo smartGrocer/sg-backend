@@ -1,3 +1,4 @@
+import { AnyBulkWriteOperation } from "mongoose";
 import { IStoreProps } from "../types/common/store";
 import { IProductProps } from "../types/common/product";
 
@@ -105,29 +106,57 @@ export const writeToDb = async (
 			};
 		}
 
-		const bulkOperations = products.map((product) => ({
-			updateOne: {
-				filter: { product_num: product.product_num },
-				update: {
-					$set: product,
-					$push: {
-						priceHistory: {
-							$each: [
-								{
-									store_num: "default",
-									date: new Date(),
-									amount: product.price,
-								},
-							],
-							$slice: -10,
-						},
-					},
-				},
-				upsert: true,
-			},
-		}));
+		const bulkOperations = [];
+		for await (const product of products) {
+			// product.price += 1;
+			// Find the existing product
+			const existingProduct = await Product.findOne({
+				product_num: product.product_num,
+			});
 
-		const result = await Product.bulkWrite(bulkOperations);
+			// If the product exists and the latest price is the same as the new price, don't push it
+			if (existingProduct && existingProduct.priceHistory.length > 0) {
+				const latestPrice =
+					existingProduct.priceHistory[
+						existingProduct.priceHistory.length - 1
+					];
+				if (latestPrice.amount !== product.price) {
+					product.priceHistory = [
+						...existingProduct.priceHistory,
+						{
+							store_num: product.store_num,
+							date: new Date(),
+							amount: product.price,
+						},
+					];
+				}
+			} else {
+				product.priceHistory = [
+					{
+						store_num: product.store_num,
+						date: new Date(),
+						amount: product.price,
+					},
+				];
+			}
+
+			// updatedAt
+			bulkOperations.push({
+				updateOne: {
+					filter: { product_num: product.product_num },
+					update: {
+						$set: product,
+						updatedAt: new Date(),
+					},
+
+					upsert: true,
+				},
+			});
+		}
+
+		const result = await Product.bulkWrite(
+			bulkOperations as unknown as AnyBulkWriteOperation<IProductProps>[]
+		);
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { upsertedIds, upsertedCount, modifiedCount, ...rest } = result;

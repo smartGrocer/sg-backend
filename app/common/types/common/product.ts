@@ -34,7 +34,9 @@ export interface IPrice {
 	compare_price_unit: string | null;
 	compare_price_quantity: number | null;
 }
-export interface IProductProps extends IProduct, IPrice {}
+export interface IProductProps extends IProduct, IPrice {
+	priceHistory?: any;
+}
 
 export interface ISearchProducts {
 	search_term: string;
