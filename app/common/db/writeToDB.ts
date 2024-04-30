@@ -108,7 +108,6 @@ export const writeToDb = async (
 
 		const bulkOperations = [];
 		for await (const product of products) {
-			// product.price += 1;
 			// Find the existing product
 			const existingProduct = await Product.findOne({
 				product_num: product.product_num,
