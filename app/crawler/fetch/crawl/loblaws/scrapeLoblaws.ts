@@ -1,14 +1,13 @@
-import { eq, sql } from "drizzle-orm";
 import { IProductProps } from "../../../../common/types/common/product";
 import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
 import getProductsFromPage from "./getProductsFromPage";
 import cleanLoblawsData from "./cleanLoblawsData";
-import db from "../../../../common/db/db";
-import { Store } from "../../../../common/db/schema";
+
 import extractProductData, {
 	IExtractProductDataProps,
 } from "./extractProductData";
 import { writeToDb } from "../../../../common/db/writeToDB";
+import Store from "../../../../common/db/schema/store";
 
 interface IScrapeLoblawsArgs {
 	store_num: string;
@@ -95,12 +94,17 @@ const pickStore = async (
 ): Promise<string | Error> => {
 	// pick random store from db based on chainName
 	try {
-		const randomStore = await db
-			.select()
-			.from(Store)
-			.where(eq(Store.chain_brand, chainName))
-			.orderBy(sql`RANDOM()`)
-			.limit(1);
+		// const randomStore = await db
+		// 	.select()
+		// 	.from(Store)
+		// 	.where(eq(Store.chain_brand, chainName))
+		// 	.orderBy(sql`RANDOM()`)
+		// 	.limit(1);
+
+		const randomStore = await Store.aggregate([
+			{ $match: { chain_brand: chainName } },
+			{ $sample: { size: 1 } },
+		]);
 
 		if (!randomStore) {
 			return new Error("Error picking store");
