@@ -2,7 +2,7 @@ import { IStoreProps } from "../types/common/store";
 import { IProductProps } from "../types/common/product";
 
 import Store from "./schema/store";
-import { Product, PriceHistory } from "./schema/product";
+import Product from "./schema/product";
 
 interface IWriteStoreToDbReturn {
 	message: string;
@@ -113,9 +113,13 @@ export const writeToDb = async (
 					$push: {
 						priceHistory: {
 							$each: [
-								{ date: new Date(), amount: product.price + 1 },
+								{
+									store_num: "default",
+									date: new Date(),
+									amount: product.price,
+								},
 							],
-							$slice: -10, // keep the last 10 price history records
+							$slice: -10,
 						},
 					},
 				},
@@ -125,9 +129,13 @@ export const writeToDb = async (
 
 		const result = await Product.bulkWrite(bulkOperations);
 
-		console.log("Bulk write result:", result);
-
-		const { upsertedCount, modifiedCount } = result;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { upsertedIds, upsertedCount, modifiedCount, ...rest } = result;
+		console.log("result", {
+			modifiedCount,
+			upsertedCount,
+			...rest,
+		});
 
 		return {
 			message: "Store and products written to db",

@@ -5,18 +5,14 @@ const priceHistorySchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	history: [
-		{
-			date: {
-				type: Date,
-				required: true,
-			},
-			amount: {
-				type: Number,
-				required: true,
-			},
-		},
-	],
+	date: {
+		type: Date,
+		required: true,
+	},
+	amount: {
+		type: Number,
+		required: true,
+	},
 });
 
 const productSchema = new mongoose.Schema({
@@ -41,8 +37,8 @@ const productSchema = new mongoose.Schema({
 		type: String,
 	},
 	priceHistory: {
-		of: [priceHistorySchema],
-		default: {},
+		type: [priceHistorySchema],
+		default: [],
 	},
 	createdAt: {
 		type: Date,
@@ -55,6 +51,5 @@ const productSchema = new mongoose.Schema({
 });
 
 const Product = mongoose.model("Product", productSchema);
-const PriceHistory = mongoose.model("PriceHistory", priceHistorySchema);
 
-export { Product, PriceHistory };
+export default Product;
