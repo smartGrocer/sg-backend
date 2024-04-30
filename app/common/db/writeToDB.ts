@@ -8,8 +8,8 @@ import Product from "./schema/product";
 interface IWriteStoreToDbReturn {
 	message: string;
 	count: number;
-	writtenProducts?: number;
-	writtenPrices?: number;
+	upsertedCount?: number;
+	modifiedCount?: number;
 }
 
 // export const writeStoreToDb = async (
@@ -106,48 +106,39 @@ export const writeToDb = async (
 			};
 		}
 
-		const bulkOperations = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const bulkOperations: any[] = [];
 		for await (const product of products) {
-			// Find the existing product
 			const existingProduct = await Product.findOne({
 				product_num: product.product_num,
 			});
+			const priceHistory: {
+				store_num: string;
+				date: Date;
+				amount: number;
+			}[] = existingProduct ? existingProduct.priceHistory : [];
 
-			// If the product exists and the latest price is the same as the new price, don't push it
-			if (existingProduct && existingProduct.priceHistory.length > 0) {
-				const latestPrice =
-					existingProduct.priceHistory[
-						existingProduct.priceHistory.length - 1
-					];
-				if (latestPrice.amount !== product.price) {
-					product.priceHistory = [
-						...existingProduct.priceHistory,
-						{
-							store_num: product.store_num,
-							date: new Date(),
-							amount: product.price,
-						},
-					];
-				}
-			} else {
-				product.priceHistory = [
-					{
-						store_num: product.store_num,
-						date: new Date(),
-						amount: product.price,
-					},
-				];
+			const currentStorePrices = priceHistory.filter(
+				(price) => price.store_num === product.store_num
+			);
+			const latestPrice =
+				currentStorePrices[currentStorePrices.length - 1];
+
+			if (!latestPrice || latestPrice.amount !== product.price) {
+				priceHistory.push({
+					store_num: product.store_num,
+					date: new Date(),
+					amount: product.price,
+				});
 			}
 
-			// updatedAt
 			bulkOperations.push({
 				updateOne: {
 					filter: { product_num: product.product_num },
 					update: {
-						$set: product,
+						$set: { ...product, priceHistory },
 						updatedAt: new Date(),
 					},
-
 					upsert: true,
 				},
 			});
@@ -158,18 +149,18 @@ export const writeToDb = async (
 		);
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { upsertedIds, upsertedCount, modifiedCount, ...rest } = result;
-		console.log("result", {
-			modifiedCount,
-			upsertedCount,
-			...rest,
+		const { upsertedCount, modifiedCount } = result;
+
+		// sleep for 5 seconds
+		await new Promise((resolve) => {
+			setTimeout(resolve, 5000);
 		});
 
 		return {
 			message: "Store and products written to db",
 			count: products.length,
-			writtenProducts: upsertedCount || 0,
-			writtenPrices: modifiedCount || 0,
+			upsertedCount: upsertedCount || 0,
+			modifiedCount: modifiedCount || 0,
 		};
 	} catch (error) {
 		console.error("Error writing products to db", error);
