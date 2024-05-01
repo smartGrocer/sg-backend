@@ -1,27 +1,5 @@
 import mongoose from "mongoose";
 
-const priceEntrySchema = new mongoose.Schema({
-	date: {
-		type: Date,
-		required: true,
-	},
-	amount: {
-		type: Number,
-		required: true,
-	},
-});
-
-const priceHistorySchema = new mongoose.Schema({
-	store_num: {
-		type: String,
-		required: true,
-	},
-	history: {
-		type: [priceEntrySchema],
-		default: [],
-	},
-});
-
 const productSchema = new mongoose.Schema({
 	product_num: {
 		type: String,
@@ -43,10 +21,6 @@ const productSchema = new mongoose.Schema({
 	product_image: {
 		type: String,
 	},
-	priceHistory: {
-		type: [priceHistorySchema],
-		default: [],
-	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
@@ -56,6 +30,8 @@ const productSchema = new mongoose.Schema({
 		default: Date.now,
 	},
 });
+
+productSchema.index({ product_num: 1, chain_brand: 1 }, { unique: true });
 
 const Product = mongoose.model("Product", productSchema);
 
