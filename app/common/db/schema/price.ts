@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
 
-const priceEntrySchema = new mongoose.Schema({
-	date: {
-		type: Date,
-		required: true,
+const priceEntrySchema = new mongoose.Schema(
+	{
+		date: {
+			type: Date,
+			required: true,
+		},
+		amount: {
+			type: Number,
+			required: true,
+		},
 	},
-	amount: {
-		type: Number,
-		required: true,
-	},
-});
+	{ _id: false }
+);
 
 const priceHistorySchema = new mongoose.Schema({
 	product_num: {
