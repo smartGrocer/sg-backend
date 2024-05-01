@@ -73,8 +73,7 @@ const scrapeStore = async ({
 			const { upsertedCount, modifiedCount } = await writeToDb(data);
 
 			console.log(
-				// `Scraped ${chainName} ${store_num} page ${page} of ${totalPages} with ${data.length} products. Total: ${AllProducts.length} products.`
-				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCount}| Modified:${modifiedCount} . Total: ${AllProducts.length} products | ${(new Date().getTime() - time_start) / 1000}s`
+				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${(new Date().getTime() - time_start) / 1000}s`
 			);
 			// // sleep for 5 seconds
 			// await new Promise((resolve) => {
@@ -95,7 +94,7 @@ const pickStore = async (
 	// pick random store from db based on chainName
 	try {
 		const randomStore = await Store.aggregate([
-			{ $match: { chain_name: chainName } },
+			{ $match: { chain_name: chainName, scrape: true } },
 			{ $sample: { size: 1 } },
 		]);
 

@@ -214,7 +214,6 @@ const addPricesToDb = async (
 		const bulkOperations = [];
 
 		for await (const product of products) {
-			product.price += 10;
 			// Find the existing price history for the product in the store
 			const existingPriceHistory = await Price.findOne({
 				product_num: product.product_num,

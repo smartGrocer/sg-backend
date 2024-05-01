@@ -46,7 +46,10 @@ const storeSchema = new mongoose.Schema({
 	country: {
 		type: String,
 	},
-
+	scrape: {
+		type: Boolean,
+		default: false,
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
