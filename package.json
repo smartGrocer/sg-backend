@@ -17,11 +17,7 @@
 		"docker:prod": "docker compose -f docker-compose.prod.yml up --build -d",
 		"docker:prod:down": "docker compose -f docker-compose.prod.yml down",
 		"docker:panda:down": "docker compose -f docker-compose.panda.yml down",
-		"docker:panda:up": "docker compose -f docker-compose.panda.yml up --build -d",
-		"db:generate": "drizzle-kit generate:sqlite --schema ./app/common/db/schema.ts --out ./app/common/db/migrations",
-		"db:migrate": "npx tsx ./app/common/db/migrate.ts",
-		"db:studio": "npx drizzle-kit studio",
-		"db:push": "drizzle-kit push:sqlite"
+		"docker:panda:up": "docker compose -f docker-compose.panda.yml up --build -d"
 	},
 	"repository": {
 		"type": "git",
@@ -35,12 +31,10 @@
 	},
 	"homepage": "https://github.com/smartGrocer/sg-backend#readme",
 	"dependencies": {
-		"@libsql/client": "^0.6.0",
 		"axios": "^1.6.7",
 		"cheerio": "^1.0.0-rc.12",
 		"cors": "^2.8.5",
 		"dotenv": "^16.4.5",
-		"drizzle-orm": "^0.30.6",
 		"express": "^4.18.2",
 		"geolib": "^3.3.4",
 		"ioredis": "^5.3.2",
@@ -56,11 +50,9 @@
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
 		"csvtojson": "^2.0.10",
-		"drizzle-kit": "^0.20.17",
 		"eslint": "^8.57.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-drizzle": "^0.2.3",
 		"eslint-plugin-import": "^2.29.1",
 		"eslint-plugin-prefer-arrow": "^1.2.3",
 		"eslint-plugin-prettier": "^5.1.3",
