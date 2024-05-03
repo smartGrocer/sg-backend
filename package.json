@@ -17,11 +17,7 @@
 		"docker:prod": "docker compose -f docker-compose.prod.yml up --build -d",
 		"docker:prod:down": "docker compose -f docker-compose.prod.yml down",
 		"docker:panda:down": "docker compose -f docker-compose.panda.yml down",
-		"docker:panda:up": "docker compose -f docker-compose.panda.yml up --build -d",
-		"db:generate": "drizzle-kit generate:sqlite --schema ./app/common/db/schema.ts --out ./app/common/db/migrations",
-		"db:migrate": "npx tsx ./app/common/db/migrate.ts",
-		"db:studio": "npx drizzle-kit studio",
-		"db:push": "drizzle-kit push:sqlite"
+		"docker:panda:up": "docker compose -f docker-compose.panda.yml up --build -d"
 	},
 	"repository": {
 		"type": "git",
@@ -38,17 +34,14 @@
 		"axios": "^1.6.7",
 		"cheerio": "^1.0.0-rc.12",
 		"cors": "^2.8.5",
-		"drizzle-orm": "^0.30.6",
-		"drizzle-kit": "^0.20.14",
+		"dotenv": "^16.4.5",
 		"express": "^4.18.2",
 		"geolib": "^3.3.4",
 		"ioredis": "^5.3.2",
-		"user-agents": "^1.1.103",
-		"dotenv": "^16.4.5",
-		"@libsql/client": "^0.6.0"
+		"mongoose": "^8.3.3",
+		"user-agents": "^1.1.103"
 	},
 	"devDependencies": {
-		"eslint-plugin-drizzle": "^0.2.3",
 		"@types/cors": "^2.8.17",
 		"@types/express": "^4.17.21",
 		"@types/jest": "^29.5.12",

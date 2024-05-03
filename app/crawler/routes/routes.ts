@@ -17,6 +17,7 @@ import { MetroChain } from "../../common/types/metro/metro";
 import searchMetro from "../fetch/search/metro/searchMetro";
 import getLoblawsProduct from "../fetch/product/loblaws/getLoblawsProduct";
 import getMetroProduct from "../fetch/product/metro/getMetroProduct";
+import scrapeLoblaws from "../fetch/crawl/loblaws/scrapeLoblaws";
 
 const router = express.Router();
 
@@ -282,6 +283,41 @@ router.get("/product/lookup", async (req: Request, res: Response) => {
 	});
 });
 
+router.get("/scrape", async (req: Request, res: Response) => {
+	const { query } = req;
+	const chainName = query.chain as LoblawsChainName;
+
+	if (!chainName) {
+		return res.status(400).json({
+			message: `Chain name is required, please provide a chain name as a query parameter like so: /scrape?chain=chain_name`,
+			availableOptions: [...Object.values(LoblawsChainName)],
+		});
+	}
+
+	// if the chain brand is loblaws
+	// if (chainName === LoblawsChainName.loblaw) {
+	const response = await scrapeLoblaws(chainName);
+
+	if (response instanceof Error) {
+		return res.status(500).json({
+			message: "Error scraping loblaws",
+			error: response,
+		});
+	}
+
+	return res.status(200).json({
+		message: "Loblaws scraped successfully",
+		count: response.length,
+		data: response,
+	});
+	// }
+
+	// return res.status(400).json({
+	// 	message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /scrape?chain=chain_name`,
+	// 	availableOptions: [...Object.values(LoblawsChainName)],
+	// });
+});
+
 router.get("*", (req, res) => {
 	res.json({
 		message:
@@ -292,6 +328,7 @@ router.get("*", (req, res) => {
 				"/product/search/:product_search?chain=chain_name&store_num=1234",
 			product_lookup:
 				"/product/lookup?product_num=1234&url=www.example.com/product/id/1234&chain=chain_name",
+			scrape: "/scrape?chain=chain_name",
 		},
 	});
 });
