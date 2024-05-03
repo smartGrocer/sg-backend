@@ -106,7 +106,7 @@ const pickStore = async (
 		if (!store) {
 			return new Error("No store found");
 		}
-
+		console.log({ store });
 		return store;
 	} catch (e) {
 		console.error(e);
