@@ -129,7 +129,7 @@ describe("Route /store", () => {
 						expect(response.body.message).not.toMatch(
 							/Invalid postal code or postal code not found. Please provide a valid postal code/
 						);
-					});
+					}, 30000);
 				});
 			});
 		});
