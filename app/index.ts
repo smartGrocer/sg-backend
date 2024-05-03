@@ -13,6 +13,8 @@ import logger from "./common/helpers/logger";
 import routes from "./crawler/routes/routes";
 // eslint-disable-next-line import/first
 import connectToRedis from "./common/cache/redis/connentRedis";
+// eslint-disable-next-line import/first
+import connectDB from "./common/db/connectDB";
 
 // eslint-disable-next-line import/no-mutable-exports
 let redis: Redis;
@@ -65,6 +67,8 @@ app.get("/ping", (req: Request, res: Response) => {
 const startServer = async (): Promise<void> => {
 	try {
 		redis = await connectToRedis();
+
+		await connectDB();
 
 		return new Promise<void>((resolve) => {
 			app.listen(port, () => {

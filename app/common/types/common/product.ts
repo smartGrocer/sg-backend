@@ -85,15 +85,15 @@ export interface IPriceData extends IPrice {
 }
 
 export interface IProductData {
-	storeId: number;
-	chain_brand: AllStoreChainBrands;
+	// storeId: number;
 	product_num: string;
+	chain_brand: AllStoreChainBrands;
 	product_brand: string;
 	product_name: string;
 	product_link: string;
 	product_image: string;
-	product_size_unit: string;
-	product_size_quantity: number;
-	unit_soldby_type: string;
-	unit_soldby_unit: string;
+	// product_size_unit: string;
+	// product_size_quantity: number;
+	// unit_soldby_type: string;
+	// unit_soldby_unit: string;
 }

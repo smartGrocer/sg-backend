@@ -1,14 +1,13 @@
-import { eq, sql } from "drizzle-orm";
 import { IProductProps } from "../../../../common/types/common/product";
 import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
 import getProductsFromPage from "./getProductsFromPage";
 import cleanLoblawsData from "./cleanLoblawsData";
-import db from "../../../../common/db/db";
-import { Store } from "../../../../common/db/schema";
+
 import extractProductData, {
 	IExtractProductDataProps,
 } from "./extractProductData";
 import { writeToDb } from "../../../../common/db/writeToDB";
+import Store from "../../../../common/db/schema/store";
 
 interface IScrapeLoblawsArgs {
 	store_num: string;
@@ -71,11 +70,10 @@ const scrapeStore = async ({
 			// console.log({ sample: data[0] });
 			AllProducts.push(...(data || []));
 
-			const { writtenProducts, writtenPrices } = await writeToDb(data);
+			const { upsertedCount, modifiedCount } = await writeToDb(data);
 
 			console.log(
-				// `Scraped ${chainName} ${store_num} page ${page} of ${totalPages} with ${data.length} products. Total: ${AllProducts.length} products.`
-				`Took ${(new Date().getTime() - time_start) / 1000}s to scrape ${chainName} ${store_num} pg ${page}/${totalPages} with ${writtenProducts} products | ${writtenPrices} prices. Total: ${AllProducts.length} products.`
+				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${(new Date().getTime() - time_start) / 1000}s`
 			);
 			// // sleep for 5 seconds
 			// await new Promise((resolve) => {
@@ -95,12 +93,10 @@ const pickStore = async (
 ): Promise<string | Error> => {
 	// pick random store from db based on chainName
 	try {
-		const randomStore = await db
-			.select()
-			.from(Store)
-			.where(eq(Store.chain_brand, chainName))
-			.orderBy(sql`RANDOM()`)
-			.limit(1);
+		const randomStore = await Store.aggregate([
+			{ $match: { chain_name: chainName, scrape: true } },
+			{ $sample: { size: 1 } },
+		]);
 
 		if (!randomStore) {
 			return new Error("Error picking store");
@@ -110,7 +106,7 @@ const pickStore = async (
 		if (!store) {
 			return new Error("No store found");
 		}
-
+		console.log({ store });
 		return store;
 	} catch (e) {
 		console.error(e);
