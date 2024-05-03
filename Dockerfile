@@ -5,7 +5,7 @@ ARG NODE_VERSION=20
 
 FROM node:${NODE_VERSION}-bullseye-slim as base
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 FROM base as deps
 
@@ -27,18 +27,20 @@ RUN npm run build
 
 FROM base as final
 
-
 ENV NODE_ENV production
 
 USER node
 
 COPY package.json .
 
-COPY --from=deps /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/dist ./
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=build /app/dist ./
 COPY /app/data ./app/data
 
+# RUN echo $(pwd) && ls -la && exit 1
+# RUN ls -la && exit 1
+# RUN ls -la app && exit 1
 
 EXPOSE 8000
 
-CMD ["node", "app/index.js"]
+CMD ["node", "index.js"]
