@@ -3,6 +3,7 @@ import { Redis } from "ioredis";
 import dotenv from "dotenv";
 import cors from "cors";
 import getSecret from "./common/helpers/getSecret";
+import scheduleCron from "./common/cron/cron";
 
 // For env File
 dotenv.config();
@@ -83,14 +84,24 @@ const startServer = async (): Promise<void> => {
 			});
 		});
 	} catch (error) {
+		console.error(error);
 		process.exit(1);
 		return Promise.reject();
 	}
 };
 
 // Start the server
-if (process.env.NODE_ENV !== "test") {
-	startServer();
+if (getSecret("NODE_ENV") !== "test") {
+	if (getSecret("NODE_ENV") === "production") {
+		startServer().then(() => {
+			setTimeout(() => {
+				scheduleCron();
+				// wait for 10 mins
+			}, 600000);
+		});
+	} else {
+		startServer();
+	}
 }
 
 export { redis, startServer };
