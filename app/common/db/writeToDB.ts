@@ -101,11 +101,6 @@ export const writeToDb = async (
 
 		const { upsertedCount, modifiedCount } = result;
 
-		await new Promise((resolve) => {
-			// sleep for a random amount of time between 60 and 240 seconds
-			setTimeout(resolve, Math.floor(Math.random() * 180000) + 60000);
-		});
-
 		return {
 			message: "Store and products written to db",
 			count: products.length,

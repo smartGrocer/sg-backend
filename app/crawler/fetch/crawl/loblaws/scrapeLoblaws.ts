@@ -67,18 +67,26 @@ const scrapeStore = async ({
 
 			const data = extractProductData(cleanData, chainName, store_num);
 
-			// console.log({ sample: data[0] });
 			AllProducts.push(...(data || []));
 
 			const { upsertedCount, modifiedCount } = await writeToDb(data);
-
+			const endTime = new Date().getTime();
 			console.log(
-				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${(new Date().getTime() - time_start) / 1000}s`
+				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
+					(endTime - time_start) / 1000
+				}s`
 			);
-			// // sleep for 5 seconds
-			// await new Promise((resolve) => {
-			// 	setTimeout(resolve, 10000);
-			// });
+
+			await new Promise((resolve) => {
+				// sleep for a random amount of time between 30s and 120s
+				const waitFor = Math.floor(
+					(Math.floor(Math.random() * 90000) + 30000) / 1000
+				);
+				console.log(
+					`Waiting for ${waitFor}s for ${chainName} ${store_num}`
+				);
+				setTimeout(resolve, waitFor * 1000);
+			});
 		}
 
 		return AllProducts;
@@ -106,7 +114,7 @@ const pickStore = async (
 		if (!store) {
 			return new Error("No store found");
 		}
-		console.log({ store });
+
 		return store;
 	} catch (e) {
 		console.error(e);

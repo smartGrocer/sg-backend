@@ -1,4 +1,5 @@
 export type SecretType =
+	| "NODE_ENV"
 	| "PORT"
 	| "UPSTASH_PORT"
 	| "UPSTASH_ENDPOINT"
