@@ -90,18 +90,15 @@ const startServer = async (): Promise<void> => {
 	}
 };
 
-// Start the server
 if (getSecret("NODE_ENV") !== "test") {
-	if (getSecret("NODE_ENV") === "production") {
-		startServer().then(() => {
+	startServer().then(() => {
+		if (getSecret("NODE_ENV") === "production") {
 			setTimeout(() => {
 				scheduleCron();
 				// wait for 10 mins
 			}, 600000);
-		});
-	} else {
-		startServer();
-	}
+		}
+	});
 }
 
 export { redis, startServer };
