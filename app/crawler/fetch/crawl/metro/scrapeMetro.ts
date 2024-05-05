@@ -6,7 +6,7 @@ import {
 import { MetroChain } from "../../../../common/types/metro/metro";
 import pickStore from "../common/pickRandomStore";
 import cleanAndExtractMetroData from "../../search/metro/cleanAndExtractMetroData";
-// import sleep from "../../../../common/helpers/sleep";
+import sleep from "../../../../common/helpers/sleep";
 import { writeToDb } from "../../../../common/db/writeToDB";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
@@ -56,7 +56,7 @@ const scrapeStore = async ({
 
 		AllProducts.push(...data);
 		await writeToDb(data);
-		// await sleep({ min: 30, max: 120 });
+		await sleep({ min: 30, max: 120 });
 		if (page_results > 1) {
 			for await (const page of Array.from({
 				length: page_results + 1,
@@ -105,7 +105,7 @@ const scrapeStore = async ({
 					break;
 				}
 
-				// await sleep({ min: 30, max: 120 });
+				await sleep({ min: 30, max: 120 });
 			}
 		}
 
