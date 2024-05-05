@@ -8,6 +8,7 @@ import pickStore from "../common/pickRandomStore";
 import cleanAndExtractMetroData from "../../search/metro/cleanAndExtractMetroData";
 // import sleep from "../../../../common/helpers/sleep";
 import { writeToDb } from "../../../../common/db/writeToDB";
+import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
 interface IScrapeMetroArgs {
 	store_num: string;
@@ -46,7 +47,10 @@ const scrapeStore = async ({
 
 		const { products: data, page_results } = cleanAndExtractMetroData({
 			data: cleanData,
-			store_num: "all",
+			store_num:
+				chainName === "metro"
+					? AllStoreChainBrands.metro
+					: AllStoreChainBrands.foodbasics,
 			chainName,
 		});
 
@@ -54,9 +58,9 @@ const scrapeStore = async ({
 		await writeToDb(data);
 		// await sleep({ min: 30, max: 120 });
 		if (page_results > 1) {
-			for await (const page of Array.from({ length: page_results }).map(
-				(_, i) => i + 1
-			)) {
+			for await (const page of Array.from({
+				length: page_results + 1,
+			}).map((_, i) => i + 2)) {
 				const time_start = new Date().getTime();
 				const url_loop = urlPage({ chainName, page });
 
@@ -80,7 +84,10 @@ const scrapeStore = async ({
 					page_results: page_results_loop,
 				} = cleanAndExtractMetroData({
 					data: cleanData_loop,
-					store_num: "all",
+					store_num:
+						chainName === "metro"
+							? AllStoreChainBrands.metro
+							: AllStoreChainBrands.foodbasics,
 					chainName,
 				});
 

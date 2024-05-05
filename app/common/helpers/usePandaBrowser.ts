@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 
-import UserAgent from "user-agents";
 import getSecret from "./getSecret";
 // eslint-disable-next-line import/no-cycle
 import { PandaBrowserKeys } from "../types/common/product";
@@ -47,9 +46,10 @@ const usePandaBrowser = async ({
 				data: true,
 				cacheInRedis: false,
 			});
-			const userAgent = new UserAgent().toString();
-			const params = `full-content=true&cache=false&stealth=true&user-agent=${userAgent}&resource=document,fetch,xhr`;
-			const pandaURL = `${getSecret("PANDA_BROWSER_URL")}/api/page?&url=${url}&${params}&server_token=pandapaw`;
+
+			const params = `full-content=true&cache=false&stealth=true&device=Desktop Chrome HiDPI&resource=document,fetch,xhr`;
+			const pandaURL = `${getSecret("PANDA_BROWSER_URL")}/api/page?&url=${url}&${params}&service_token=pandapaw`;
+
 			response = await axios.get(pandaURL).catch((err) => {
 				throw new Error(
 					`Panda Service: Error fetching products for metro, status: ${err}`

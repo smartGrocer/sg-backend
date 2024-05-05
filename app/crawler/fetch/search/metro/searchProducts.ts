@@ -10,6 +10,7 @@ import {
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 import cleanAndExtractMetroData from "./cleanAndExtractMetroData";
+import { AllStoreChainBrands } from "../../../../common/types/common/store";
 
 const searchProducts = async ({
 	search_term,
@@ -48,7 +49,10 @@ const searchProducts = async ({
 
 		const { products: data } = cleanAndExtractMetroData({
 			data: cleanData,
-			store_num,
+			store_num:
+				chainName === "metro"
+					? AllStoreChainBrands.metro
+					: AllStoreChainBrands.foodbasics,
 			chainName,
 		});
 
