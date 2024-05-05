@@ -51,7 +51,7 @@ const scrapeStore = async ({
 		await sleep({ min: 30, max: 120 });
 
 		for await (const page of Array.from({ length: totalPages }).map(
-			(_, i) => i + 1
+			(_, i) => i + 2
 		)) {
 			const time_start = new Date().getTime();
 			const response = await getProductsFromPage({
