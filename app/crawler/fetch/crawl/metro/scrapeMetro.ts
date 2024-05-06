@@ -93,7 +93,8 @@ const scrapeStore = async ({
 
 				AllProducts.push(...data_loop);
 
-				const { upsertedCount, modifiedCount } = await writeToDb(data);
+				const { upsertedCount, modifiedCount } =
+					await writeToDb(data_loop);
 				const endTime = new Date().getTime();
 				console.log(
 					`Scraped ${chainName} pg ${page}| Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${

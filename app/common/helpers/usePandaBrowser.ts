@@ -56,11 +56,11 @@ const usePandaBrowser = async ({
 				);
 			});
 			resData = response.data.fullContent;
-			if (response.status === 200) {
-				console.log(
-					`Panda Service: Fetched data from panda for ${url}`
-				);
-			}
+			// if (response.status === 200) {
+			// 	console.log(
+			// 		`Panda Service: Fetched data from panda for ${url}`
+			// 	);
+			// }
 		}
 	}
 
