@@ -25,8 +25,8 @@ const scheduleCron = (): void => {
 	];
 
 	const job = new CronJob(
-		// run the cron job every 12 hours
-		"0 0 */12 * * *",
+		// run the cron job every 6 hours
+		"0 0 */6 * * *",
 		async () => {
 			const randomRunners = runners.sort(() => Math.random() - 0.5);
 
