@@ -14,6 +14,7 @@ import {
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import removeHtmlTags from "../../../../common/helpers/removeHtmlTags";
 
 const getProduct = async ({
 	product_num,
@@ -60,6 +61,7 @@ const getProduct = async ({
 		productData.product_name = product.name;
 		productData.product_link = `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`;
 		productData.product_image = pickImage(product.imageAssets);
+		productData.description = removeHtmlTags(product.description || "");
 		productData.product_size_unit = parseQuantity(product.packageSize).unit;
 		productData.product_size_quantity = parseQuantity(
 			product.packageSize

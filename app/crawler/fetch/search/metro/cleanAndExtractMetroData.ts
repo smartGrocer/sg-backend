@@ -138,6 +138,7 @@ const cleanAndExtractMetroData = ({
 				product_name,
 				product_link,
 				product_image,
+				description: "",
 				product_size_unit,
 				product_size_quantity,
 
