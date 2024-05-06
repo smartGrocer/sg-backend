@@ -47,8 +47,13 @@ const scrapeStore = async ({
 
 		const totalPages = Math.ceil(totalResults / pageSize);
 
-		await writeToDb(initialProducts);
-		await sleep({ min: 30, max: 120 });
+		const { upsertedCount, modifiedCount } =
+			await writeToDb(initialProducts);
+
+		console.log(
+			`Scraped ${chainName} pg 1 | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products`
+		);
+		await sleep({ min: 30, max: 45 });
 
 		for await (const page of Array.from({ length: totalPages }).map(
 			(_, i) => i + 2
@@ -73,16 +78,19 @@ const scrapeStore = async ({
 
 			AllProducts.push(...(data || []));
 
-			const { upsertedCount, modifiedCount } = await writeToDb(data);
+			const {
+				upsertedCount: upsertedCountInitial,
+				modifiedCount: modifiedCountInitial,
+			} = await writeToDb(data);
 			const endTime = new Date().getTime();
 			console.log(
-				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
+				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products | ${
 					(endTime - time_start) / 1000
 				}s`
 			);
 
 			// sleep for a random amount of time between 30s and 120s
-			await sleep({ min: 30, max: 120 });
+			await sleep({ min: 30, max: 45 });
 		}
 
 		return AllProducts;

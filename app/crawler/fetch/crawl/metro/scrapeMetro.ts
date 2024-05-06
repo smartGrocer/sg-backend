@@ -28,6 +28,7 @@ const scrapeStore = async ({
 	chainName,
 }: IScrapeMetroArgs): Promise<IProductProps[] | Error> => {
 	try {
+		console.log({ scraping: `${chainName}` });
 		const url = urlPage({ chainName, page: 1 });
 
 		const AllProducts: IProductProps[] = [];
@@ -55,8 +56,16 @@ const scrapeStore = async ({
 		});
 
 		AllProducts.push(...data);
-		await writeToDb(data);
-		await sleep({ min: 30, max: 120 });
+
+		const {
+			upsertedCount: upsertedCountInitial,
+			modifiedCount: modifiedCountInitial,
+		} = await writeToDb(data);
+
+		console.log(
+			`Scraped ${chainName} pg 1 | Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products`
+		);
+		await sleep({ min: 30, max: 40 });
 		if (page_results > 1) {
 			for await (const page of Array.from({
 				length: page_results + 1,
@@ -106,7 +115,7 @@ const scrapeStore = async ({
 					break;
 				}
 
-				await sleep({ min: 30, max: 120 });
+				await sleep({ min: 30, max: 45 });
 			}
 		}
 
