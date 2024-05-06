@@ -2,6 +2,8 @@
 import { CronJob } from "cron";
 import { LoblawsChainName } from "../types/loblaws/loblaws";
 import scrapeLoblaws from "../../crawler/fetch/crawl/loblaws/scrapeLoblaws";
+import { MetroChain } from "../types/metro/metro";
+import scrapeMetro from "../../crawler/fetch/crawl/metro/scrapeMetro";
 
 const scheduleCron = (): void => {
 	console.log("Starting cron job");
@@ -17,11 +19,14 @@ const scheduleCron = (): void => {
 		"fortinos",
 
 		// ...Object.values(LoblawsChainName),
+
+		"metro",
+		"foodbasics",
 	];
 
 	const job = new CronJob(
-		// run the cron job every 12 hours
-		"0 0 */12 * * *",
+		// run the cron job every 6 hours
+		"0 0 */6 * * *",
 		async () => {
 			const randomRunners = runners.sort(() => Math.random() - 0.5);
 
@@ -40,6 +45,13 @@ const scheduleCron = (): void => {
 					) {
 						// run the loblaws runner
 						await scrapeLoblaws(runner as LoblawsChainName);
+					}
+
+					if (
+						Object.values(MetroChain).includes(runner as MetroChain)
+					) {
+						// run the metro runner
+						await scrapeMetro(runner as MetroChain);
 					}
 
 					break;

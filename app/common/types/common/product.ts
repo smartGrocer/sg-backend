@@ -76,6 +76,7 @@ export interface IGetProductReturn {
 export enum PandaBrowserKeys {
 	metro_search_panda = "metro_search_panda",
 	metro_lookup_panda = "metro_lookup_panda",
+	metro_crawl_panda = "metro_crawl_panda",
 }
 
 export interface IPriceData extends IPrice {
