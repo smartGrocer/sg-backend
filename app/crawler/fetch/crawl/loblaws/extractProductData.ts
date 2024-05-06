@@ -1,3 +1,4 @@
+import removeHtmlTags from "../../../../common/helpers/removeHtmlTags";
 import { IProductProps } from "../../../../common/types/common/product";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";
 import {
@@ -40,7 +41,7 @@ const extractProductData = (
 					(image: any) => image?.imageUrl !== null
 				)[0]?.imageUrl ||
 				"",
-
+			description: removeHtmlTags(product.description || ""),
 			product_size_unit: product.uom,
 			// product_size_quantity: product[i].packageSizing,
 			product_size_quantity: 1,
