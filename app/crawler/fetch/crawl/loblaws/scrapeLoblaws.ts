@@ -53,7 +53,7 @@ const scrapeStore = async ({
 		console.log(
 			`Scraped ${chainName} pg 1 | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products`
 		);
-		await sleep({ min: 30, max: 45 });
+		await sleep({ min: 20, max: 35 });
 
 		for await (const page of Array.from({ length: totalPages }).map(
 			(_, i) => i + 2
@@ -90,7 +90,7 @@ const scrapeStore = async ({
 			);
 
 			// sleep for a random amount of time between 30s and 120s
-			await sleep({ min: 30, max: 45 });
+			await sleep({ min: 20, max: 35 });
 		}
 
 		return AllProducts;
