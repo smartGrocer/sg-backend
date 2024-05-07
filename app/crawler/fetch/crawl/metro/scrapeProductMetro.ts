@@ -5,24 +5,24 @@
  */
 
 import Product from "../../../../common/db/schema/product";
-import { writeToDb } from "../../../../common/db/writeToDB";
+import sleep from "../../../../common/helpers/sleep";
 import { IProductData } from "../../../../common/types/common/product";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import getProduct from "../../product/metro/getProduct";
 
-const scrapeProductMetro = async ({ chainName }: { chainName: MetroChain }) => {
-	let productsFound = true;
-
-	console.log(`Scraping products for ${chainName}`);
+const scrapeAllProductsMetro = async ({
+	chainName,
+}: {
+	chainName: MetroChain;
+}): Promise<void> => {
+	await sleep({ min: 5, max: 10 });
+	const start_time = new Date().getTime();
 
 	// eslint-disable-next-line no-use-before-define
 	const product = await findProductMetro({ chainName });
 
-	console.log(`Found product with description`, {
-		product,
-	});
-
 	if (!product) {
+		console.log(`No products found for ${chainName}`);
 		return;
 	}
 
@@ -34,22 +34,42 @@ const scrapeProductMetro = async ({ chainName }: { chainName: MetroChain }) => {
 		chainName,
 	});
 
-	console.log(`Product data`, productData);
-
 	if (productData instanceof Error) {
 		console.log(`Error fetching product`, productData);
-
+		// eslint-disable-next-line consistent-return
+		await scrapeAllProductsMetro({ chainName }); // Retry with next product
 		return;
 	}
 
-	// if productData starts with "Product number: " then dont save to db
+	// if productData starts with "Product number: " then don't save to db
 	if (productData.description.startsWith("Product number: ")) {
-		console.log(`Product description is empty`, productData);
-
-		return;
+		productData.description = "N/A";
 	}
 
-	await writeToDb([productData]);
+	// update product in mongodb with description and updatedAt
+	await Product.findOneAndUpdate(
+		{
+			product_num: product.product_num,
+			chain_brand: product.chain_brand,
+		},
+		{
+			$set: {
+				description: productData.description,
+				updatedAt: new Date(),
+			},
+		},
+		{
+			upsert: false,
+		}
+	);
+
+	console.log(
+		`Product description updated for ${product.product_num} at ${product.chain_brand} | Time: ${
+			(new Date().getTime() - start_time) / 1000
+		} s`
+	);
+	// Continue scraping for more products
+	await scrapeAllProductsMetro({ chainName });
 };
 
 const findProductMetro = async ({
@@ -67,4 +87,4 @@ const findProductMetro = async ({
 	return product[0];
 };
 
-export default scrapeProductMetro;
+export default scrapeAllProductsMetro;
