@@ -126,6 +126,26 @@ const cleanAndExtractMetroData = ({
 			const unit_soldby_unit =
 				unit_soldby_type === "ea." ? "ea." : "pack";
 
+			// const description =
+			// 	$(el)
+			// 		.find(".pi--additional-info")
+			// 		.children()
+			// 		.find(".accordion--text")
+			// 		.children()
+			// 		.first()
+			// 		.text()
+			// 		.trim() || "";
+
+			// description: find parent of class "pi--product-main-info__sku"
+			const description =
+				$(el)
+					.find(".pi--product-main-info__sku")
+					.parent()
+					.children()
+					.first()
+					.text()
+					.trim() || "";
+
 			productData.push({
 				product_num,
 				store_num,
@@ -138,7 +158,7 @@ const cleanAndExtractMetroData = ({
 				product_name,
 				product_link,
 				product_image,
-				description: "",
+				description,
 				product_size_unit,
 				product_size_quantity,
 
