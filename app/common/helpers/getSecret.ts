@@ -6,7 +6,8 @@ export type SecretType =
 	| "UPSTASH_PASSWORD"
 	| "PANDA_BROWSER_URL"
 	| "USE_REDIS"
-	| "MONGO_URI";
+	| "MONGO_URI"
+	| "RUN_METRO_DESC_CRON";
 
 const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables

@@ -48,20 +48,20 @@ const getProduct = async ({
 			const product_id_2 = $(el).attr("data-product-code") || "";
 			const store_id_2 = "all";
 
-			const product_brand =
-				$(el).find(".head__brand").text().trim() || "";
+			const product_brand = $(el).find(".pi--brand").text().trim() || "";
 
-			const product_name = $(el).find(".head__title").text().trim() || "";
+			const product_name = $(el).find(".pi--title").text().trim() || "";
 
-			const link_to_product =
-				$(el).find(".product-details-link").attr("href") || "";
-			const product_link =
-				`https://www.${
-					chainName === "metro" ? "metro.ca" : "foodbasics.ca"
-				}${link_to_product}` || "";
+			const link_to_product = $(`span[itemprop="url"]`).text() || "";
+
+			const product_link = link_to_product
+				? `https://www.${
+						chainName === "metro" ? "metro.ca" : "foodbasics.ca"
+					}${link_to_product}`
+				: "";
 			const product_image =
 				$(el)
-					.find(".pt__visual")
+					.find(".pdp-image")
 					.children()
 					.find("picture.defaultable-picture source")
 					.attr("srcset")
@@ -149,6 +149,15 @@ const getProduct = async ({
 			const unit_soldby_unit =
 				unit_soldby_type === "ea." ? "ea." : "pack";
 
+			const description =
+				$(el)
+					.find(".pi--product-main-info__sku")
+					.parent()
+					.children()
+					.first()
+					.text()
+					.trim() || "";
+
 			productData.push({
 				product_num: product_id_2,
 				store_num: store_id_2,
@@ -161,7 +170,7 @@ const getProduct = async ({
 				product_name,
 				product_link,
 				product_image,
-				description: "",
+				description,
 				product_size_unit,
 				product_size_quantity,
 				unit_soldby_type,

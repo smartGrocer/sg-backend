@@ -3,6 +3,7 @@ import { Redis } from "ioredis";
 import dotenv from "dotenv";
 import cors from "cors";
 import getSecret from "./common/helpers/getSecret";
+import cronAddDescMetro from "./common/cron/cronAddDescMetro";
 import scheduleCron from "./common/cron/cron";
 
 // For env File
@@ -95,6 +96,7 @@ if (getSecret("NODE_ENV") !== "test") {
 		if (getSecret("NODE_ENV") === "production") {
 			setTimeout(() => {
 				scheduleCron();
+				cronAddDescMetro();
 				// wait for 10 mins
 			}, 600000);
 		}
