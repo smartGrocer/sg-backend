@@ -52,12 +52,13 @@ const getProduct = async ({
 
 			const product_name = $(el).find(".pi--title").text().trim() || "";
 
-			const link_to_product =
-				$(el).find(".product-details-link").attr("href") || "";
-			const product_link =
-				`https://www.${
-					chainName === "metro" ? "metro.ca" : "foodbasics.ca"
-				}${link_to_product}` || "";
+			const link_to_product = $(`span[itemprop="url"]`).text() || "";
+
+			const product_link = link_to_product
+				? `https://www.${
+						chainName === "metro" ? "metro.ca" : "foodbasics.ca"
+					}${link_to_product}`
+				: "";
 			const product_image =
 				$(el)
 					.find(".pdp-image")
@@ -148,14 +149,6 @@ const getProduct = async ({
 			const unit_soldby_unit =
 				unit_soldby_type === "ea." ? "ea." : "pack";
 
-			// 	$(el)
-			// 		.find(".pi--additional-info")
-			// 		.children()
-			// 		.find("accordion--text")
-			// 		.children()
-			// 		.first()
-			// 		.text()
-			// 		.trim() || "";
 			const description =
 				$(el)
 					.find(".pi--product-main-info__sku")
@@ -164,6 +157,7 @@ const getProduct = async ({
 					.first()
 					.text()
 					.trim() || "";
+
 			productData.push({
 				product_num: product_id_2,
 				store_num: store_id_2,

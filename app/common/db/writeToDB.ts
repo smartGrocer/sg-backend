@@ -80,8 +80,18 @@ export const writeToDb = async (
 					chain_brand: product.chain_brand,
 				},
 				update: {
-					$set: product,
-					updatedAt: new Date(),
+					$set: {
+						...(product.description !== "" && {
+							description: product.description,
+						}),
+						product_num: product.product_num,
+						chain_brand: product.chain_brand,
+						product_brand: product.product_brand,
+						product_name: product.product_name,
+						product_link: product.product_link,
+						product_image: product.product_image,
+						updatedAt: new Date(),
+					},
 				},
 				upsert: true,
 			},

@@ -15,7 +15,7 @@ const scrapeAllProductsMetro = async ({
 }: {
 	chainName: MetroChain;
 }): Promise<void> => {
-	await sleep({ min: 5, max: 10 });
+	await sleep({ min: 15, max: 35 });
 	const start_time = new Date().getTime();
 
 	// eslint-disable-next-line no-use-before-define
@@ -42,8 +42,12 @@ const scrapeAllProductsMetro = async ({
 	}
 
 	// if productData starts with "Product number: " then don't save to db
-	if (productData.description.startsWith("Product number: ")) {
-		productData.description = "N/A";
+	if (
+		productData.description
+			.toLowerCase()
+			.startsWith("Product number: ".toLowerCase())
+	) {
+		productData.description = "";
 	}
 
 	// update product in mongodb with description and updatedAt
