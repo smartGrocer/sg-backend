@@ -7,7 +7,9 @@ export type SecretType =
 	| "PANDA_BROWSER_URL"
 	| "USE_REDIS"
 	| "MONGO_URI"
-	| "RUN_METRO_DESC_CRON";
+	| "RUN_METRO_DESC_CRON"
+	| "AXIOM_TOKEN"
+	| "AXIOM_DATASET";
 
 const getSecret = (secretType: SecretType): string => {
 	// get the secret from the environment variables

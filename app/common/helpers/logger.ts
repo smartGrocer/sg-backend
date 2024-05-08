@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Handle GET requests to /api route
-const logger = (req: Request, res: Response, next: NextFunction): void => {
+const apiLogger = (req: Request, res: Response, next: NextFunction): void => {
 	// if not /ping
 	if (req.url !== "/ping") {
 		// log time taken to process request
@@ -26,4 +26,4 @@ const logger = (req: Request, res: Response, next: NextFunction): void => {
 	next();
 };
 
-export default logger;
+export default apiLogger;

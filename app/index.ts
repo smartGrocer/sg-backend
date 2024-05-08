@@ -5,18 +5,19 @@ import cors from "cors";
 import getSecret from "./common/helpers/getSecret";
 import cronAddDescMetro from "./common/cron/cronAddDescMetro";
 import scheduleCron from "./common/cron/cron";
-
 // For env File
 dotenv.config();
 
 // eslint-disable-next-line import/first
-import logger from "./common/helpers/logger";
+import apiLogger from "./common/helpers/logger";
 // eslint-disable-next-line import/first, import/no-cycle
 import routes from "./crawler/routes/routes";
 // eslint-disable-next-line import/first
 import connectToRedis from "./common/cache/redis/connentRedis";
 // eslint-disable-next-line import/first
 import connectDB from "./common/db/connectDB";
+// eslint-disable-next-line import/first
+import logger from "./common/axiom/axiom";
 
 // eslint-disable-next-line import/no-mutable-exports
 let redis: Redis;
@@ -27,7 +28,7 @@ const port = getSecret("PORT") || 7000;
 // body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(logger);
+app.use(apiLogger);
 
 // cors middleware
 app.use(
@@ -74,6 +75,11 @@ const startServer = async (): Promise<void> => {
 
 		return new Promise<void>((resolve) => {
 			app.listen(port, () => {
+				logger.log({
+					level: "info",
+					message: `Crawler-service is live at http://localhost:${port}`,
+					type: "general",
+				});
 				console.log(
 					`Crawler-server running on ${
 						process.env.NODE_ENV === "production"
