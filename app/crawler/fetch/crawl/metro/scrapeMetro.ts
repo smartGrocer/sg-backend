@@ -65,7 +65,7 @@ const scrapeStore = async ({
 		console.log(
 			`Scraped ${chainName} pg 1 | Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products`
 		);
-		await sleep({ min: 30, max: 40 });
+		await sleep({ min: 20, max: 35 });
 		if (page_results > 1) {
 			for await (const page of Array.from({
 				length: page_results + 1,
@@ -115,7 +115,7 @@ const scrapeStore = async ({
 					break;
 				}
 
-				await sleep({ min: 30, max: 45 });
+				await sleep({ min: 20, max: 35 });
 			}
 		}
 

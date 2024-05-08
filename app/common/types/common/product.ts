@@ -20,6 +20,7 @@ export interface IProduct {
 	product_name: string;
 	product_link: string;
 	product_image: string;
+	description: string;
 	product_size_unit: string;
 	product_size_quantity: number;
 	unit_soldby_type: string;
@@ -93,6 +94,7 @@ export interface IProductData {
 	product_name: string;
 	product_link: string;
 	product_image: string;
+	description: string;
 	// product_size_unit: string;
 	// product_size_quantity: number;
 	// unit_soldby_type: string;
