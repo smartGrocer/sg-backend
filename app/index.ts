@@ -17,7 +17,7 @@ import connectToRedis from "./common/cache/redis/connentRedis";
 // eslint-disable-next-line import/first
 import connectDB from "./common/db/connectDB";
 // eslint-disable-next-line import/first
-import logger from "./common/axiom/axiom";
+import logger from "./common/logging/axiom";
 
 // eslint-disable-next-line import/no-mutable-exports
 let redis: Redis;
@@ -73,27 +73,51 @@ const startServer = async (): Promise<void> => {
 
 		await connectDB();
 
-		return new Promise<void>((resolve) => {
-			app.listen(port, () => {
-				logger.log({
-					level: "info",
-					message: `Crawler-service is live at http://localhost:${port}`,
-					type: "general",
-				});
-				console.log(
-					`Crawler-server running on ${
+		await new Promise<void>((resolve, reject) => {
+			const server = app.listen(port, () => {
+				logger.info({
+					message: `Crawler-server running on ${
 						process.env.NODE_ENV === "production"
 							? port
-							: `http://localhost:${port}`
-					} `
-				);
+							: `http://localhost:${port} asdasd`
+					} `,
+				});
+
 				resolve();
+			});
+
+			server.on("error", (error) => {
+				reject(error);
 			});
 		});
 	} catch (error) {
-		console.error(error);
-		process.exit(1);
-		return Promise.reject();
+		if (error instanceof Error) {
+			logger.error({
+				message: "Error starting server - 1",
+				error: error.toString(),
+			});
+		} else {
+			logger.error({
+				message: "Error starting server - 2",
+				error: new Error(
+					error?.toString() ?? "Unknown error"
+				).toString(),
+			});
+		}
+		logger.on("error", (err) => {
+			// eslint-disable-next-line no-console
+			console.error("Logger error:", err);
+		});
+		logger.on("finish", () => {
+			// eslint-disable-next-line no-console
+			console.error("Logger finished. Exiting...");
+			// axiom/winston doesnt seem to properly flush the logs before the process exits
+			setTimeout(() => {
+				process.exit(1);
+			}, 2000);
+		});
+
+		logger.end();
 	}
 };
 
