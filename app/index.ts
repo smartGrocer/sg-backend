@@ -5,19 +5,14 @@ import cors from "cors";
 import getSecret from "./common/helpers/getSecret";
 import cronAddDescMetro from "./common/cron/cronAddDescMetro";
 import scheduleCron from "./common/cron/cron";
+import apiLogger from "./common/helpers/apiLogger";
+import routes from "./crawler/routes/routes";
+import connectToRedis from "./common/cache/redis/connentRedis";
+import connectDB from "./common/db/connectDB";
+import logger from "./common/logging/axiom";
+
 // For env File
 dotenv.config();
-
-// eslint-disable-next-line import/first
-import apiLogger from "./common/helpers/apiLogger";
-// eslint-disable-next-line import/first, import/no-cycle
-import routes from "./crawler/routes/routes";
-// eslint-disable-next-line import/first
-import connectToRedis from "./common/cache/redis/connentRedis";
-// eslint-disable-next-line import/first
-import connectDB from "./common/db/connectDB";
-// eslint-disable-next-line import/first
-import logger from "./common/logging/axiom";
 
 // eslint-disable-next-line import/no-mutable-exports
 let redis: Redis;
