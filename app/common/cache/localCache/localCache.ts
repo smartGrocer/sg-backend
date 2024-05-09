@@ -1,3 +1,5 @@
+import logger from "../../logging/axiom";
+
 export const localCache = new Map();
 
 export const getLocalCachedData = async (key: string) => {
@@ -5,7 +7,9 @@ export const getLocalCachedData = async (key: string) => {
 	const cachedData = await localCache.get(key);
 
 	if (cachedData) {
-		console.log(`CACHE HIT:Local: ${key}`);
+		logger.info({
+			message: `CACHE HIT:Local: ${key}`,
+		});
 		// remove destroy from the return object
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { destroy, updatedAt, ...data } = cachedData;
@@ -20,13 +24,17 @@ export const saveToLocalCache = async (
 	data: unknown,
 	ttl?: number
 ) => {
-	console.log(`CACHE SET:Local: ${key}`);
+	logger.info({
+		message: `CACHE SET:Local: ${key}`,
+	});
 	localCache.set(key, {
 		data,
 		updatedAt: new Date(),
 		destroy: setTimeout(
 			() => {
-				console.log(`Cache cleaned up for ${key}`);
+				logger.info({
+					message: `Cache cleaned up for ${key}`,
+				});
 				localCache.delete(key);
 			},
 			ttl || 1000 * 60 * 60 * 24 * 7

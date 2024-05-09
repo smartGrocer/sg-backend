@@ -9,7 +9,7 @@ import scheduleCron from "./common/cron/cron";
 dotenv.config();
 
 // eslint-disable-next-line import/first
-import apiLogger from "./common/helpers/logger";
+import apiLogger from "./common/helpers/apiLogger";
 // eslint-disable-next-line import/first, import/no-cycle
 import routes from "./crawler/routes/routes";
 // eslint-disable-next-line import/first

@@ -1,5 +1,6 @@
 import Redis from "ioredis";
 import getSecret from "../../helpers/getSecret";
+import logger from "../../logging/axiom";
 
 const connectToRedis = async (): Promise<Redis> => {
 	const redis = new Redis({
@@ -16,23 +17,42 @@ const connectToRedis = async (): Promise<Redis> => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	redis.on("error", (error: any) => {
 		if (error.code === "ECONNRESET") {
-			console.log("Connection to Redis Session Store timed out.");
+			logger.error({
+				message: "Connection to Redis Session Store timed out.",
+			});
 		} else if (error.code === "ECONNREFUSED") {
-			console.log("Connection to Redis Session Store refused!");
-		} else console.log(error);
+			logger.error({
+				message: "Connection to Redis Session Store refused.",
+			});
+		} else {
+			logger.error({
+				message: "Error connecting to Redis Session Store.",
+				error: error?.toString(),
+			});
+		}
 	});
 
 	// Listen to 'reconnecting' event to Redis
 	redis.on("reconnecting", () => {
-		if (redis.status === "reconnecting")
-			console.log("Reconnecting to Redis Session Store...");
-		else console.log("Error reconnecting to Redis Session Store.");
+		if (redis.status === "reconnecting") {
+			logger.info({
+				message: "Reconnecting to Redis Session Store...",
+			});
+		} else {
+			logger.error({
+				message: "Error reconnecting to Redis Session Store.",
+			});
+		}
 	});
 
 	// Listen to the 'connect' event to Redis
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	redis.on("connect", (err: any) => {
-		if (!err) console.log("Connected to Redis Session Store!");
+		if (!err) {
+			logger.info({
+				message: "Connected to Redis Session Store!",
+			});
+		}
 	});
 
 	return redis;
