@@ -11,6 +11,7 @@ import {
 } from "../../../../common/cache/storeCache";
 import cleanAndExtractMetroData from "./cleanAndExtractMetroData";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import logger from "../../../../common/logging/axiom";
 
 const searchProducts = async ({
 	search_term,
@@ -65,7 +66,11 @@ const searchProducts = async ({
 
 		return data;
 	} catch (e) {
-		console.log(`Error fetching products for metro: ${e}`);
+		logger.error({
+			message: `Error fetching products for metro: ${e}`,
+			error: e?.toString(),
+		});
+
 		return e as Error;
 	}
 };

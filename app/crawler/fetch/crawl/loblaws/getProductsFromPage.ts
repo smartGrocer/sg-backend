@@ -3,6 +3,7 @@ import {
 	LoblawsChainAlternateName,
 	LoblawsChainName,
 } from "../../../../common/types/loblaws/loblaws";
+import logger from "../../../../common/logging/axiom";
 
 const getProductsFromPage = async ({
 	store_num,
@@ -49,7 +50,10 @@ const getProductsFromPage = async ({
 
 		return response;
 	} catch (e) {
-		console.error(e);
+		logger.error({
+			message: `Error fetching products for ${chainName} | page: ${page}`,
+			error: e?.toString(),
+		});
 		return e as Error;
 	}
 };

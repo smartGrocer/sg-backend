@@ -9,6 +9,7 @@ import extractProductData, {
 import { writeToDb } from "../../../../common/db/writeToDB";
 import pickStore from "../common/pickRandomStore";
 import sleep from "../../../../common/helpers/sleep";
+import logger from "../../../../common/logging/axiom";
 
 interface IScrapeLoblawsArgs {
 	store_num: string;
@@ -22,7 +23,9 @@ const scrapeStore = async ({
 	try {
 		const AllProducts: IProductProps[] = [];
 
-		console.log({ scraping: `${chainName} ${store_num}` });
+		logger.info({
+			message: `Scraping ${chainName} ${store_num}`,
+		});
 		const initialResponse = await getProductsFromPage({
 			page: 1,
 			store_num,
@@ -50,9 +53,9 @@ const scrapeStore = async ({
 		const { upsertedCount, modifiedCount } =
 			await writeToDb(initialProducts);
 
-		console.log(
-			`Scraped ${chainName} pg 1 | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products`
-		);
+		logger.info({
+			message: `Scraped ${chainName} pg 1 | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products`,
+		});
 		await sleep({ min: 20, max: 35 });
 
 		for await (const page of Array.from({ length: totalPages }).map(
@@ -66,7 +69,10 @@ const scrapeStore = async ({
 			});
 
 			if (response instanceof Error) {
-				console.error(response);
+				logger.error({
+					message: `Error fetching ${chainName} ${store_num} pg ${page}`,
+					error: response.toString(),
+				});
 				return response;
 			}
 
@@ -83,11 +89,12 @@ const scrapeStore = async ({
 				modifiedCount: modifiedCountInitial,
 			} = await writeToDb(data);
 			const endTime = new Date().getTime();
-			console.log(
-				`Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products | ${
+
+			logger.info({
+				message: `Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products | ${
 					(endTime - time_start) / 1000
-				}s`
-			);
+				}s`,
+			});
 
 			// sleep for a random amount of time between 30s and 120s
 			await sleep({ min: 20, max: 35 });
@@ -95,7 +102,10 @@ const scrapeStore = async ({
 
 		return AllProducts;
 	} catch (e) {
-		console.error(e);
+		logger.error({
+			message: `Error scraping ${chainName} ${store_num}`,
+			error: e?.toString(),
+		});
 		return e as Error;
 	}
 };
@@ -118,7 +128,10 @@ const scrapeLoblaws = async (
 
 		return products;
 	} catch (e) {
-		console.error(e);
+		logger.error({
+			message: `Error scraping ${chainName}`,
+			error: e?.toString(),
+		});
 		return e as Error;
 	}
 };
