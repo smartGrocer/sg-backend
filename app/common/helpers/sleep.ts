@@ -13,7 +13,7 @@ const sleep = ({
 			(Math.floor(Math.random() * (max - min)) + min) * 1000
 		);
 
-		logger.info({
+		logger.verbose({
 			message: `Waiting for ${waitFor / 1000}s`,
 		});
 		setTimeout(resolve, waitFor);

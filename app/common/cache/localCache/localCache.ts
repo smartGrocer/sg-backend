@@ -7,7 +7,7 @@ export const getLocalCachedData = async (key: string) => {
 	const cachedData = await localCache.get(key);
 
 	if (cachedData) {
-		logger.info({
+		logger.verbose({
 			message: `CACHE HIT:Local: ${key}`,
 		});
 		// remove destroy from the return object
@@ -24,7 +24,7 @@ export const saveToLocalCache = async (
 	data: unknown,
 	ttl?: number
 ) => {
-	logger.info({
+	logger.verbose({
 		message: `CACHE SET:Local: ${key}`,
 	});
 	localCache.set(key, {
@@ -32,7 +32,7 @@ export const saveToLocalCache = async (
 		updatedAt: new Date(),
 		destroy: setTimeout(
 			() => {
-				logger.info({
+				logger.verbose({
 					message: `Cache cleaned up for ${key}`,
 				});
 				localCache.delete(key);

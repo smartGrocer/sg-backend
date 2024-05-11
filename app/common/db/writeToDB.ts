@@ -50,6 +50,7 @@ export const writeStoreToDb = async (
 
 		logger.info({
 			message: `Stores written to db: ${stores.length} upserted: ${upsertedCount} modified: ${modifiedCount}`,
+			service: "scrapper",
 		});
 		return {
 			message: "Stores written to db",

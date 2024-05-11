@@ -11,7 +11,7 @@ const connectDB = async (): Promise<void> => {
 			dbName: "scrape",
 		});
 
-		logger.info({
+		logger.verbose({
 			message: `MongoDB Connected: ${conn.connection.db.databaseName}`,
 		});
 	} catch (err) {

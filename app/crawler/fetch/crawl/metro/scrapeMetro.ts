@@ -31,6 +31,7 @@ const scrapeStore = async ({
 	try {
 		logger.info({
 			message: `Scraping ${chainName}`,
+			service: "scrapper",
 		});
 		const url = urlPage({ chainName, page: 1 });
 
@@ -67,6 +68,7 @@ const scrapeStore = async ({
 
 		logger.info({
 			message: `Scraped ${chainName} pg 1 | Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products`,
+			service: "scrapper",
 		});
 
 		await sleep({ min: 20, max: 35 });
@@ -114,6 +116,7 @@ const scrapeStore = async ({
 					message: `Scraped ${chainName} pg ${page}/${page_results} | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
 						(endTime - time_start) / 1000
 					}s`,
+					service: "scrapper",
 				});
 
 				if (page_results_loop === 0) {

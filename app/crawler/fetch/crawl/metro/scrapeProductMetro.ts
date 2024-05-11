@@ -27,6 +27,7 @@ const scrapeAllProductsMetro = async ({
 			message: `No products found for ${chainName} | Time: ${
 				(new Date().getTime() - start_time) / 1000
 			} s`,
+			service: "scrapper",
 		});
 		return;
 	}
@@ -82,6 +83,7 @@ const scrapeAllProductsMetro = async ({
 		message: `Product description updated for ${product.product_num} at ${product.chain_brand} | Time: ${
 			(new Date().getTime() - start_time) / 1000
 		} s`,
+		service: "scrapper",
 	});
 	// Continue scraping for more products
 	await scrapeAllProductsMetro({ chainName });

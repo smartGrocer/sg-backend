@@ -78,6 +78,7 @@ const startServer = async (): Promise<void> => {
 							? port
 							: `http://localhost:${port}`
 					}`,
+					service: "crawler-server",
 				});
 
 				resolve();

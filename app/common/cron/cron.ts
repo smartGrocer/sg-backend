@@ -9,6 +9,7 @@ import logger from "../logging/axiom";
 const scheduleCron = (): void => {
 	logger.info({
 		message: "Starting cron job",
+		service: "cron",
 	});
 
 	const pastRunners: string[] = [];
@@ -39,6 +40,7 @@ const scheduleCron = (): void => {
 				if (!pastRunners.includes(runner)) {
 					logger.info({
 						message: `Running cron job for ${runner}`,
+						service: "cron",
 					});
 					pastRunners.push(runner);
 
@@ -63,6 +65,7 @@ const scheduleCron = (): void => {
 				} else if (pastRunners.length === runners.length) {
 					logger.info({
 						message: "Resetting Runners",
+						service: "cron",
 					});
 					pastRunners.length = 0;
 					break;

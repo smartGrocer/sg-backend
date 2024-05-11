@@ -25,6 +25,7 @@ const scrapeStore = async ({
 
 		logger.info({
 			message: `Scraping ${chainName} ${store_num}`,
+			service: "scrapper",
 		});
 		const initialResponse = await getProductsFromPage({
 			page: 1,
@@ -55,6 +56,7 @@ const scrapeStore = async ({
 
 		logger.info({
 			message: `Scraped ${chainName} pg 1 | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products`,
+			service: "scrapper",
 		});
 		await sleep({ min: 20, max: 35 });
 
@@ -94,6 +96,7 @@ const scrapeStore = async ({
 				message: `Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products | ${
 					(endTime - time_start) / 1000
 				}s`,
+				service: "scrapper",
 			});
 
 			// sleep for a random amount of time between 30s and 120s

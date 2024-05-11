@@ -8,6 +8,7 @@ const cronAddDescMetro = async (): Promise<void> => {
 	if (getSecret("RUN_METRO_DESC_CRON") === "true") {
 		logger.info({
 			message: "Starting cron job: cronAddDescMetro",
+			service: "cron",
 		});
 
 		const runners = ["metro", "foodbasics"];
@@ -15,6 +16,7 @@ const cronAddDescMetro = async (): Promise<void> => {
 		for await (const runner of runners) {
 			logger.info({
 				message: `Running cron job: cronAddDescMetro for ${runner}`,
+				service: "cron",
 			});
 			await scrapeProductMetro({
 				chainName: runner as MetroChain,
@@ -28,6 +30,7 @@ const cronAddDescMetro = async (): Promise<void> => {
 				for await (const runner of runners) {
 					logger.info({
 						message: `Running cron job: cronAddDescMetro for ${runner}`,
+						service: "cron",
 					});
 					await scrapeProductMetro({
 						chainName: runner as MetroChain,

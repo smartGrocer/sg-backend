@@ -32,7 +32,7 @@ export const getCachedData = async ({
 		}
 	}
 
-	logger.info({
+	logger.verbose({
 		message: `CACHE MISS: ${key}`,
 	});
 	return null;

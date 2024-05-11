@@ -48,8 +48,8 @@ const logger = winston.createLogger({
 	],
 });
 
-logger.debug({
-	message: "Logger successfully setup in axiom.ts",
+logger.verbose({
+	message: "Logger successfully setup!",
 });
 
 export default logger;

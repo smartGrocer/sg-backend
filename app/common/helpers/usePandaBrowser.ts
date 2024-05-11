@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 
 import getSecret from "./getSecret";
-// eslint-disable-next-line import/no-cycle
 import { PandaBrowserKeys } from "../types/common/product";
 import { getCachedData, saveToCache } from "../cache/storeCache";
+import logger from "../logging/axiom";
 
 interface IUsePandaBrowserArgs {
 	url: string;
@@ -57,11 +57,11 @@ const usePandaBrowser = async ({
 			});
 			resData = response.data.fullContent;
 
-			// if (response.status === 200) {
-			// 	logger.info({
-			// 		message: `Panda Service: Fetched data from panda for ${url}`,
-			// 	});
-			// }
+			if (response.status === 200) {
+				logger.verbose({
+					message: `Panda Service: Fetched data from panda for ${url}`,
+				});
+			}
 		}
 	}
 

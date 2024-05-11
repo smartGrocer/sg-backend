@@ -35,7 +35,7 @@ const connectToRedis = async (): Promise<Redis> => {
 	// Listen to 'reconnecting' event to Redis
 	redis.on("reconnecting", () => {
 		if (redis.status === "reconnecting") {
-			logger.info({
+			logger.verbose({
 				message: "Reconnecting to Redis Session Store...",
 			});
 		} else {
@@ -49,7 +49,7 @@ const connectToRedis = async (): Promise<Redis> => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	redis.on("connect", (err: any) => {
 		if (!err) {
-			logger.info({
+			logger.verbose({
 				message: "Connected to Redis Session Store!",
 			});
 		}

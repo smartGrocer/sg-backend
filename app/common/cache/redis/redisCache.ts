@@ -6,7 +6,7 @@ export const getRedisCache = async (key: string) => {
 	const response = (await redis.get(key)) || null;
 
 	if (response) {
-		logger.info({
+		logger.verbose({
 			message: `CACHE HIT:Redis: ${key}`,
 		});
 		return JSON.parse(response.toString());
@@ -19,7 +19,7 @@ export const saveToRedisCache = async (
 	data: unknown,
 	ttl?: number
 ) => {
-	logger.info({
+	logger.verbose({
 		message: `CACHE SET:Redis: ${key}`,
 	});
 	return redis.set(
