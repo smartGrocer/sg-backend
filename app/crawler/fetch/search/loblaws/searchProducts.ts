@@ -71,7 +71,7 @@ const searchProducts = async ({
 					product_brand: product.brand,
 					product_name: product.name,
 					product_link: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`,
-					description: removeHtmlTags(product.description || ""),
+					description: removeHtmlTags(product.description || "N/A"),
 					product_image: pickImage(product.imageAssets),
 					product_size_unit: parseQuantity(product.packageSize).unit,
 					product_size_quantity: parseQuantity(product.packageSize)

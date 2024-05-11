@@ -41,7 +41,7 @@ const extractProductData = (
 					(image: any) => image?.imageUrl !== null
 				)[0]?.imageUrl ||
 				"",
-			description: removeHtmlTags(product.description || ""),
+			description: removeHtmlTags(product.description || "N/A"),
 			product_size_unit: product.uom,
 			// product_size_quantity: product[i].packageSizing,
 			product_size_quantity: 1,

@@ -5,7 +5,7 @@ const removeHtmlTags = (html: string): string => {
 		return "";
 	}
 	const $ = cheerio.load(html);
-	return $.text();
+	return $.text() || "N/A";
 };
 
 export default removeHtmlTags;

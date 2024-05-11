@@ -61,7 +61,7 @@ const getProduct = async ({
 		productData.product_name = product.name;
 		productData.product_link = `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`;
 		productData.product_image = pickImage(product.imageAssets);
-		productData.description = removeHtmlTags(product.description || "");
+		productData.description = removeHtmlTags(product.description || "N/A");
 		productData.product_size_unit = parseQuantity(product.packageSize).unit;
 		productData.product_size_quantity = parseQuantity(
 			product.packageSize
