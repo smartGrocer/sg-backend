@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import logger from "../logging/axiom";
 
 // Handle GET requests to /api route
 const apiLogger = (req: Request, res: Response, next: NextFunction): void => {
@@ -8,15 +9,15 @@ const apiLogger = (req: Request, res: Response, next: NextFunction): void => {
 		const start = Date.now();
 		res.on("finish", () => {
 			const elapsed = Date.now() - start;
-			console.log(
+			logger.http(
 				`${req.method}:${res.statusCode}: '${req.protocol}://${req.get("host")}${
 					req.originalUrl
-				}' at: '${new Date().toLocaleString("en-US", {
+				}' : '${new Date().toLocaleString("en-US", {
 					timeZone: "America/New_York",
 				})}' from ${
 					req.ip ||
-					req.headers["x-forwarded-for"] ||
 					req.socket.remoteAddress ||
+					req.headers["x-forwarded-for"] ||
 					req.ip ||
 					null
 				} | ${elapsed}ms | ${res.get("Content-Length") || 0} b`

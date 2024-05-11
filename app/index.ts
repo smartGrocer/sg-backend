@@ -77,7 +77,7 @@ const startServer = async (): Promise<void> => {
 						process.env.NODE_ENV === "production"
 							? port
 							: `http://localhost:${port}`
-					} `,
+					}`,
 				});
 
 				resolve();
