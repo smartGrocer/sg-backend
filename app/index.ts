@@ -11,6 +11,8 @@ import connectToRedis from "./common/cache/redis/connentRedis";
 import connectDB from "./common/db/connectDB";
 import logger from "./common/logging/axiom";
 
+require("newrelic");
+
 // For env File
 dotenv.config();
 
@@ -74,7 +76,7 @@ const startServer = async (): Promise<void> => {
 					message: `Crawler-server running on ${
 						process.env.NODE_ENV === "production"
 							? port
-							: `http://localhost:${port} asdasd`
+							: `http://localhost:${port}`
 					} `,
 				});
 
