@@ -42,12 +42,12 @@ const scrapeAllProductsMetro = async ({
 	}
 
 	// if productData starts with "Product number: " then don't save to db
-	if (
+	if (productData &&
 		productData?.description
 			.toLowerCase()
 			.startsWith("Product number: ".toLowerCase())
 	) {
-		productData.description = "";
+		productData.description = "N/A";
 	}
 
 	// update product in mongodb with description and updatedAt
@@ -58,7 +58,7 @@ const scrapeAllProductsMetro = async ({
 		},
 		{
 			$set: {
-				description: productData.description,
+				description: productData?.description || "N/A",
 				updatedAt: new Date(),
 			},
 		},
