@@ -43,7 +43,7 @@ const scrapeAllProductsMetro = async ({
 
 	// if productData starts with "Product number: " then don't save to db
 	if (
-		productData.description
+		productData?.description
 			.toLowerCase()
 			.startsWith("Product number: ".toLowerCase())
 	) {
