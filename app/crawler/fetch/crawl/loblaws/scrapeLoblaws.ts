@@ -9,7 +9,7 @@ import extractProductData, {
 import { writeToDb } from "../../../../common/db/writeToDB";
 import pickStore from "../common/pickRandomStore";
 import sleep from "../../../../common/helpers/sleep";
-import logger from "../../../../common/logging/axiom";
+import logger from "../../../../common/logging/logger";
 
 interface IScrapeLoblawsArgs {
 	store_num: string;

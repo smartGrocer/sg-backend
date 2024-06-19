@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import getSecret from "./getSecret";
 import { PandaBrowserKeys } from "../types/common/product";
 import { getCachedData, saveToCache } from "../cache/storeCache";
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 
 interface IUsePandaBrowserArgs {
 	url: string;

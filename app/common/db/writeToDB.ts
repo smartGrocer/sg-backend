@@ -4,7 +4,7 @@ import { IProductProps } from "../types/common/product";
 import Store from "./schema/store";
 import Product from "./schema/product";
 import Price from "./schema/price";
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 
 interface IWriteStoreToDbReturn {
 	message: string;

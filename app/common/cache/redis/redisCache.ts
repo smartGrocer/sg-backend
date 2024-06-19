@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import { redis } from "../../../index";
-import logger from "../../logging/axiom";
+import logger from "../../logging/logger";
 
 export const getRedisCache = async (key: string) => {
 	const response = (await redis.get(key)) || null;

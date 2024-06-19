@@ -1,6 +1,6 @@
 import Redis from "ioredis";
 import getSecret from "../../helpers/getSecret";
-import logger from "../../logging/axiom";
+import logger from "../../logging/logger";
 
 const connectToRedis = async (): Promise<Redis> => {
 	const redis = new Redis({

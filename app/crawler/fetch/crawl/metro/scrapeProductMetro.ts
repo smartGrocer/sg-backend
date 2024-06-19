@@ -6,7 +6,7 @@
 
 import Product from "../../../../common/db/schema/product";
 import sleep from "../../../../common/helpers/sleep";
-import logger from "../../../../common/logging/axiom";
+import logger from "../../../../common/logging/logger";
 import { IProductData } from "../../../../common/types/common/product";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import getProduct from "../../product/metro/getProduct";

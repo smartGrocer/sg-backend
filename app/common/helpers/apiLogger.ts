@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 
 // Handle GET requests to /api route
 const apiLogger = (req: Request, res: Response, next: NextFunction): void => {

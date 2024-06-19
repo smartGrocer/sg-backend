@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import getSecret from "../helpers/getSecret";
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 
 const DB_STRING = getSecret("MONGO_URI");
 

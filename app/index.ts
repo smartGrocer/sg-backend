@@ -9,7 +9,7 @@ import apiLogger from "./common/helpers/apiLogger";
 import routes from "./crawler/routes/routes";
 import connectToRedis from "./common/cache/redis/connentRedis";
 import connectDB from "./common/db/connectDB";
-import logger from "./common/logging/axiom";
+import logger from "./common/logging/logger";
 
 require("newrelic");
 

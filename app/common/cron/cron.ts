@@ -4,7 +4,7 @@ import { LoblawsChainName } from "../types/loblaws/loblaws";
 import scrapeLoblaws from "../../crawler/fetch/crawl/loblaws/scrapeLoblaws";
 import { MetroChain } from "../types/metro/metro";
 import scrapeMetro from "../../crawler/fetch/crawl/metro/scrapeMetro";
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 
 const scheduleCron = (): void => {
 	logger.info({

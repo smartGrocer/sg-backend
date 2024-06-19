@@ -2,7 +2,7 @@ import { CronJob } from "cron";
 import scrapeProductMetro from "../../crawler/fetch/crawl/metro/scrapeProductMetro";
 import getSecret from "../helpers/getSecret";
 import { MetroChain } from "../types/metro/metro";
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 
 const cronAddDescMetro = async (): Promise<void> => {
 	if (getSecret("RUN_METRO_DESC_CRON") === "true") {

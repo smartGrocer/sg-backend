@@ -1,4 +1,4 @@
-import logger from "../../logging/axiom";
+import logger from "../../logging/logger";
 
 export const localCache = new Map();
 

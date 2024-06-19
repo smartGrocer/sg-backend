@@ -1,4 +1,4 @@
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 
 //  sleep for min to max seconds
 const sleep = ({

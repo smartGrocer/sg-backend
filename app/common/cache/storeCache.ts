@@ -1,5 +1,5 @@
 import getSecret from "../helpers/getSecret";
-import logger from "../logging/axiom";
+import logger from "../logging/logger";
 import { getLocalCachedData, saveToLocalCache } from "./localCache/localCache";
 // eslint-disable-next-line import/no-cycle
 import { getRedisCache, saveToRedisCache } from "./redis/redisCache";

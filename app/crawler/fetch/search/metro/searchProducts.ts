@@ -11,7 +11,7 @@ import {
 } from "../../../../common/cache/storeCache";
 import cleanAndExtractMetroData from "./cleanAndExtractMetroData";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";
-import logger from "../../../../common/logging/axiom";
+import logger from "../../../../common/logging/logger";
 
 const searchProducts = async ({
 	search_term,

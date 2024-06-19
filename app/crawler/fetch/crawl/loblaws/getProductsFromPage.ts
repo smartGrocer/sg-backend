@@ -3,7 +3,7 @@ import {
 	LoblawsChainAlternateName,
 	LoblawsChainName,
 } from "../../../../common/types/loblaws/loblaws";
-import logger from "../../../../common/logging/axiom";
+import logger from "../../../../common/logging/logger";
 
 const getProductsFromPage = async ({
 	store_num,

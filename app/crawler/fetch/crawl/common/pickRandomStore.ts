@@ -1,5 +1,5 @@
 import Store from "../../../../common/db/schema/store";
-import logger from "../../../../common/logging/axiom";
+import logger from "../../../../common/logging/logger";
 import { IAllStoreChains } from "../../../../common/types/common/store";
 
 const pickStore = async (

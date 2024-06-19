@@ -9,7 +9,7 @@ import cleanAndExtractMetroData from "../../search/metro/cleanAndExtractMetroDat
 import sleep from "../../../../common/helpers/sleep";
 import { writeToDb } from "../../../../common/db/writeToDB";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";
-import logger from "../../../../common/logging/axiom";
+import logger from "../../../../common/logging/logger";
 
 interface IScrapeMetroArgs {
 	store_num: string;
