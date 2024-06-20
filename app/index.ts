@@ -109,7 +109,7 @@ const startServer = async (): Promise<void> => {
 		logger.on("finish", () => {
 			// eslint-disable-next-line no-console
 			console.error("Logger finished. Exiting...");
-			// axiom/winston doesnt seem to properly flush the logs before the process exits
+			// winston doesnt seem to properly flush the logs before the process exits
 			setTimeout(() => {
 				process.exit(1);
 			}, 2000);
