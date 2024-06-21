@@ -7,7 +7,7 @@ import cronAddDescMetro from "./common/cron/cronAddDescMetro";
 import scheduleCron from "./common/cron/cron";
 import apiLogger from "./common/helpers/apiLogger";
 import routes from "./crawler/routes/routes";
-import connectToRedis from "./common/cache/redis/connentRedis";
+import connectToRedis from "./common/cache/redis/connectRedis";
 import connectDB from "./common/db/connectDB";
 import logger from "./common/logging/logger";
 
