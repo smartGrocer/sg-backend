@@ -22,7 +22,14 @@ const connectDB = async (): Promise<void> => {
 			service: "mongo",
 		});
 
-		process.exit(1);
+		// winston doesnt seem to properly flush the logs before the process exits
+		logger.error({
+			message: "Exiting...",
+			service: "mongo",
+		});
+		setTimeout(() => {
+			process.exit(1);
+		}, 2000);
 	}
 };
 

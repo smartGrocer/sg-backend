@@ -106,10 +106,15 @@ const startServer = async (): Promise<void> => {
 			// eslint-disable-next-line no-console
 			console.error("Logger error:", err);
 		});
+
 		logger.on("finish", () => {
 			// eslint-disable-next-line no-console
 			console.error("Logger finished. Exiting...");
 			// winston doesnt seem to properly flush the logs before the process exits
+			logger.error({
+				message: "Exiting...",
+				service: "crawler-server",
+			});
 			setTimeout(() => {
 				process.exit(1);
 			}, 2000);

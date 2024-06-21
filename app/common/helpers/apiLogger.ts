@@ -9,8 +9,8 @@ const apiLogger = (req: Request, res: Response, next: NextFunction): void => {
 		const start = Date.now();
 		res.on("finish", () => {
 			const elapsed = Date.now() - start;
-			logger.http(
-				`${req.method}:${res.statusCode}: '${req.protocol}://${req.get("host")}${
+			logger.http({
+				message: `${req.method}:${res.statusCode}: '${req.protocol}://${req.get("host")}${
 					req.originalUrl
 				}' : '${new Date().toLocaleString("en-US", {
 					timeZone: "America/New_York",
@@ -20,8 +20,9 @@ const apiLogger = (req: Request, res: Response, next: NextFunction): void => {
 					req.headers["x-forwarded-for"] ||
 					req.ip ||
 					null
-				} | ${elapsed}ms | ${res.get("Content-Length") || 0} b`
-			);
+				} | ${elapsed}ms | ${res.get("Content-Length") || 0} b`,
+				service: "http",
+			});
 		});
 	}
 	next();
