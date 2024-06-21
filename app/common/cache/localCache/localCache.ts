@@ -36,6 +36,7 @@ export const saveToLocalCache = async (
 			() => {
 				logger.verbose({
 					message: `Cache cleaned up for ${key}`,
+					service: "cache",
 				});
 				localCache.delete(key);
 			},
