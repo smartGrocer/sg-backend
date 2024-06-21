@@ -52,7 +52,8 @@ const getProductsFromPage = async ({
 	} catch (e) {
 		logger.error({
 			message: `Error fetching products for ${chainName} | page: ${page}`,
-			error: e?.toString(),
+			error: e,
+			service: "crawler",
 		});
 		return e as Error;
 	}

@@ -73,7 +73,8 @@ const scrapeStore = async ({
 			if (response instanceof Error) {
 				logger.error({
 					message: `Error fetching ${chainName} ${store_num} pg ${page}`,
-					error: response.toString(),
+					error: response?.message,
+					service: "scrapper",
 				});
 				return response;
 			}
@@ -107,7 +108,8 @@ const scrapeStore = async ({
 	} catch (e) {
 		logger.error({
 			message: `Error scraping ${chainName} ${store_num}`,
-			error: e?.toString(),
+			error: e,
+			service: "scrapper",
 		});
 		return e as Error;
 	}
@@ -133,7 +135,8 @@ const scrapeLoblaws = async (
 	} catch (e) {
 		logger.error({
 			message: `Error scraping ${chainName}`,
-			error: e?.toString(),
+			error: e,
+			service: "scrapper",
 		});
 		return e as Error;
 	}

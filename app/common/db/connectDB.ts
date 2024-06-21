@@ -13,12 +13,15 @@ const connectDB = async (): Promise<void> => {
 
 		logger.verbose({
 			message: `MongoDB Connected: ${conn.connection.db.databaseName}`,
+			service: "mongo",
 		});
 	} catch (err) {
 		logger.error({
 			message: "Error connecting to MongoDB",
-			error: err?.toString(),
+			error: err,
+			service: "mongo",
 		});
+
 		process.exit(1);
 	}
 };

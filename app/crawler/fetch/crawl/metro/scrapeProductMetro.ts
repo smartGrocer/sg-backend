@@ -45,7 +45,7 @@ const scrapeAllProductsMetro = async ({
 			message: `Error fetching product ${product.product_num} at ${product.chain_brand} | Time: ${
 				(new Date().getTime() - start_time) / 1000
 			} s`,
-			error: productData.toString(),
+			error: productData,
 		});
 
 		// eslint-disable-next-line consistent-return

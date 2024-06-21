@@ -60,6 +60,7 @@ const usePandaBrowser = async ({
 			if (response.status === 200) {
 				logger.verbose({
 					message: `Panda Service: Fetched data from panda for ${url}`,
+					service: "panda",
 				});
 			}
 		}

@@ -68,7 +68,8 @@ const searchProducts = async ({
 	} catch (e) {
 		logger.error({
 			message: `Error fetching products for metro: ${e}`,
-			error: e?.toString(),
+			error: e,
+			service: "crawler",
 		});
 
 		return e as Error;

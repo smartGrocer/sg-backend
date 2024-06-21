@@ -9,6 +9,7 @@ export const getLocalCachedData = async (key: string) => {
 	if (cachedData) {
 		logger.verbose({
 			message: `CACHE HIT:Local: ${key}`,
+			service: "cache",
 		});
 		// remove destroy from the return object
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,6 +27,7 @@ export const saveToLocalCache = async (
 ) => {
 	logger.verbose({
 		message: `CACHE SET:Local: ${key}`,
+		service: "cache",
 	});
 	localCache.set(key, {
 		data,

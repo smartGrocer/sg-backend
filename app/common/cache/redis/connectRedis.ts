@@ -19,15 +19,18 @@ const connectToRedis = async (): Promise<Redis> => {
 		if (error.code === "ECONNRESET") {
 			logger.error({
 				message: "Connection to Redis Session Store timed out.",
+				service: "redis",
 			});
 		} else if (error.code === "ECONNREFUSED") {
 			logger.error({
 				message: "Connection to Redis Session Store refused.",
+				service: "redis",
 			});
 		} else {
 			logger.error({
 				message: "Error connecting to Redis Session Store.",
-				error: error?.toString(),
+				error,
+				service: "redis",
 			});
 		}
 	});
@@ -37,10 +40,12 @@ const connectToRedis = async (): Promise<Redis> => {
 		if (redis.status === "reconnecting") {
 			logger.verbose({
 				message: "Reconnecting to Redis Session Store...",
+				service: "redis",
 			});
 		} else {
 			logger.error({
 				message: "Error reconnecting to Redis Session Store.",
+				service: "redis",
 			});
 		}
 	});
@@ -51,6 +56,7 @@ const connectToRedis = async (): Promise<Redis> => {
 		if (!err) {
 			logger.verbose({
 				message: "Connected to Redis Session Store!",
+				service: "redis",
 			});
 		}
 	});

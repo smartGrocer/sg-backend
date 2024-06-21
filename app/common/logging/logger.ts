@@ -50,6 +50,7 @@ const logger = winston.createLogger({
 
 logger.verbose({
 	message: "Logger successfully setup!",
+	service: "logger",
 });
 
 export default logger;

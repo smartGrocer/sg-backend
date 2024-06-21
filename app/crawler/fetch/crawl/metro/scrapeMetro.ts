@@ -131,7 +131,8 @@ const scrapeStore = async ({
 	} catch (e) {
 		logger.error({
 			message: `Error scraping ${chainName}`,
-			error: e?.toString(),
+			error: e,
+			service: "scrapper",
 		});
 		return e as Error;
 	}
@@ -157,7 +158,8 @@ const scrapeMetro = async (
 	} catch (e) {
 		logger.error({
 			message: `Error scraping ${chainName}`,
-			error: e?.toString(),
+			error: e,
+			service: "scrapper",
 		});
 		return e as Error;
 	}

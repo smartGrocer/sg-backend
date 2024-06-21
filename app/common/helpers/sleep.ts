@@ -15,6 +15,7 @@ const sleep = ({
 
 		logger.verbose({
 			message: `Waiting for ${waitFor / 1000}s`,
+			service: "sleep",
 		});
 		setTimeout(resolve, waitFor);
 	});

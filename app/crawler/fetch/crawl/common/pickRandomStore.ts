@@ -25,7 +25,8 @@ const pickStore = async (
 	} catch (e) {
 		logger.error({
 			message: `Error picking store ${chainName}`,
-			error: e?.toString(),
+			error: e,
+			service: "crawler",
 		});
 		return e as Error;
 	}

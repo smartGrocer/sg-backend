@@ -59,7 +59,8 @@ export const writeStoreToDb = async (
 	} catch (e) {
 		logger.error({
 			message: "Error writing store to db",
-			error: e?.toString(),
+			error: e,
+			service: "scrapper",
 		});
 		return {
 			message: "Error writing store to db",
@@ -126,7 +127,8 @@ export const writeToDb = async (
 	} catch (error) {
 		logger.error({
 			message: "Error writing products to db",
-			error: error?.toString(),
+			error,
+			service: "scrapper",
 		});
 		return {
 			message: "Error writing products to db",
@@ -203,7 +205,8 @@ const addPricesToDb = async (
 	} catch (error) {
 		logger.error({
 			message: "Error writing product prices to db",
-			error: error?.toString(),
+			error,
+			service: "scrapper",
 		});
 		return {
 			message: "Error writing product prices to db",
