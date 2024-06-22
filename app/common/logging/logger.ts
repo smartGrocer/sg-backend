@@ -16,6 +16,12 @@ const createFormat = (stack: boolean): winston.Logform.Format =>
 		logFormat
 	);
 
+/**
+ * Returns the filename for the log file based on the current date and log level
+ * Creates a new log file for each month
+ * e.g. logs/2024-06-error.log
+ * or logs/2024-07-combined.log
+ */
 const getFilename = (level: string): string => {
 	const now = new Date();
 	const year = now.getFullYear();
