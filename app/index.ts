@@ -129,6 +129,6 @@ if (getSecret("NODE_ENV") !== "test") {
 	});
 }
 
-export { redis, startServer };
+export { redis };
 
 export default app;
