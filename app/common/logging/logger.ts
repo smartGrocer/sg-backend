@@ -8,14 +8,18 @@ const logFormat = winston.format.printf(
 		}`;
 	}
 );
+
+const createFormat = (stack: boolean): winston.Logform.Format =>
+	winston.format.combine(
+		winston.format.timestamp(),
+		winston.format.errors({ stack }),
+		logFormat
+	);
+
 const logger = winston.createLogger({
 	level: "debug",
 
-	format: winston.format.combine(
-		winston.format.timestamp(),
-		winston.format.errors({ stack: false }),
-		logFormat
-	),
+	format: createFormat(true),
 	defaultMeta: { env: getSecret("NODE_ENV") },
 	transports: [
 		new winston.transports.Console({
@@ -24,21 +28,12 @@ const logger = winston.createLogger({
 		new winston.transports.File({
 			filename: "logs/error.log",
 			level: "error",
-			format: winston.format.combine(
-				winston.format.timestamp(),
-				winston.format.errors({ stack: true }),
-				logFormat
-			),
+			format: createFormat(true),
 		}),
 		new winston.transports.File({
 			filename: "logs/combined.log",
 			level: "debug",
-			format: winston.format.combine(
-				winston.format.timestamp(),
-				winston.format.errors({ stack: true }),
-
-				logFormat
-			),
+			format: createFormat(true),
 		}),
 	],
 	exceptionHandlers: [
@@ -47,11 +42,7 @@ const logger = winston.createLogger({
 		}),
 		new winston.transports.File({
 			filename: "logs/exceptions.log",
-			format: winston.format.combine(
-				winston.format.timestamp(),
-				winston.format.errors({ stack: true }),
-				logFormat
-			),
+			format: createFormat(true),
 		}),
 	],
 	rejectionHandlers: [
@@ -60,11 +51,7 @@ const logger = winston.createLogger({
 		}),
 		new winston.transports.File({
 			filename: "logs/rejections.log",
-			format: winston.format.combine(
-				winston.format.timestamp(),
-				winston.format.errors({ stack: true }),
-				logFormat
-			),
+			format: createFormat(true),
 		}),
 	],
 });
