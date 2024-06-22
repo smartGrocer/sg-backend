@@ -89,19 +89,12 @@ const startServer = async (): Promise<void> => {
 			});
 		});
 	} catch (error) {
-		if (error instanceof Error) {
-			logger.error({
-				message: "Error starting server - 1",
-				error: error.toString(),
-			});
-		} else {
-			logger.error({
-				message: "Error starting server - 2",
-				error: new Error(
-					error?.toString() ?? "Unknown error"
-				).toString(),
-			});
-		}
+		logger.error({
+			message: "Error starting server - 1",
+			error: error?.toString() ?? "Unknown error",
+			service: "crawler-server",
+		});
+
 		logger.on("error", (err) => {
 			// eslint-disable-next-line no-console
 			console.error("Logger error:", err);

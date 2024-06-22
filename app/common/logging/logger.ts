@@ -16,6 +16,13 @@ const createFormat = (stack: boolean): winston.Logform.Format =>
 		logFormat
 	);
 
+const getFilename = (level: string): string => {
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = (now.getMonth() + 1).toString().padStart(2, "0");
+	return `logs/${year}-${month}-${level}.log`;
+};
+
 const logger = winston.createLogger({
 	level: "debug",
 
@@ -26,12 +33,12 @@ const logger = winston.createLogger({
 			format: winston.format.colorize({ all: true }),
 		}),
 		new winston.transports.File({
-			filename: "logs/error.log",
+			filename: getFilename("error"),
 			level: "error",
 			format: createFormat(true),
 		}),
 		new winston.transports.File({
-			filename: "logs/combined.log",
+			filename: getFilename("combined"),
 			level: "debug",
 			format: createFormat(true),
 		}),
@@ -41,7 +48,7 @@ const logger = winston.createLogger({
 			format: winston.format.colorize({ all: true }),
 		}),
 		new winston.transports.File({
-			filename: "logs/exceptions.log",
+			filename: getFilename("exceptions"),
 			format: createFormat(true),
 		}),
 	],
@@ -50,7 +57,7 @@ const logger = winston.createLogger({
 			format: winston.format.colorize({ all: true }),
 		}),
 		new winston.transports.File({
-			filename: "logs/rejections.log",
+			filename: getFilename("rejections"),
 			format: createFormat(true),
 		}),
 	],
