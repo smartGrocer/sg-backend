@@ -42,7 +42,6 @@ const scheduleCron = (): void => {
 						message: `Running cron job for ${runner}`,
 						service: "cron",
 					});
-					pastRunners.push(runner);
 
 					// if runner was in LoblawsChainName
 					if (
@@ -61,6 +60,7 @@ const scheduleCron = (): void => {
 						await scrapeMetro(runner as MetroChain);
 					}
 
+					pastRunners.push(runner);
 					break;
 				} else if (pastRunners.length === runners.length) {
 					logger.info({

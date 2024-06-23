@@ -37,12 +37,6 @@ app.use(
 	})
 );
 
-// on every response, add a header
-app.use((req: Request, res: Response, next) => {
-	res.header("server", "crawler-service");
-	next();
-});
-
 // routes
 app.use("/api", routes);
 
@@ -129,6 +123,6 @@ if (getSecret("NODE_ENV") !== "test") {
 	});
 }
 
-export { redis, startServer };
+export { redis };
 
 export default app;
