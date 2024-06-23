@@ -29,43 +29,43 @@ const getFilename = (level: string): string => {
 	return `logs/${year}-${month}-${level}.log`;
 };
 
+const ConsoleTransport = (): winston.transports.ConsoleTransportInstance => {
+	return new winston.transports.Console({
+		format: winston.format.colorize({ all: true }),
+	});
+};
+
+const FileTransport = ({
+	filename,
+	level,
+}: {
+	filename: string;
+	level?: string;
+}): winston.transports.FileTransportInstance => {
+	return new winston.transports.File({
+		filename,
+		level,
+		format: createFormat(true),
+	});
+};
+
 const logger = winston.createLogger({
 	level: "debug",
 
 	format: createFormat(true),
 	defaultMeta: { env: getSecret("NODE_ENV") },
 	transports: [
-		new winston.transports.Console({
-			format: winston.format.colorize({ all: true }),
-		}),
-		new winston.transports.File({
-			filename: getFilename("error"),
-			level: "error",
-			format: createFormat(true),
-		}),
-		new winston.transports.File({
-			filename: getFilename("combined"),
-			level: "debug",
-			format: createFormat(true),
-		}),
+		ConsoleTransport(),
+		FileTransport({ filename: getFilename("error"), level: "error" }),
+		FileTransport({ filename: getFilename("combined"), level: "debug" }),
 	],
 	exceptionHandlers: [
-		new winston.transports.Console({
-			format: winston.format.colorize({ all: true }),
-		}),
-		new winston.transports.File({
-			filename: getFilename("exceptions"),
-			format: createFormat(true),
-		}),
+		ConsoleTransport(),
+		FileTransport({ filename: getFilename("exceptions") }),
 	],
 	rejectionHandlers: [
-		new winston.transports.Console({
-			format: winston.format.colorize({ all: true }),
-		}),
-		new winston.transports.File({
-			filename: getFilename("rejections"),
-			format: createFormat(true),
-		}),
+		ConsoleTransport(),
+		FileTransport({ filename: getFilename("rejections") }),
 	],
 });
 
