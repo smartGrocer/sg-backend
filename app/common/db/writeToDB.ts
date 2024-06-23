@@ -4,6 +4,7 @@ import { IProductProps } from "../types/common/product";
 import Store from "./schema/store";
 import Product from "./schema/product";
 import Price from "./schema/price";
+import logger from "../logging/logger";
 
 interface IWriteStoreToDbReturn {
 	message: string;
@@ -46,15 +47,21 @@ export const writeStoreToDb = async (
 		}
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { upsertedCount, modifiedCount } = insertedStores;
-		console.log(
-			`Stores written to db: ${stores.length} upserted: ${upsertedCount} modified: ${modifiedCount}`
-		);
+
+		logger.info({
+			message: `Stores written to db: ${stores.length} upserted: ${upsertedCount} modified: ${modifiedCount}`,
+			service: "scrapper",
+		});
 		return {
 			message: "Stores written to db",
 			count: stores.length,
 		};
 	} catch (e) {
-		console.error("Error writing store to db", e);
+		logger.error({
+			message: "Error writing store to db",
+			error: e,
+			service: "scrapper",
+		});
 		return {
 			message: "Error writing store to db",
 			count: 0,
@@ -118,7 +125,11 @@ export const writeToDb = async (
 			modifiedCount: modifiedCount || 0,
 		};
 	} catch (error) {
-		console.error("Error writing products to db", error);
+		logger.error({
+			message: "Error writing products to db",
+			error,
+			service: "scrapper",
+		});
 		return {
 			message: "Error writing products to db",
 			count: 0,
@@ -192,7 +203,11 @@ const addPricesToDb = async (
 			modifiedCount: modifiedCount || 0,
 		};
 	} catch (error) {
-		console.error("Error writing product prices to db", error);
+		logger.error({
+			message: "Error writing product prices to db",
+			error,
+			service: "scrapper",
+		});
 		return {
 			message: "Error writing product prices to db",
 			count: 0,

@@ -4,9 +4,13 @@ import { LoblawsChainName } from "../types/loblaws/loblaws";
 import scrapeLoblaws from "../../crawler/fetch/crawl/loblaws/scrapeLoblaws";
 import { MetroChain } from "../types/metro/metro";
 import scrapeMetro from "../../crawler/fetch/crawl/metro/scrapeMetro";
+import logger from "../logging/logger";
 
 const scheduleCron = (): void => {
-	console.log("Starting cron job");
+	logger.info({
+		message: "Starting cron job",
+		service: "cron",
+	});
 
 	const pastRunners: string[] = [];
 
@@ -34,7 +38,10 @@ const scheduleCron = (): void => {
 			// if all runners have been run, reset pastRunners
 			for await (const runner of randomRunners) {
 				if (!pastRunners.includes(runner)) {
-					console.log(`Running ${runner}`);
+					logger.info({
+						message: `Running cron job for ${runner}`,
+						service: "cron",
+					});
 					pastRunners.push(runner);
 
 					// if runner was in LoblawsChainName
@@ -56,7 +63,10 @@ const scheduleCron = (): void => {
 
 					break;
 				} else if (pastRunners.length === runners.length) {
-					console.log("Resetting Runners");
+					logger.info({
+						message: "Resetting Runners",
+						service: "cron",
+					});
 					pastRunners.length = 0;
 					break;
 				}

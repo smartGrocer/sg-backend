@@ -1,4 +1,5 @@
 import Store from "../../../../common/db/schema/store";
+import logger from "../../../../common/logging/logger";
 import { IAllStoreChains } from "../../../../common/types/common/store";
 
 const pickStore = async (
@@ -22,7 +23,11 @@ const pickStore = async (
 
 		return store;
 	} catch (e) {
-		console.error(e);
+		logger.error({
+			message: `Error picking store ${chainName}`,
+			error: e,
+			service: "crawler",
+		});
 		return e as Error;
 	}
 };

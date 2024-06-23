@@ -5,18 +5,16 @@ import cors from "cors";
 import getSecret from "./common/helpers/getSecret";
 import cronAddDescMetro from "./common/cron/cronAddDescMetro";
 import scheduleCron from "./common/cron/cron";
+import apiLogger from "./common/helpers/apiLogger";
+import routes from "./crawler/routes/routes";
+import connectToRedis from "./common/cache/redis/connectRedis";
+import connectDB from "./common/db/connectDB";
+import logger from "./common/logging/logger";
+
+require("newrelic");
 
 // For env File
 dotenv.config();
-
-// eslint-disable-next-line import/first
-import logger from "./common/helpers/logger";
-// eslint-disable-next-line import/first, import/no-cycle
-import routes from "./crawler/routes/routes";
-// eslint-disable-next-line import/first
-import connectToRedis from "./common/cache/redis/connentRedis";
-// eslint-disable-next-line import/first
-import connectDB from "./common/db/connectDB";
 
 // eslint-disable-next-line import/no-mutable-exports
 let redis: Redis;
@@ -27,7 +25,7 @@ const port = getSecret("PORT") || 7000;
 // body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(logger);
+app.use(apiLogger);
 
 // cors middleware
 app.use(
@@ -72,22 +70,50 @@ const startServer = async (): Promise<void> => {
 
 		await connectDB();
 
-		return new Promise<void>((resolve) => {
-			app.listen(port, () => {
-				console.log(
-					`Crawler-server running on ${
+		await new Promise<void>((resolve, reject) => {
+			const server = app.listen(port, () => {
+				logger.info({
+					message: `Crawler-server running on ${
 						process.env.NODE_ENV === "production"
 							? port
 							: `http://localhost:${port}`
-					} `
-				);
+					}`,
+					service: "crawler-server",
+				});
+
 				resolve();
+			});
+
+			server.on("error", (error) => {
+				reject(error);
 			});
 		});
 	} catch (error) {
-		console.error(error);
-		process.exit(1);
-		return Promise.reject();
+		logger.error({
+			message: "Error starting server - 1",
+			error: error?.toString() ?? "Unknown error",
+			service: "crawler-server",
+		});
+
+		logger.on("error", (err) => {
+			// eslint-disable-next-line no-console
+			console.error("Logger error:", err);
+		});
+
+		logger.on("finish", () => {
+			// eslint-disable-next-line no-console
+			console.error("Logger finished. Exiting...");
+			// winston doesnt seem to properly flush the logs before the process exits
+			logger.error({
+				message: "Exiting...",
+				service: "crawler-server",
+			});
+			setTimeout(() => {
+				process.exit(1);
+			}, 2000);
+		});
+
+		logger.end();
 	}
 };
 

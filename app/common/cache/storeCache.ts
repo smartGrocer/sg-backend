@@ -1,4 +1,5 @@
 import getSecret from "../helpers/getSecret";
+import logger from "../logging/logger";
 import { getLocalCachedData, saveToLocalCache } from "./localCache/localCache";
 // eslint-disable-next-line import/no-cycle
 import { getRedisCache, saveToRedisCache } from "./redis/redisCache";
@@ -31,7 +32,10 @@ export const getCachedData = async ({
 		}
 	}
 
-	console.log(`CACHE MISS: ${key}`);
+	logger.verbose({
+		message: `CACHE MISS: ${key}`,
+		service: "cache",
+	});
 	return null;
 };
 

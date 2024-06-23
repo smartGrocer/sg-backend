@@ -1,11 +1,15 @@
 // eslint-disable-next-line import/no-cycle
 import { redis } from "../../../index";
+import logger from "../../logging/logger";
 
 export const getRedisCache = async (key: string) => {
 	const response = (await redis.get(key)) || null;
 
 	if (response) {
-		console.log(`CACHE HIT:Redis: ${key}`);
+		logger.verbose({
+			message: `CACHE HIT:Redis: ${key}`,
+			service: "cache",
+		});
 		return JSON.parse(response.toString());
 	}
 	return null;
@@ -16,7 +20,10 @@ export const saveToRedisCache = async (
 	data: unknown,
 	ttl?: number
 ) => {
-	console.log(`CACHE SET:Redis: ${key}`);
+	logger.verbose({
+		message: `CACHE SET:Redis: ${key}`,
+		service: "cache",
+	});
 	return redis.set(
 		key,
 		JSON.stringify(data),

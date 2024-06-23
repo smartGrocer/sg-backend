@@ -9,6 +9,7 @@ import cleanAndExtractMetroData from "../../search/metro/cleanAndExtractMetroDat
 import sleep from "../../../../common/helpers/sleep";
 import { writeToDb } from "../../../../common/db/writeToDB";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import logger from "../../../../common/logging/logger";
 
 interface IScrapeMetroArgs {
 	store_num: string;
@@ -28,7 +29,10 @@ const scrapeStore = async ({
 	chainName,
 }: IScrapeMetroArgs): Promise<IProductProps[] | Error> => {
 	try {
-		console.log({ scraping: `${chainName}` });
+		logger.info({
+			message: `Scraping ${chainName}`,
+			service: "scrapper",
+		});
 		const url = urlPage({ chainName, page: 1 });
 
 		const AllProducts: IProductProps[] = [];
@@ -62,9 +66,11 @@ const scrapeStore = async ({
 			modifiedCount: modifiedCountInitial,
 		} = await writeToDb(data);
 
-		console.log(
-			`Scraped ${chainName} pg 1 | Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products`
-		);
+		logger.info({
+			message: `Scraped ${chainName} pg 1 | Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products`,
+			service: "scrapper",
+		});
+
 		await sleep({ min: 20, max: 35 });
 		if (page_results > 1) {
 			for await (const page of Array.from({
@@ -105,11 +111,13 @@ const scrapeStore = async ({
 				const { upsertedCount, modifiedCount } =
 					await writeToDb(data_loop);
 				const endTime = new Date().getTime();
-				console.log(
-					`Scraped ${chainName} pg ${page}| Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
+
+				logger.info({
+					message: `Scraped ${chainName} pg ${page}/${page_results} | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
 						(endTime - time_start) / 1000
-					}s`
-				);
+					}s`,
+					service: "scrapper",
+				});
 
 				if (page_results_loop === 0) {
 					break;
@@ -121,7 +129,11 @@ const scrapeStore = async ({
 
 		return AllProducts;
 	} catch (e) {
-		console.error(e);
+		logger.error({
+			message: `Error scraping ${chainName}`,
+			error: e,
+			service: "scrapper",
+		});
 		return e as Error;
 	}
 };
@@ -144,7 +156,11 @@ const scrapeMetro = async (
 
 		return products;
 	} catch (e) {
-		console.error(e);
+		logger.error({
+			message: `Error scraping ${chainName}`,
+			error: e,
+			service: "scrapper",
+		});
 		return e as Error;
 	}
 };

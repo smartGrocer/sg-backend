@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+// For env File
+dotenv.config();
 export type SecretType =
 	| "NODE_ENV"
 	| "PORT"

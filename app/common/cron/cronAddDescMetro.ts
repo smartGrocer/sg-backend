@@ -2,15 +2,22 @@ import { CronJob } from "cron";
 import scrapeProductMetro from "../../crawler/fetch/crawl/metro/scrapeProductMetro";
 import getSecret from "../helpers/getSecret";
 import { MetroChain } from "../types/metro/metro";
+import logger from "../logging/logger";
 
 const cronAddDescMetro = async (): Promise<void> => {
 	if (getSecret("RUN_METRO_DESC_CRON") === "true") {
-		console.log("Starting cron job: cronAddDescMetro");
+		logger.info({
+			message: "Starting cron job: cronAddDescMetro",
+			service: "cron",
+		});
 
 		const runners = ["metro", "foodbasics"];
 
 		for await (const runner of runners) {
-			console.log(`Running ${runner}`);
+			logger.info({
+				message: `Running cron job: cronAddDescMetro for ${runner}`,
+				service: "cron",
+			});
 			await scrapeProductMetro({
 				chainName: runner as MetroChain,
 			});
@@ -21,7 +28,10 @@ const cronAddDescMetro = async (): Promise<void> => {
 			"0 0 0 * * 0",
 			async () => {
 				for await (const runner of runners) {
-					console.log(`Running ${runner}`);
+					logger.info({
+						message: `Running cron job: cronAddDescMetro for ${runner}`,
+						service: "cron",
+					});
 					await scrapeProductMetro({
 						chainName: runner as MetroChain,
 					});

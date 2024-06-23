@@ -1,3 +1,5 @@
+import logger from "../logging/logger";
+
 //  sleep for min to max seconds
 const sleep = ({
 	min = 30,
@@ -10,7 +12,11 @@ const sleep = ({
 		const waitFor = Math.floor(
 			(Math.floor(Math.random() * (max - min)) + min) * 1000
 		);
-		console.log(`Waiting for ${waitFor / 1000}s`);
+
+		logger.verbose({
+			message: `Waiting for ${waitFor / 1000}s`,
+			service: "sleep",
+		});
 		setTimeout(resolve, waitFor);
 	});
 };

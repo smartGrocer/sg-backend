@@ -6,6 +6,7 @@
 
 import Product from "../../../../common/db/schema/product";
 import sleep from "../../../../common/helpers/sleep";
+import logger from "../../../../common/logging/logger";
 import { IProductData } from "../../../../common/types/common/product";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import getProduct from "../../product/metro/getProduct";
@@ -22,7 +23,12 @@ const scrapeAllProductsMetro = async ({
 	const product = await findProductMetro({ chainName });
 
 	if (!product) {
-		console.log(`No products found for ${chainName}`);
+		logger.info({
+			message: `No products found for ${chainName} | Time: ${
+				(new Date().getTime() - start_time) / 1000
+			} s`,
+			service: "scrapper",
+		});
 		return;
 	}
 
@@ -35,7 +41,13 @@ const scrapeAllProductsMetro = async ({
 	});
 
 	if (productData instanceof Error) {
-		console.log(`Error fetching product`, productData);
+		logger.error({
+			message: `Error fetching product ${product.product_num} at ${product.chain_brand} | Time: ${
+				(new Date().getTime() - start_time) / 1000
+			} s`,
+			error: productData,
+		});
+
 		// eslint-disable-next-line consistent-return
 		await scrapeAllProductsMetro({ chainName }); // Retry with next product
 		return;
@@ -67,11 +79,12 @@ const scrapeAllProductsMetro = async ({
 		}
 	);
 
-	console.log(
-		`Product description updated for ${product.product_num} at ${product.chain_brand} | Time: ${
+	logger.info({
+		message: `Product description updated for ${product.product_num} at ${product.chain_brand} | Time: ${
 			(new Date().getTime() - start_time) / 1000
-		} s`
-	);
+		} s`,
+		service: "scrapper",
+	});
 	// Continue scraping for more products
 	await scrapeAllProductsMetro({ chainName });
 };
