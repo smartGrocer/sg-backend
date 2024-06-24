@@ -3,9 +3,9 @@ import getSecret from "../helpers/getSecret";
 
 const logFormat = winston.format.printf(
 	({ timestamp, level, message, service, error }) => {
-		return `${timestamp} [${service}] ${level}: ${message} ${
-			error ? `: ${error.stack}` : ""
-		}`;
+		return `${timestamp} ${
+			service ? `[${service}]` : ""
+		} ${level}: ${message} ${error ? `: ${error.stack}` : ""}`;
 	}
 );
 
