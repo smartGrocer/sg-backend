@@ -2,6 +2,7 @@ version: "3.8"
 services:
     node-app:
         container_name: node-service
+        hostname: node-service-prod
         image: ghcr.io/smartgrocer/sg-backend:latest
         restart: unless-stopped
         env_file:
