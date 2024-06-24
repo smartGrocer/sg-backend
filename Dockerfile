@@ -46,4 +46,4 @@ COPY /app/data ./app/data
 
 EXPOSE 8000
 
-CMD ["node", "index.js"]
+CMD ["node", "-r", "newrelic", "index.js"]

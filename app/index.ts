@@ -11,8 +11,6 @@ import connectToRedis from "./common/cache/redis/connectRedis";
 import connectDB from "./common/db/connectDB";
 import logger from "./common/logging/logger";
 
-require("newrelic");
-
 // For env File
 dotenv.config();
 
