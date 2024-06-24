@@ -41,7 +41,7 @@
 		"ioredis": "^5.3.2",
 		"mongoose": "^8.3.3",
 		"newrelic": "^11.16.0",
-		"user-agents": "^1.1.103",
+		"user-agents": "^1.1.244",
 		"winston": "^3.13.0"
 	},
 	"devDependencies": {
