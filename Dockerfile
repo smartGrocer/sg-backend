@@ -29,8 +29,8 @@ FROM base as final
 
 ENV NODE_ENV production
 
-RUN mkdir ./logs
-RUN chmod -R 777 ./logs
+# This is to allow permissions for creating /logs and newrelic_agent.log files
+RUN chown -R node:node .
 
 USER node
 
