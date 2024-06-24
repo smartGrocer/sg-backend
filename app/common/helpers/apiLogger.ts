@@ -15,11 +15,10 @@ const apiLogger = (req: Request, res: Response, next: NextFunction): void => {
 				}' : '${new Date().toLocaleString("en-US", {
 					timeZone: "America/New_York",
 				})}' from ${
-					req.ip ||
-					req.socket.remoteAddress ||
 					req.headers["x-forwarded-for"] ||
+					req.headers["x-real-ip"] ||
 					req.ip ||
-					null
+					req.socket.remoteAddress
 				} | ${elapsed}ms | ${res.get("Content-Length") || 0} b`,
 				service: "http",
 			});
