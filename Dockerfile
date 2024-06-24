@@ -29,6 +29,9 @@ FROM base as final
 
 ENV NODE_ENV production
 
+RUN mkdir ./logs
+RUN chmod -R 777 ./logs
+
 USER node
 
 COPY package.json .
