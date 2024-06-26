@@ -1,16 +1,14 @@
 const ProductCard = () => {
 	return (
-		<div className="card card-side card-compact bg-base-100 shadow-xl w-80 mx-auto  ">
+		<div className="flex flex-col gap-2 p-2 w-40 items-center bg-slate-100 rounded-lg ">
 			<figure>
 				<img
-					src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
+					src="https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 					alt="Movie"
+					className="w-full mx-auto"
 				/>
 			</figure>
-			<div className="card-body">
-				<h2 className="card-title">New movie is released!</h2>
-				<p>Click the button to watch on Jetflix app.</p>
-			</div>
+			<h3 className="text-slate-800 font-bold">Banana</h3>
 		</div>
 	);
 };
