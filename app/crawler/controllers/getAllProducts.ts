@@ -33,16 +33,20 @@ const getAllProducts = async (req: Request, res: Response) => {
 			});
 		}
 
-		const cleanedProducts = products.map(
-			(product) => cleanMongoDoc(product) as IProductData
+		const cleanedProducts = products.map((product) =>
+			cleanMongoDoc(product)
 		) as IProductData[];
+
+		// get the total number of products
+		const totalProducts = await Product.countDocuments();
 
 		return res.status(200).json({
 			pagination: {
-				totalResults: products.length,
+				totalResults: totalProducts,
+				count: cleanedProducts.length,
 				pageNumber: page,
 				pageSize: perPage,
-				totalPages: Math.ceil(products.length / perPage),
+				totalPages: Math.ceil(totalProducts / perPage),
 			},
 			products: cleanedProducts,
 		});

@@ -9,8 +9,12 @@ const cleanMongoDoc = (doc: Document): Partial<Document> => {
 	/**
 	 * Remove _id and __v from the document
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { _id, __v, ...cleanedDoc } = doc.toObject();
+
+	const cleanedDoc = doc.toObject();
+	// eslint-disable-next-line no-underscore-dangle
+	delete cleanedDoc._id;
+	// eslint-disable-next-line no-underscore-dangle
+	delete cleanedDoc.__v;
 	return cleanedDoc;
 };
 
