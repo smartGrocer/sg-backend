@@ -7,6 +7,7 @@ const fallBackRoute = async (req: Request, res: Response) => {
 		availableRoutes: {
 			stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
 			scrape: "/scrape?chain=chain_name",
+			all_products: "/products/all?per_page=10&page=1",
 		},
 	});
 };
