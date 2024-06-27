@@ -11,6 +11,7 @@ const fallBackRoute = async (req: Request, res: Response) => {
 			product_lookup:
 				"/product/lookup?product_num=1234&url=www.example.com/product/id/1234&chain=chain_name",
 			scrape: "/scrape?chain=chain_name",
+			all_products: "/products/all?per_page=10&page=1",
 		},
 	});
 };
