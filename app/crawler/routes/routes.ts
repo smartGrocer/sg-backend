@@ -2,18 +2,12 @@ import express from "express";
 import getStores from "../controllers/getStores";
 import fallBackRoute from "../controllers/fallbackRoute";
 import scrapeStores from "../controllers/scrapeStore";
-import getProductLookup from "../controllers/getProductLookup";
-import getProductSearch from "../controllers/getProductSearch";
 import getAllProducts from "../controllers/getAllProducts";
 
 const router = express.Router();
 
 // Routes
 router.get("/stores/:chain_brand?/:chain?", getStores);
-
-router.get("/product/search/:product_search?", getProductSearch);
-
-router.get("/product/lookup", getProductLookup);
 
 router.get("/products/all", getAllProducts);
 

@@ -5,7 +5,7 @@ import {
 } from "../../../../common/types/common/product";
 import { MetroChain } from "../../../../common/types/metro/metro";
 import pickStore from "../common/pickRandomStore";
-import cleanAndExtractMetroData from "../../search/metro/cleanAndExtractMetroData";
+import cleanAndExtractMetroData from "../../../../common/helpers/cleanAndExtractMetroData";
 import sleep from "../../../../common/helpers/sleep";
 import { writeToDb } from "../../../../common/db/writeToDB";
 import { AllStoreChainBrands } from "../../../../common/types/common/store";

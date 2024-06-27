@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
-import parseQuantity from "../../../../common/helpers/parseQuantity";
-import { AllStoreChainBrands } from "../../../../common/types/common/store";
-import { IProductProps } from "../../../../common/types/common/product";
+import parseQuantity from "./parseQuantity";
+import { AllStoreChainBrands } from "../types/common/store";
+import { IProductProps } from "../types/common/product";
 
 interface IExtractMetroDataReturn {
 	products: IProductProps[];
