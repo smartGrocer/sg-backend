@@ -100,13 +100,3 @@ export interface IProductData {
 	// unit_soldby_type: string;
 	// unit_soldby_unit: string;
 }
-
-export interface IAllProductsData {
-	pagination: {
-		totalResults: number;
-		pageNumber: number;
-		pageSize: number;
-		totalPages: number;
-	};
-	products: IProductData[];
-}

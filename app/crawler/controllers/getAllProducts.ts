@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
 import logger from "../../common/logging/logger";
 import Product from "../../common/db/schema/product";
-import { IAllProductsData } from "../../common/types/common/product";
+import cleanMongoDoc from "../../common/helpers/cleanMongoDoc";
+import { IProductData } from "../../common/types/common/product";
 
-const getAllProducts = async (
-	req: Request,
-	res: Response
-): Promise<Response<IAllProductsData> | Response<string>> => {
+const getAllProducts = async (req: Request, res: Response) => {
 	try {
 		const perPage = Number(req.query.per_page) || 10;
 		const page = Number(req.query.page) || 1;
@@ -15,7 +13,6 @@ const getAllProducts = async (
 			return res.status(400).json({
 				message:
 					"Invalid per_page or page query parameter. Please provide a valid number greater than 0.",
-				code: 400,
 			});
 		}
 
@@ -23,13 +20,22 @@ const getAllProducts = async (
 			return res.status(400).json({
 				message:
 					"Invalid per_page query parameter. Please provide a valid number less than or equal to 100.",
-				code: 400,
 			});
 		}
 
 		const products = await Product.find()
 			.skip(perPage * page - perPage)
 			.limit(perPage);
+
+		if (products.length === 0) {
+			return res.status(404).json({
+				message: "No products found",
+			});
+		}
+
+		const cleanedProducts = products.map(
+			(product) => cleanMongoDoc(product) as IProductData
+		) as IProductData[];
 
 		return res.status(200).json({
 			pagination: {
@@ -38,11 +44,13 @@ const getAllProducts = async (
 				pageSize: perPage,
 				totalPages: Math.ceil(products.length / perPage),
 			},
-			products,
+			products: cleanedProducts,
 		});
 	} catch (error) {
 		logger.error(error);
-		return res.status(500).send("Internal Server Error");
+		return res.status(500).json({
+			message: "An error occurred while fetching products",
+		});
 	}
 };
 
