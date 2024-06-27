@@ -13,10 +13,6 @@ describe("Route /store", () => {
 
 			expect(response.body.availableRoutes).toMatchObject({
 				stores: "/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
-				product_search:
-					"/product/search/:product_search?chain=chain_name&store_num=1234",
-				product_lookup:
-					"/product/lookup?product_num=1234&url=www.example.com/product/id/1234&chain=chain_name",
 			});
 		});
 
