@@ -1,0 +1,137 @@
+import { Request, Response } from "express";
+import filterStoresByLocation from "../../common/helpers/filterStoresByLocation";
+import { getCoordinatesFromPostal } from "../../common/helpers/getCoordinatesFromPostal";
+import { validatePostalCode } from "../../common/helpers/validatePostalCode";
+import {
+	AllStoreChainBrands,
+	IStoreProps,
+} from "../../common/types/common/store";
+import fetchLoblawsStores from "../fetch/stores/loblaws/fetchLoblawsStores";
+import fetchMetroStores from "../fetch/stores/metro/fetchMetroStores";
+import fetchWalmartStores from "../fetch/stores/walmart/fetchWalmartStores";
+
+const getStores = async (req: Request, res: Response) => {
+	const { params } = req;
+	const chain_brand = params.chain_brand as AllStoreChainBrands;
+	const showAllStores = chain_brand === "all";
+
+	const postalCode = (req.query.postal_code || "m9b6c2") as string;
+	const validPostalCode = validatePostalCode(postalCode);
+
+	const distance = Number(req.query.distance as string) || 5000;
+
+	const allStores: IStoreProps[] = [];
+
+	// if chain brand is not provided or is invalid
+	if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
+		return res.status(400).json({
+			message: `Invalid chain brand, please provide a valid chain brand.`,
+			availableOptions: Object.values(AllStoreChainBrands),
+		});
+	}
+
+	if (!validPostalCode) {
+		return res.status(400).json({
+			message:
+				"Invalid postal code. Please provide a valid postal code as a query parameter in the format: ?postal_code=a1a1a1",
+			data: `postal_code=${!postalCode ? "''" : postalCode} might be invalid. Please provide a valid postal code.`,
+		});
+	}
+	const userCoordinates = await getCoordinatesFromPostal(postalCode);
+
+	if (!userCoordinates) {
+		return res.status(400).json({
+			message: `Invalid postal code or postal code not found. Please provide a valid postal code.`,
+			data: `postal_code=${!postalCode ? "''" : postalCode} might be invalid or could not be found. Please provide a valid postal code.`,
+		});
+	}
+
+	// if the chain brand is loblaws
+	if (chain_brand === AllStoreChainBrands.loblaws || showAllStores) {
+		const { message, count, data, code, availableOptions } =
+			await fetchLoblawsStores({
+				req,
+				res,
+				validPostalCode,
+				userCoordinates,
+				distance,
+				showAllStores,
+			});
+
+		if (!showAllStores) {
+			return res.status(code).json({
+				message,
+				count,
+				data,
+				availableOptions,
+			});
+		}
+
+		allStores.push(...(data || []));
+	}
+
+	// if the chain brand is metro or foodbasics
+	if (
+		chain_brand === AllStoreChainBrands.metro ||
+		chain_brand === AllStoreChainBrands.foodbasics ||
+		showAllStores
+	) {
+		const { message, count, data, code, availableOptions } =
+			await fetchMetroStores({
+				req,
+				res,
+				validPostalCode,
+				userCoordinates,
+				distance,
+				showAllStores,
+			});
+
+		if (!showAllStores) {
+			return res.status(code).json({
+				message,
+				count,
+				data,
+				availableOptions,
+			});
+		}
+
+		allStores.push(...(data || []));
+	}
+
+	if (chain_brand === AllStoreChainBrands.walmart || showAllStores) {
+		const { message, count, data, code, availableOptions } =
+			await fetchWalmartStores({
+				req,
+				res,
+				validPostalCode,
+				userCoordinates,
+				distance,
+				showAllStores,
+			});
+
+		if (!showAllStores) {
+			return res.status(code).json({
+				message,
+				count,
+				data,
+				availableOptions,
+			});
+		}
+
+		allStores.push(...(data || []));
+	}
+
+	const filteredAllStores = filterStoresByLocation({
+		stores: allStores,
+		distance,
+		userCoordinates,
+	});
+
+	return res.status(200).json({
+		message: `Stores fetched successfully for all stores.`,
+		count: filteredAllStores.length,
+		data: filteredAllStores,
+	});
+};
+
+export default getStores;
