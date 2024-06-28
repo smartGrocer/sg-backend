@@ -34,7 +34,10 @@ const getAllProducts = async (req: Request, res: Response) => {
 		}
 
 		const cleanedProducts = products.map((product) =>
-			cleanMongoDoc(product)
+			cleanMongoDoc({
+				doc: product,
+				keysToRemove: ["_id", "__v"],
+			})
 		) as IProductData[];
 
 		// get the total number of products

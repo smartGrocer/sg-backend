@@ -100,3 +100,17 @@ export interface IProductData {
 	// unit_soldby_type: string;
 	// unit_soldby_unit: string;
 }
+
+export interface IPriceHistoryArray {
+	date: string;
+	amount: number;
+}
+export interface IPriceHistory {
+	product_num: string;
+	store_num: string;
+	history: IPriceHistoryArray[];
+}
+
+export interface IProductDataWithPriceHistory extends IProductData {
+	priceHistory: IPriceHistory[];
+}

@@ -1,20 +1,30 @@
-import { Document } from "mongoose";
-
 /**
  * Clean a MongoDB document by removing _id and __v
  * @param doc - MongoDB document
+ * @param keysToRemove - Keys to remove from the document. Type: string[]
  * @returns - Cleaned document
  */
-const cleanMongoDoc = (doc: Document): Partial<Document> => {
-	/**
-	 * Remove _id and __v from the document
-	 */
 
-	const cleanedDoc = doc.toObject();
-	// eslint-disable-next-line no-underscore-dangle
-	delete cleanedDoc._id;
-	// eslint-disable-next-line no-underscore-dangle
-	delete cleanedDoc.__v;
+//  doc is an object that has keys
+interface IDoc {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[key: string]: any;
+}
+
+const cleanMongoDoc = ({
+	doc,
+	keysToRemove,
+}: {
+	doc: IDoc;
+	keysToRemove: string[];
+}): IDoc => {
+	// const cleanedDoc = doc.toObject();
+	const cleanedDoc = { ...doc };
+
+	keysToRemove.forEach((key) => {
+		delete cleanedDoc[key];
+	});
+
 	return cleanedDoc;
 };
 
