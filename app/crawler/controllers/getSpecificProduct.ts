@@ -62,6 +62,57 @@ const getProductWithPrices = async (productId: string) => {
 				as: "priceHistory",
 			},
 		},
+		{
+			$unwind: {
+				path: "$priceHistory",
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+		{
+			$lookup: {
+				from: "stores", // The collection name in MongoDB
+				localField: "priceHistory.store_num",
+				foreignField: "store_num",
+				as: "priceHistory.store",
+			},
+		},
+		{
+			$unwind: {
+				path: "$priceHistory.store",
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+		{
+			$group: {
+				_id: "$_id",
+				product_num: { $first: "$product_num" },
+				chain_brand: { $first: "$chain_brand" },
+				product_brand: { $first: "$product_brand" },
+				product_name: { $first: "$product_name" },
+				product_link: { $first: "$product_link" },
+				product_image: { $first: "$product_image" },
+				description: { $first: "$description" },
+				createdAt: { $first: "$createdAt" },
+				updatedAt: { $first: "$updatedAt" },
+				priceHistory: {
+					$push: {
+						_id: "$priceHistory._id",
+						product_num: "$priceHistory.product_num",
+						store_num: "$priceHistory.store_num",
+						history: "$priceHistory.history",
+						store: {
+							chain_name: "$priceHistory.store.chain_name",
+							store_num: "$priceHistory.store.store_num",
+							formatted_address:
+								"$priceHistory.store.formatted_address",
+							latitude: "$priceHistory.store.latitude",
+							longitude: "$priceHistory.store.longitude",
+							store_name: "$priceHistory.store.store_name",
+						},
+					},
+				},
+			},
+		},
 	]);
 
 	return productWithPrices;
