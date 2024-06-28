@@ -7,18 +7,31 @@ import {
 	IProductDataWithPriceHistory,
 } from "../../common/types/common/product";
 import cleanMongoDoc from "../../common/helpers/cleanMongoDoc";
+import morphPriceHistoryArray from "../../common/helpers/morphPriceHistoryArray";
 
 const cleanProductWithPrices = (
 	productWithPrice: IProductDataWithPriceHistory[]
-): IProductDataWithPriceHistory => {
+) => {
 	const { priceHistory, ...product } =
 		productWithPrice[0] as IProductDataWithPriceHistory;
 
 	const cleanedPrices = priceHistory.map((doc) => {
-		return cleanMongoDoc({
+		const cleanedPriceDoc = cleanMongoDoc({
 			doc,
 			keysToRemove: ["_id", "__v"],
 		}) as IPriceHistory;
+
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { history, product_num, ...rest } = cleanedPriceDoc;
+
+		const formattedPriceArray = morphPriceHistoryArray(history);
+
+		const formattedPriceHistory = {
+			...rest,
+			history: formattedPriceArray,
+		};
+
+		return formattedPriceHistory;
 	});
 
 	const cleanedProduct = cleanMongoDoc({
@@ -29,7 +42,7 @@ const cleanProductWithPrices = (
 	const productWithCleanedPrices = {
 		...cleanedProduct,
 		priceHistory: cleanedPrices,
-	} as IProductDataWithPriceHistory;
+	};
 
 	return productWithCleanedPrices;
 };

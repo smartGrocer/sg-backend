@@ -111,6 +111,16 @@ export interface IPriceHistory {
 	history: IPriceHistoryArray[];
 }
 
+// export interface IFormattedPriceHistoryArray {
+// 	[date: string]: number;
+// }
+
+// export interface IFormattedPriceHistory {
+// 	product_num: string;
+// 	store_num: string;
+// 	history: IFormattedPriceHistoryArray;
+// }
+
 export interface IProductDataWithPriceHistory extends IProductData {
 	priceHistory: IPriceHistory[];
 }
