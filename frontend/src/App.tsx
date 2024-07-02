@@ -11,7 +11,7 @@ function App() {
 		<>
 			<SearchBar />
 			<CategoryList />
-			<h2 className="mb-2 ">Products</h2>
+			<h2 className="mb-2 text-center uppercase">{"{CategoryName}"}</h2>
 			<ProductList />
 		</>
 	);
