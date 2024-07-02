@@ -52,7 +52,7 @@
 		"@types/supertest": "^6.0.2",
 		"@types/user-agents": "^1.0.4",
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
-		"@typescript-eslint/parser": "^6.21.0",
+		"@typescript-eslint/parser": "^7.15.0",
 		"csvtojson": "^2.0.10",
 		"eslint": "^8.57.0",
 		"eslint-config-airbnb-base": "^15.0.0",
