@@ -3,6 +3,7 @@ import getStores from "../controllers/getStores";
 import fallBackRoute from "../controllers/fallbackRoute";
 import scrapeStores from "../controllers/scrapeStore";
 import getAllProducts from "../controllers/getAllProducts";
+import getSpecificProduct from "../controllers/getSpecificProduct";
 
 const router = express.Router();
 
@@ -10,6 +11,8 @@ const router = express.Router();
 router.get("/stores/:chain_brand?/:chain?", getStores);
 
 router.get("/products/all", getAllProducts);
+
+router.get("/product/:id", getSpecificProduct);
 
 router.get("/scrape", scrapeStores);
 

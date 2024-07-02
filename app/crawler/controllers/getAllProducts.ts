@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import logger from "../../common/logging/logger";
 import Product from "../../common/db/schema/product";
-import cleanMongoDoc from "../../common/helpers/cleanMongoDoc";
 import { IProductData } from "../../common/types/common/product";
 
 const getAllProducts = async (req: Request, res: Response) => {
@@ -23,9 +22,17 @@ const getAllProducts = async (req: Request, res: Response) => {
 			});
 		}
 
-		const products = await Product.find()
-			.skip(perPage * page - perPage)
-			.limit(perPage);
+		const products = (await Product.aggregate([
+			{ $skip: perPage * (page - 1) },
+			{ $limit: perPage },
+			{
+				// remove _id and __v from the response
+				$project: {
+					_id: 0,
+					__v: 0,
+				},
+			},
+		])) as IProductData[];
 
 		if (products.length === 0) {
 			return res.status(404).json({
@@ -33,22 +40,18 @@ const getAllProducts = async (req: Request, res: Response) => {
 			});
 		}
 
-		const cleanedProducts = products.map((product) =>
-			cleanMongoDoc(product)
-		) as IProductData[];
-
 		// get the total number of products
 		const totalProducts = await Product.countDocuments();
 
 		return res.status(200).json({
 			pagination: {
 				totalResults: totalProducts,
-				count: cleanedProducts.length,
+				count: products.length,
 				pageNumber: page,
 				pageSize: perPage,
 				totalPages: Math.ceil(totalProducts / perPage),
 			},
-			products: cleanedProducts,
+			products,
 		});
 	} catch (error) {
 		logger.error(error);
