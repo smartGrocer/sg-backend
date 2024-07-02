@@ -26,6 +26,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 			{ $skip: perPage * (page - 1) },
 			{ $limit: perPage },
 			{
+				// remove _id and __v from the response
 				$project: {
 					_id: 0,
 					__v: 0,
