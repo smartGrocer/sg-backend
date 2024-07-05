@@ -40,6 +40,13 @@ const getAllProducts = async (req: Request, res: Response) => {
 			});
 		}
 
+		const products_with_cat_link = products.map((product) => {
+			return {
+				...product,
+				cat_link: `http://localhost:8000/api/catogorize/${product.product_num}`,
+			};
+		});
+
 		// get the total number of products
 		const totalProducts = await Product.countDocuments();
 
@@ -51,7 +58,8 @@ const getAllProducts = async (req: Request, res: Response) => {
 				pageSize: perPage,
 				totalPages: Math.ceil(totalProducts / perPage),
 			},
-			products,
+
+			products: products_with_cat_link,
 		});
 	} catch (error) {
 		logger.error(error);
