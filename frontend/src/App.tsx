@@ -1,6 +1,3 @@
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "/vite.svg";
-
 import "./App.css";
 import CategoryList from "./components/CategoryList";
 import ProductList from "./components/ProductList";

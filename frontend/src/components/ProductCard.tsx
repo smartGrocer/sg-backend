@@ -1,12 +1,11 @@
-type ProductCardProps = {
-	children?: JSX.Element;
+interface ProductCardProps {
 	productName: string;
 	imgUrl: string;
-};
+}
 
 const ProductCard = ({ productName, imgUrl }: ProductCardProps) => {
 	return (
-		<div className="flex flex-col gap-2 p-2 w-40 items-center bg-slate-100 rounded-lg ">
+		<div className="flex flex-col gap-2 p-2 w-40 items-center bg-slate-100 rounded-lg">
 			<figure className="rounded-md overflow-hidden">
 				<img
 					src={imgUrl}

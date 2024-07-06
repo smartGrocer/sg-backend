@@ -27,14 +27,13 @@ type Product = {
 	updatedAt: string;
 };
 
-type IProductsResponse = {
+interface IProductsResponse {
 	pagination: Pagination;
 	products: Product[];
-};
+}
 
 const ProductList = () => {
 	const [products, setProducts] = useState<Product[] | null>(null);
-	// const [currentPage, setCurrentPage] = useState(1);
 
 	useEffect(() => {
 		const params = new URLSearchParams(queryParams);
