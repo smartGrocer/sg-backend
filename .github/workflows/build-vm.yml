@@ -25,11 +25,11 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: npm
+          cache-dependency-path: ./backend/package-lock.json
 
       - name: Install Dependencies
         id: npm-ci
         run: npm ci
-        working-directory: ./backend
 
       - name: build
         id: npm-build
