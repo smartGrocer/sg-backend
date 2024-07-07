@@ -1,11 +1,15 @@
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "/vite.svg";
 import "./App.css";
+import CategoryList from "./components/CategoryList";
+import ProductList from "./components/ProductList";
+import SearchBar from "./components/SearchBar";
 
 function App() {
 	return (
 		<>
-			<button className="btn">Daisy Works</button>
+			<SearchBar />
+			<CategoryList />
+			<h2 className="mb-2 text-center uppercase">{"{CategoryName}"}</h2>
+			<ProductList />
 		</>
 	);
 }
