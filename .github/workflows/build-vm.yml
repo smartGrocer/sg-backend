@@ -29,6 +29,7 @@ jobs:
       - name: Install Dependencies
         id: npm-ci
         run: npm ci
+        working-directory: ./backend
 
       - name: build
         id: npm-build
