@@ -19,9 +19,9 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Change Directory
-        id: change-directory
-        run: cd backend
+      # - name: Change Directory
+      #   id: change-directory
+      #   run: cd backend
 
       - name: Setup Node.js
         id: setup-node
