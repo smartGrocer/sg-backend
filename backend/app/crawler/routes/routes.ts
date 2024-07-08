@@ -8,13 +8,13 @@ import getSpecificProduct from "../controllers/getSpecificProduct";
 const router = express.Router();
 
 // Routes
-router.get("/stores/:chain_brand?/:chain?", getStores);
+router.get("/api/stores/:chain_brand?/:chain?", getStores);
 
-router.get("/products/all", getAllProducts);
+router.get("/api/products/all", getAllProducts);
 
-router.get("/product/:id", getSpecificProduct);
+router.get("/api/product/:id", getSpecificProduct);
 
-router.get("/scrape", scrapeStores);
+router.get("/api/scrape", scrapeStores);
 
 router.get("*", fallBackRoute);
 

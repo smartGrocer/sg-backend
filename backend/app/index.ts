@@ -36,7 +36,7 @@ app.use(
 );
 
 // routes
-app.use("/api", routes);
+app.use("/", routes);
 
 app.get("/", (req: Request, res: Response) => {
 	// log with current date and time in EST
