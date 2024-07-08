@@ -6,7 +6,7 @@ import {
 } from "../../../backend/app/common/types/common/product";
 import { VITE_SERVER_URL } from "../common/common";
 
-const PRODUCTS_ENDPOINT = `${VITE_SERVER_URL}/products/all`;
+const PRODUCTS_ENDPOINT = `${VITE_SERVER_URL}/api/products/all`;
 
 const queryParams = {
   per_page: "10",
