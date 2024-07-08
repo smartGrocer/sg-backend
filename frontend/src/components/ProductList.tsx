@@ -18,7 +18,7 @@ const ProductList = () => {
 
     const getData = async () => {
       const ENDPOINT=`${PRODUCTS_ENDPOINT}?${params}`
-      console.log({ENDPOINT})
+      console.log({PRODUCTS_ENDPOINT,ENDPOINT})
       const response = await fetch(ENDPOINT);
 
       const data: IProductsResponse = await response.json();
