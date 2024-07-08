@@ -1,10 +1,7 @@
 import ProductCard from "./ProductCard";
 import { useState, useEffect } from "react";
-import {
-  IProductData,
-  IProductPropsWithPagination,
-} from "../../../backend/app/common/types/common/product";
 import { VITE_SERVER_URL } from "../common/common";
+import { IProductsResponse, Product } from "../common/types/product";
 
 const PRODUCTS_ENDPOINT = `${VITE_SERVER_URL}/api/products/all`;
 
@@ -14,14 +11,14 @@ const queryParams = {
 };
 
 const ProductList = () => {
-  const [products, setProducts] = useState<IProductData[] | null>(null);
+  const [products, setProducts] = useState<Product[] | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(queryParams);
 
     const getData = async () => {
       const response = await fetch(`${PRODUCTS_ENDPOINT}?${params}`);
-      const data: IProductPropsWithPagination = await response.json();
+      const data: IProductsResponse = await response.json();
       console.log(data);
       setProducts(data.results);
     };
