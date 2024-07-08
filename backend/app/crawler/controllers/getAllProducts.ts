@@ -51,7 +51,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 				pageSize: perPage,
 				totalPages: Math.ceil(totalProducts / perPage),
 			},
-			products,
+			results: products,
 		});
 	} catch (error) {
 		logger.error(error);
