@@ -4,12 +4,9 @@ import {
   IProductData,
   IProductPropsWithPagination,
 } from "../../../backend/app/common/types/common/product";
+import { VITE_SERVER_URL } from "../common/common";
 
-const PRODUCTS_ENDPOINT = "https://smartgrocer.nmpereira.com/api/products/all";
-const queryParams = {
-	per_page: "10",
-	page: "1",
-};
+const PRODUCTS_ENDPOINT = `${VITE_SERVER_URL}/products/all`;
 
 const queryParams = {
   per_page: "10",
