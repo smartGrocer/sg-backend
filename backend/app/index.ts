@@ -10,6 +10,7 @@ import routes from "./crawler/routes/routes";
 import connectToRedis from "./common/cache/redis/connectRedis";
 import connectDB from "./common/db/connectDB";
 import logger from "./common/logging/logger";
+import fallBackRoute from "./crawler/controllers/fallbackRoute";
 
 // For env File
 dotenv.config();
@@ -36,7 +37,7 @@ app.use(
 );
 
 // routes
-app.use("/", routes);
+app.use("/api", routes);
 
 app.get("/", (_req: Request, res: Response) => {
 	// log with current date and time in EST
@@ -55,6 +56,8 @@ app.get("/ping", (_req: Request, res: Response) => {
 		message: "pong",
 	});
 });
+
+app.get("*", fallBackRoute);
 
 const startServer = async (): Promise<void> => {
 	try {
