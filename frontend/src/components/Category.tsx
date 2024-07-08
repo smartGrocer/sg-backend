@@ -5,7 +5,7 @@ const Category = () => {
 				className="w-10 rounded-full"
 				src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
 			/>
-			<p className="text-center w-10">Fruits</p>
+			<p className="text-center w-10">Fruit</p>
 		</div>
 	);
 };
