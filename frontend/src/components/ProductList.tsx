@@ -17,7 +17,10 @@ const ProductList = () => {
     const params = new URLSearchParams(queryParams);
 
     const getData = async () => {
-      const response = await fetch(`${PRODUCTS_ENDPOINT}?${params}`);
+      const ENDPOINT=`${PRODUCTS_ENDPOINT}?${params}`
+      console.log({ENDPOINT})
+      const response = await fetch(ENDPOINT);
+
       const data: IProductsResponse = await response.json();
       console.log(data);
       setProducts(data.results);
