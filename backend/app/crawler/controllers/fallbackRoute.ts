@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-const fallBackRoute = async (req: Request, res: Response) => {
+const fallBackRoute = async (_req: Request, res: Response) => {
 	res.json({
 		message:
 			"Welcome to the Crawler Service. Please use one of the available routes",

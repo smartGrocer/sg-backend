@@ -44,7 +44,7 @@ const getProduct = async ({
 		const cleanData = product.replace(/\n|\r|\t/g, "");
 		const $ = cheerio.load(cleanData);
 
-		$(".product-info").each((i, el) => {
+		$(".product-info").each((_i, el) => {
 			const product_id_2 = $(el).attr("data-product-code") || "";
 			const store_id_2 = "all";
 

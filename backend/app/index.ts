@@ -38,7 +38,7 @@ app.use(
 // routes
 app.use("/", routes);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
 	// log with current date and time in EST
 	res.json({
 		message: `crawler-service is up and running as of: ${new Date().toLocaleString(
@@ -50,7 +50,7 @@ app.get("/", (req: Request, res: Response) => {
 	});
 });
 
-app.get("/ping", (req: Request, res: Response) => {
+app.get("/ping", (_req: Request, res: Response) => {
 	res.json({
 		message: "pong",
 	});
