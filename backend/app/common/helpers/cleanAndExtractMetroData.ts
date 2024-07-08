@@ -22,7 +22,7 @@ const cleanAndExtractMetroData = ({
 	const page_results = $(".products-tools").text().trim().split(" ")[0] || 0;
 	$(".searchOnlineResults")
 		.find("div.tile-product")
-		.each((i, el) => {
+		.each((_i, el) => {
 			const product_num = $(el).attr("data-product-code") || "";
 
 			const product_brand =

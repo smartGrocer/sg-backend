@@ -49,7 +49,7 @@ const getMetroStores = async ({
 		// get the ul with the id of mapResults and loop through the li with id fs--box-shop
 		$("#mapResults")
 			.find("li.fs--box-shop")
-			.each((i, el) => {
+			.each((_i, el) => {
 				const storeId = $(el).attr("data-store-id") || ""; // store id
 				const storeName = $(el).attr("data-store-name") || ""; // store name
 				const storeLatitude = $(el).attr("data-store-lat") || ""; // store latitude
