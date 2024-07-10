@@ -5,23 +5,29 @@ ARG NODE_VERSION=20
 
 FROM node:${NODE_VERSION}-bullseye-slim as base
 
-WORKDIR /app
+
+
+
+
+
+WORKDIR /sg-app/backend
 
 FROM base as deps
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+RUN --mount=type=bind,source=backend/package.json,target=package.json \
+    --mount=type=bind,source=backend/package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
 
 FROM deps as build
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+
+RUN --mount=type=bind,source=backend/package.json,target=package.json \
+    --mount=type=bind,source=backend/package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci
 
-COPY . .
+COPY ./backend .
 
 RUN npm run build
 
@@ -34,11 +40,11 @@ RUN chown -R node:node .
 
 USER node
 
-COPY package.json .
+COPY /backend/package.json .
 
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./
-COPY /app/data ./app/data
+COPY --from=deps /sg-app/backend/node_modules ./node_modules
+COPY --from=build /sg-app/backend/dist ./
+COPY backend/app/data ./app/data
 
 # RUN echo $(pwd) && ls -la && exit 1
 # RUN ls -la && exit 1
@@ -46,4 +52,4 @@ COPY /app/data ./app/data
 
 EXPOSE 8000
 
-CMD ["node", "-r", "newrelic", "index.js"]
+CMD ["node", "index.js"]
