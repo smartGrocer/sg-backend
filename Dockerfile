@@ -38,10 +38,6 @@ WORKDIR /sg-app
 
 ENV NODE_ENV production
 
-# This is to allow permissions for creating /logs and newrelic_agent.log files
-RUN chown -R node:node .
-
-USER node
 
 COPY backend/package.json ./backend/package.json
 
@@ -49,8 +45,13 @@ COPY --from=deps /sg-app/backend/node_modules ./backend/node_modules
 COPY --from=build /sg-app/backend/dist ./backend/dist
 COPY --from=build-frontend /sg-app/frontend/dist ./backend/public
 
-COPY backend/app/data ./app/data
+COPY backend/app/data ./backend/app/data
+
+# This is to allow permissions for creating /logs and newrelic_agent.log files
+RUN chown -R node:node .
+
+USER node
 
 EXPOSE 8000
 
-CMD ["node", "backend/dist/index.js"]
+
