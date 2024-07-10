@@ -42,7 +42,7 @@ jobs:
         id: npm-ci-test
         run: npm run test:ci
 
-        # test build
+      # test build
 
   # build_publish_docker:
   #   name: Build and Publish Docker Image
@@ -51,8 +51,6 @@ jobs:
   #   permissions:
   #     packages: write
   #     contents: read
-
-  #   if: github.ref == 'refs/heads/main'
 
   #   steps:
   #     - name: Checkout
@@ -66,8 +64,17 @@ jobs:
   #         username: ${{ github.actor }}
   #         password: ${{ secrets.DOCKER_TOKEN_GIT_REG }}
 
+  #     - name: Set Docker tag
+  #       id: set-docker-tag
+  #       run: |
+  #         if [ "${{ github.event_name }}" == "pull_request" ]; then
+  #           echo "TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
+  #         elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+  #           echo "TAG=latest" >> $GITHUB_ENV
+  #         fi
+
   #     - name: Build and push Docker Image
-  #       run: docker build . -t ghcr.io/smartgrocer/sg-backend:latest --push
+  #       run: docker build . -t ghcr.io/smartgrocer/sg-backend:${{ env.TAG }} --push --platform linux/amd64
 
   # deploy:
   #   runs-on: ubuntu-latest
