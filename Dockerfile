@@ -20,23 +20,15 @@ FROM base as deps
 
 WORKDIR /sg-app/backend
 
-RUN --mount=type=bind,source=backend/package.json,target=package.json \
-    --mount=type=bind,source=backend/package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+COPY backend/package.json backend/package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci --omit=dev
 
 # Stage 3: Build the backend
 FROM deps as build
 
 WORKDIR /sg-app/backend
 
-RUN --mount=type=bind,source=backend/package.json,target=package.json \
-    --mount=type=bind,source=backend/package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci
-
-COPY ./backend .
-
+COPY backend/ ./
 RUN npm run build
 
 # Stage 4: Create the final image
