@@ -32,7 +32,9 @@ WORKDIR /sg-app/backend
 
 COPY backend/ ./
 
-COPY --from=deps /sg-app/backend/node_modules ./node_modules
+# This is a copy of the node_modules for the build
+COPY backend/package.json backend/package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci
 
 RUN npm run build
 
