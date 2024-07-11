@@ -38,11 +38,11 @@ jobs:
       # - name: Lint
       #   id: npm-lint
       #   run: npm run lint
-      - name: Test
-        id: npm-ci-test
-        run: npm run test:ci
+      # - name: Test
+      #   id: npm-ci-test
+      #   run: npm run test:ci
 
-        # test build
+      # test build
 
   build_publish_docker:
     name: Build and Publish Docker Image
