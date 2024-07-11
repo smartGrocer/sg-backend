@@ -74,7 +74,7 @@ jobs:
           fi
 
       - name: Build and push Docker Image
-        run: docker build . -t ghcr.io/smartgrocer/sg-backend:${{ env.TAG }} --push
+        run: docker build . -t ghcr.io/smartgrocer/sg-backend:${{ env.TAG }} --push --platform linux/amd64
 
   # deploy:
   #   runs-on: ubuntu-latest
