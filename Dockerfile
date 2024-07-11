@@ -23,12 +23,18 @@ WORKDIR /sg-app/backend
 COPY backend/package.json backend/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci --omit=dev
 
+
 # Stage 3: Build the backend
 FROM deps as build
 
 WORKDIR /sg-app/backend
 
+
 COPY backend/ ./
+
+# install typescript to build the backend
+RUN npm install -g typescript
+
 RUN npm run build
 
 # Stage 4: Create the final image
