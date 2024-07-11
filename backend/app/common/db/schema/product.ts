@@ -1,5 +1,19 @@
 import mongoose from "mongoose";
 
+const productLinkSchema = new mongoose.Schema(
+	{
+		chain_name: {
+			type: String,
+			required: true,
+		},
+		link: {
+			type: String,
+			required: true,
+		},
+	},
+	{ _id: false }
+);
+
 const productSchema = new mongoose.Schema({
 	product_num: {
 		type: String,
@@ -16,7 +30,8 @@ const productSchema = new mongoose.Schema({
 		type: String,
 	},
 	product_link: {
-		type: String,
+		type: [productLinkSchema],
+		default: [],
 	},
 	product_image: {
 		type: String,
