@@ -1,28 +1,50 @@
 version: "3.8"
 services:
-    node-app:
-        container_name: node-service
-        hostname: node-service-prod
-        image: ghcr.io/smartgrocer/sg-backend:latest
-        restart: unless-stopped
-        env_file:
-            - .env
-        volumes:
-            - ./logs:/app/logs
+  frontend:
+    container_name: frontend-service
+    image: ghcr.io/smartgrocer/sg-backend:latest # Use the image from GitHub Container Registry
+    # build:
+    #   context: ..
+    #   dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Adjust port as needed
+    environment:
+      - NODE_ENV=production # Ensure production environment for frontend if needed
+    networks:
+      - app-network
+    depends_on:
+      - backend
 
-    caddy:
-        image: caddy:2.7.6
-        restart: unless-stopped
-        container_name: caddy-service
-        ports:
-            - "80:80"
-            - "443:443"
-            #- "443:443/udp"
-        volumes:
-            - ./caddy/prod/Caddyfile:/etc/caddy/Caddyfile
-            - ./site:/srv
-            - caddy_data:/data
-            - caddy_config:/config
-volumes:
-    caddy_data:
-    caddy_config:
+    command:
+      - sh
+      - -c
+      - |
+        cd backend/public
+        npx serve -s .
+
+  backend:
+    container_name: backend-service
+    image: ghcr.io/smartgrocer/sg-backend:latest # Use the image from GitHub Container Registry
+    # build:
+    #   context: ..
+    #   dockerfile: Dockerfile
+    ports:
+      - "8000:8000" # Ensure backend port matches your configuration
+    env_file:
+      - ../backend/.env
+    volumes:
+      - ./logs:/app/logs # Mount logs volume as needed
+    networks:
+      - app-network
+    command:
+      - sh
+      - -c
+      - |
+        ls -la
+        cd backend
+        ls -la
+        node dist/index.js
+
+networks:
+  app-network:
+    driver: bridge
