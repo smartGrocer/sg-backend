@@ -44,37 +44,37 @@ jobs:
 
       # test build
 
-  build_publish_docker:
-    name: Build and Publish Docker Image
-    runs-on: ubuntu-latest
-    needs: tests
-    permissions:
-      packages: write
-      contents: read
+  # build_publish_docker:
+  #   name: Build and Publish Docker Image
+  #   runs-on: ubuntu-latest
+  #   needs: tests
+  #   permissions:
+  #     packages: write
+  #     contents: read
 
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v4
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKER_TOKEN_GIT_REG }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKER_TOKEN_GIT_REG }}
 
-      - name: Set Docker tag
-        id: set-docker-tag
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            echo "TAG=latest" >> $GITHUB_ENV
-          fi
+  #     - name: Set Docker tag
+  #       id: set-docker-tag
+  #       run: |
+  #         if [ "${{ github.event_name }}" == "pull_request" ]; then
+  #           echo "TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
+  #         elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+  #           echo "TAG=latest" >> $GITHUB_ENV
+  #         fi
 
-      - name: Build and push Docker Image
-        run: docker build . -t ghcr.io/smartgrocer/sg-backend:${{ env.TAG }} --push --platform linux/amd64
+  #     - name: Build and push Docker Image
+  #       run: docker build . -t ghcr.io/smartgrocer/sg-backend:${{ env.TAG }} --push --platform linux/amd64
 
   # deploy:
   #   runs-on: ubuntu-latest
