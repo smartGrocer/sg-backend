@@ -61,4 +61,4 @@ USER node
 
 EXPOSE 8000
 
-
+CMD ["node", "backend/dist/index.js"]
