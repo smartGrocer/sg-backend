@@ -64,9 +64,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_TOKEN_GIT_REG }}
 
-      - name: Install typescript
-        run: npm install -g typescript
-
       - name: Set Docker tag
         id: set-docker-tag
         run: |

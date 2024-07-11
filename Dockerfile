@@ -32,8 +32,7 @@ WORKDIR /sg-app/backend
 
 COPY backend/ ./
 
-# install typescript to build the backend
-RUN npm install -g typescript
+COPY --from=deps /sg-app/backend/node_modules ./node_modules
 
 RUN npm run build
 
