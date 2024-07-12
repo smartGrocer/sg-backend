@@ -1,6 +1,6 @@
 import removeHtmlTags from "../../../../common/helpers/removeHtmlTags";
 import { IProductProps } from "../../../../common/types/common/product";
-import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import { AllParentCompanyList } from "../../../../common/types/common/store";
 import {
 	ILoblawsAllFoodProps,
 	LoblawsChainAlternateName,
@@ -27,7 +27,7 @@ const extractProductData = (
 			product_num: product.productId,
 			product_name: product.title,
 			store_num,
-			parent_company: AllStoreChainBrands.loblaws,
+			parent_company: AllParentCompanyList.loblaws,
 			chain_name: chainName, // loblaw not loblaws
 			product_brand: product.brand || "",
 			product_link:

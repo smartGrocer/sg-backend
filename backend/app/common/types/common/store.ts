@@ -9,7 +9,7 @@ import { LoblawsChainName } from "../loblaws/loblaws";
 import { MetroChain } from "../metro/metro";
 
 // eslint-disable-next-line no-shadow
-export enum AllStoreChainBrands {
+export enum AllParentCompanyList {
 	all = "all",
 	loblaws = "loblaws",
 	walmart = "walmart",
@@ -19,7 +19,7 @@ export enum AllStoreChainBrands {
 export interface IStoreProps {
 	// id: string;
 	store_num: string;
-	parent_company: AllStoreChainBrands;
+	parent_company: AllParentCompanyList;
 	chain_name: string;
 	store_name: string;
 	latitude: number;

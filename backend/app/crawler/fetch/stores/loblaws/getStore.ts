@@ -8,7 +8,7 @@ import {
 } from "../../../../common/types/loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
 import {
-	AllStoreChainBrands,
+	AllParentCompanyList,
 	IStoreProps,
 } from "../../../../common/types/common/store";
 import {
@@ -96,7 +96,7 @@ const getLoblawsStores = async ({
 					return {
 						store_num: store.storeId || "",
 						chain_name: store.storeBannerId || "",
-						parent_company: AllStoreChainBrands.loblaws,
+						parent_company: AllParentCompanyList.loblaws,
 						store_name: store.name || "",
 						latitude: store.geoPoint.latitude || 0,
 						longitude: store.geoPoint.longitude || 0,

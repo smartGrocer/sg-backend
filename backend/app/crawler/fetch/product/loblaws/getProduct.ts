@@ -13,7 +13,7 @@ import {
 	getCachedData,
 	saveToCache,
 } from "../../../../common/cache/storeCache";
-import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import { AllParentCompanyList } from "../../../../common/types/common/store";
 import removeHtmlTags from "../../../../common/helpers/removeHtmlTags";
 
 const getProduct = async ({
@@ -56,7 +56,7 @@ const getProduct = async ({
 		productData.product_num = product.code;
 		productData.store_num = store_num;
 		productData.chain_name = chainName;
-		productData.parent_company = AllStoreChainBrands.loblaws;
+		productData.parent_company = AllParentCompanyList.loblaws;
 		productData.product_brand = product.brand;
 		productData.product_name = product.name;
 		productData.product_link = `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`;

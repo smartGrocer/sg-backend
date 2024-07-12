@@ -8,7 +8,7 @@ import pickStore from "../common/pickRandomStore";
 import cleanAndExtractMetroData from "../../../../common/helpers/cleanAndExtractMetroData";
 import sleep from "../../../../common/helpers/sleep";
 import { writeToDb } from "../../../../common/db/writeToDB";
-import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import { AllParentCompanyList } from "../../../../common/types/common/store";
 import logger from "../../../../common/logging/logger";
 
 interface IScrapeMetroArgs {
@@ -54,8 +54,8 @@ const scrapeStore = async ({
 			data: cleanData,
 			store_num:
 				chainName === "metro"
-					? AllStoreChainBrands.metro
-					: AllStoreChainBrands.foodbasics,
+					? AllParentCompanyList.metro
+					: AllParentCompanyList.foodbasics,
 			chainName,
 		});
 
@@ -101,8 +101,8 @@ const scrapeStore = async ({
 					data: cleanData_loop,
 					store_num:
 						chainName === "metro"
-							? AllStoreChainBrands.metro
-							: AllStoreChainBrands.foodbasics,
+							? AllParentCompanyList.metro
+							: AllParentCompanyList.foodbasics,
 					chainName,
 				});
 

@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import parseQuantity from "./parseQuantity";
-import { AllStoreChainBrands } from "../types/common/store";
+import { AllParentCompanyList } from "../types/common/store";
 import { IProductProps } from "../types/common/product";
 
 interface IExtractMetroDataReturn {
@@ -142,8 +142,8 @@ const cleanAndExtractMetroData = ({
 				chain_name: chainName,
 				parent_company:
 					chainName === "metro"
-						? AllStoreChainBrands.metro
-						: AllStoreChainBrands.foodbasics,
+						? AllParentCompanyList.metro
+						: AllParentCompanyList.foodbasics,
 				product_brand,
 				product_name,
 				product_link,

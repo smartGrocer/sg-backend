@@ -11,7 +11,7 @@ import {
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
-import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import { AllParentCompanyList } from "../../../../common/types/common/store";
 
 const getProduct = async ({
 	product_num,
@@ -163,8 +163,8 @@ const getProduct = async ({
 				store_num: store_id_2,
 				parent_company:
 					chainName === "metro"
-						? AllStoreChainBrands.metro
-						: AllStoreChainBrands.foodbasics,
+						? AllParentCompanyList.metro
+						: AllParentCompanyList.foodbasics,
 				chain_name: chainName,
 				product_brand,
 				product_name,

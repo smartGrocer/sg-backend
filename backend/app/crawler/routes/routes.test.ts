@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../../index";
-import { AllStoreChainBrands } from "../../common/types/common/store";
+import { AllParentCompanyList } from "../../common/types/common/store";
 
 describe("Route /store", () => {
 	describe("GET /api", () => {
@@ -55,7 +55,7 @@ describe("Route /store", () => {
 							"Invalid chain brand, please provide a valid chain brand."
 						);
 						expect(response.body.availableOptions).toEqual(
-							Object.values(AllStoreChainBrands)
+							Object.values(AllParentCompanyList)
 						);
 					}
 				});

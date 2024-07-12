@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AllStoreChainBrands } from "../../common/types/common/store";
+import { AllParentCompanyList } from "../../common/types/common/store";
 import { LoblawsChainName } from "../../common/types/loblaws/loblaws";
 import { MetroChain } from "../../common/types/metro/metro";
 import scrapeLoblaws from "../fetch/crawl/loblaws/scrapeLoblaws";
@@ -53,7 +53,7 @@ const scrapeStores = async (req: Request, res: Response) => {
 
 	return res.status(400).json({
 		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /scrape?chain=chain_name`,
-		availableOptions: [...Object.values(AllStoreChainBrands)],
+		availableOptions: [...Object.values(AllParentCompanyList)],
 	});
 };
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 // eslint-disable-next-line import/no-cycle
 import {
-	AllStoreChainBrands,
+	AllParentCompanyList,
 	IStoreProps,
 } from "../../../../common/types/common/store";
 import { MetroChain } from "../../../../common/types/metro/metro";
@@ -74,8 +74,8 @@ const getMetroStores = async ({
 					store_num: storeId,
 					parent_company:
 						chainName === "metro"
-							? AllStoreChainBrands.metro
-							: AllStoreChainBrands.foodbasics,
+							? AllParentCompanyList.metro
+							: AllParentCompanyList.foodbasics,
 					chain_name: chainName,
 					store_name: storeName,
 					latitude: parseFloat(storeLatitude),

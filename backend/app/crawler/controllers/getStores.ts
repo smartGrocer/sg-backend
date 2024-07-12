@@ -3,7 +3,7 @@ import filterStoresByLocation from "../../common/helpers/filterStoresByLocation"
 import { getCoordinatesFromPostal } from "../../common/helpers/getCoordinatesFromPostal";
 import { validatePostalCode } from "../../common/helpers/validatePostalCode";
 import {
-	AllStoreChainBrands,
+	AllParentCompanyList,
 	IStoreProps,
 } from "../../common/types/common/store";
 import fetchLoblawsStores from "../fetch/stores/loblaws/fetchLoblawsStores";
@@ -12,7 +12,7 @@ import fetchWalmartStores from "../fetch/stores/walmart/fetchWalmartStores";
 
 const getStores = async (req: Request, res: Response) => {
 	const { params } = req;
-	const parent_company = params.parent_company as AllStoreChainBrands;
+	const parent_company = params.parent_company as AllParentCompanyList;
 	const showAllStores = parent_company === "all";
 
 	const postalCode = (req.query.postal_code || "m9b6c2") as string;
@@ -23,10 +23,10 @@ const getStores = async (req: Request, res: Response) => {
 	const allStores: IStoreProps[] = [];
 
 	// if chain brand is not provided or is invalid
-	if (!Object.values(AllStoreChainBrands).includes(parent_company)) {
+	if (!Object.values(AllParentCompanyList).includes(parent_company)) {
 		return res.status(400).json({
 			message: `Invalid chain brand, please provide a valid chain brand.`,
-			availableOptions: Object.values(AllStoreChainBrands),
+			availableOptions: Object.values(AllParentCompanyList),
 		});
 	}
 
@@ -47,7 +47,7 @@ const getStores = async (req: Request, res: Response) => {
 	}
 
 	// if the chain brand is loblaws
-	if (parent_company === AllStoreChainBrands.loblaws || showAllStores) {
+	if (parent_company === AllParentCompanyList.loblaws || showAllStores) {
 		const { message, count, data, code, availableOptions } =
 			await fetchLoblawsStores({
 				req,
@@ -72,8 +72,8 @@ const getStores = async (req: Request, res: Response) => {
 
 	// if the chain brand is metro or foodbasics
 	if (
-		parent_company === AllStoreChainBrands.metro ||
-		parent_company === AllStoreChainBrands.foodbasics ||
+		parent_company === AllParentCompanyList.metro ||
+		parent_company === AllParentCompanyList.foodbasics ||
 		showAllStores
 	) {
 		const { message, count, data, code, availableOptions } =
@@ -98,7 +98,7 @@ const getStores = async (req: Request, res: Response) => {
 		allStores.push(...(data || []));
 	}
 
-	if (parent_company === AllStoreChainBrands.walmart || showAllStores) {
+	if (parent_company === AllParentCompanyList.walmart || showAllStores) {
 		const { message, count, data, code, availableOptions } =
 			await fetchWalmartStores({
 				req,
