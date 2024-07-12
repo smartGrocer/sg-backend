@@ -39,7 +39,7 @@ const getProductWithPrices = async (productId: string) => {
 			$group: {
 				_id: "$_id",
 				product_num: { $first: "$product_num" },
-				chain_brand: { $first: "$chain_brand" },
+				parent_company: { $first: "$parent_company" },
 				product_brand: { $first: "$product_brand" },
 				product_name: { $first: "$product_name" },
 				product_link: { $first: "$product_link" },
@@ -90,7 +90,7 @@ const getProductWithPrices = async (productId: string) => {
 			$project: {
 				_id: 0,
 				product_num: 1,
-				chain_brand: 1,
+				parent_company: 1,
 				product_brand: 1,
 				product_name: 1,
 				product_link: 1,

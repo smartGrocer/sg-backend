@@ -8,7 +8,7 @@ import getSpecificProduct from "../controllers/getSpecificProduct";
 const router = express.Router();
 
 // Routes
-router.get("/stores/:chain_brand?/:chain?", getStores);
+router.get("/stores/:parent_company?/:chain?", getStores);
 
 router.get("/products/all", getAllProducts);
 

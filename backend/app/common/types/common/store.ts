@@ -19,7 +19,7 @@ export enum AllStoreChainBrands {
 export interface IStoreProps {
 	// id: string;
 	store_num: string;
-	chain_brand: AllStoreChainBrands;
+	parent_company: AllStoreChainBrands;
 	chain_name: string;
 	store_name: string;
 	latitude: number;

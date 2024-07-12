@@ -12,8 +12,8 @@ import fetchWalmartStores from "../fetch/stores/walmart/fetchWalmartStores";
 
 const getStores = async (req: Request, res: Response) => {
 	const { params } = req;
-	const chain_brand = params.chain_brand as AllStoreChainBrands;
-	const showAllStores = chain_brand === "all";
+	const parent_company = params.parent_company as AllStoreChainBrands;
+	const showAllStores = parent_company === "all";
 
 	const postalCode = (req.query.postal_code || "m9b6c2") as string;
 	const validPostalCode = validatePostalCode(postalCode);
@@ -23,7 +23,7 @@ const getStores = async (req: Request, res: Response) => {
 	const allStores: IStoreProps[] = [];
 
 	// if chain brand is not provided or is invalid
-	if (!Object.values(AllStoreChainBrands).includes(chain_brand)) {
+	if (!Object.values(AllStoreChainBrands).includes(parent_company)) {
 		return res.status(400).json({
 			message: `Invalid chain brand, please provide a valid chain brand.`,
 			availableOptions: Object.values(AllStoreChainBrands),
@@ -47,7 +47,7 @@ const getStores = async (req: Request, res: Response) => {
 	}
 
 	// if the chain brand is loblaws
-	if (chain_brand === AllStoreChainBrands.loblaws || showAllStores) {
+	if (parent_company === AllStoreChainBrands.loblaws || showAllStores) {
 		const { message, count, data, code, availableOptions } =
 			await fetchLoblawsStores({
 				req,
@@ -72,8 +72,8 @@ const getStores = async (req: Request, res: Response) => {
 
 	// if the chain brand is metro or foodbasics
 	if (
-		chain_brand === AllStoreChainBrands.metro ||
-		chain_brand === AllStoreChainBrands.foodbasics ||
+		parent_company === AllStoreChainBrands.metro ||
+		parent_company === AllStoreChainBrands.foodbasics ||
 		showAllStores
 	) {
 		const { message, count, data, code, availableOptions } =
@@ -98,7 +98,7 @@ const getStores = async (req: Request, res: Response) => {
 		allStores.push(...(data || []));
 	}
 
-	if (chain_brand === AllStoreChainBrands.walmart || showAllStores) {
+	if (parent_company === AllStoreChainBrands.walmart || showAllStores) {
 		const { message, count, data, code, availableOptions } =
 			await fetchWalmartStores({
 				req,

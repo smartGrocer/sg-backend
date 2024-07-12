@@ -28,7 +28,7 @@ export const writeStoreToDb = async (
 			updateOne: {
 				filter: {
 					store_num: store.store_num,
-					chain_brand: store.chain_brand,
+					parent_company: store.parent_company,
 				},
 				update: {
 					$setOnInsert: store,
@@ -84,7 +84,7 @@ export const writeToDb = async (
 			updateOne: {
 				filter: {
 					product_num: product.product_num,
-					chain_brand: product.chain_brand,
+					parent_company: product.parent_company,
 				},
 				update: {
 					$set: {
@@ -92,7 +92,7 @@ export const writeToDb = async (
 							description: product.description,
 						}),
 						product_num: product.product_num,
-						chain_brand: product.chain_brand,
+						parent_company: product.parent_company,
 						product_brand: product.product_brand,
 						product_name: product.product_name,
 						product_link: product.product_link,

@@ -14,7 +14,7 @@ export interface IGetProduct {
 export interface IProduct {
 	product_num: string;
 	store_num: string;
-	chain_brand: AllStoreChainBrands;
+	parent_company: AllStoreChainBrands;
 	chain_name: string;
 	product_brand: string;
 	product_name: string;
@@ -83,13 +83,13 @@ export enum PandaBrowserKeys {
 export interface IPriceData extends IPrice {
 	productId: number;
 	storeId: number;
-	chain_brand: AllStoreChainBrands;
+	parent_company: AllStoreChainBrands;
 }
 
 export interface IProductData {
 	// storeId: number;
 	product_num: string;
-	chain_brand: AllStoreChainBrands;
+	parent_company: AllStoreChainBrands;
 	product_brand: string;
 	product_name: string;
 	product_link: string;

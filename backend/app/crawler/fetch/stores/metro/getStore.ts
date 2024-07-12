@@ -72,7 +72,7 @@ const getMetroStores = async ({
 
 				data.push({
 					store_num: storeId,
-					chain_brand:
+					parent_company:
 						chainName === "metro"
 							? AllStoreChainBrands.metro
 							: AllStoreChainBrands.foodbasics,

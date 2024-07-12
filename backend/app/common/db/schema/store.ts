@@ -5,7 +5,7 @@ const storeSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	chain_brand: {
+	parent_company: {
 		type: String,
 		required: true,
 	},
@@ -60,7 +60,7 @@ const storeSchema = new mongoose.Schema({
 	},
 });
 
-storeSchema.index({ store_num: 1, chain_brand: 1 }, { unique: true });
+storeSchema.index({ store_num: 1, parent_company: 1 }, { unique: true });
 
 const Store = mongoose.model("Store", storeSchema);
 

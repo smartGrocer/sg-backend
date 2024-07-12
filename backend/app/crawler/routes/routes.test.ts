@@ -12,7 +12,7 @@ describe("Route /store", () => {
 			);
 
 			expect(response.body.availableRoutes).toMatchObject({
-				stores: "/api/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
+				stores: "/api/stores/:parent_company/:chain?postal_code=postal_code&distance=5000",
 			});
 		});
 
@@ -39,7 +39,7 @@ describe("Route /store", () => {
 
 	describe("GET /api/stores", () => {
 		describe("when query params are missing or incorrect", () => {
-			describe("when chain_brand is missing", () => {
+			describe("when parent_company is missing", () => {
 				it("should throw an error", async () => {
 					const routesInputs = [
 						"/api/stores",
@@ -130,6 +130,6 @@ describe("Route /store", () => {
 			});
 		});
 
-		describe("when query includes valid chain_brands", () => {});
+		describe("when query includes valid parent_company", () => {});
 	});
 });

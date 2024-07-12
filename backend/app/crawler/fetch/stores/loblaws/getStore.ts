@@ -96,7 +96,7 @@ const getLoblawsStores = async ({
 					return {
 						store_num: store.storeId || "",
 						chain_name: store.storeBannerId || "",
-						chain_brand: AllStoreChainBrands.loblaws,
+						parent_company: AllStoreChainBrands.loblaws,
 						store_name: store.name || "",
 						latitude: store.geoPoint.latitude || 0,
 						longitude: store.geoPoint.longitude || 0,

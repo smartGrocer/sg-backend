@@ -36,13 +36,13 @@ const scrapeAllProductsMetro = async ({
 	const productData = await getProduct({
 		product_num: product.product_num,
 		url: product.product_link,
-		store_num: product.chain_brand,
+		store_num: product.parent_company,
 		chainName,
 	});
 
 	if (productData instanceof Error) {
 		logger.error({
-			message: `Error fetching product ${product.product_num} at ${product.chain_brand} | Time: ${
+			message: `Error fetching product ${product.product_num} at ${product.parent_company} | Time: ${
 				(new Date().getTime() - start_time) / 1000
 			} s`,
 			error: productData,
@@ -54,7 +54,8 @@ const scrapeAllProductsMetro = async ({
 	}
 
 	// if productData starts with "Product number: " then don't save to db
-	if (productData &&
+	if (
+		productData &&
 		productData?.description
 			.toLowerCase()
 			.startsWith("Product number: ".toLowerCase())
@@ -66,7 +67,7 @@ const scrapeAllProductsMetro = async ({
 	await Product.findOneAndUpdate(
 		{
 			product_num: product.product_num,
-			chain_brand: product.chain_brand,
+			parent_company: product.parent_company,
 		},
 		{
 			$set: {
@@ -80,7 +81,7 @@ const scrapeAllProductsMetro = async ({
 	);
 
 	logger.info({
-		message: `Product description updated for ${product.product_num} at ${product.chain_brand} | Time: ${
+		message: `Product description updated for ${product.product_num} at ${product.parent_company} | Time: ${
 			(new Date().getTime() - start_time) / 1000
 		} s`,
 		service: "scrapper",
@@ -97,7 +98,12 @@ const findProductMetro = async ({
 	// find random products in mongodb that do not have a description field or is an empty string
 
 	const product = await Product.aggregate([
-		{ $match: { chain_brand: chainName, description: { $exists: false } } },
+		{
+			$match: {
+				parent_company: chainName,
+				description: { $exists: false },
+			},
+		},
 		{ $sample: { size: 1 } },
 	]);
 

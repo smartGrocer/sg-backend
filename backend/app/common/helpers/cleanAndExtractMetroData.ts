@@ -140,7 +140,7 @@ const cleanAndExtractMetroData = ({
 				product_num,
 				store_num,
 				chain_name: chainName,
-				chain_brand:
+				parent_company:
 					chainName === "metro"
 						? AllStoreChainBrands.metro
 						: AllStoreChainBrands.foodbasics,
