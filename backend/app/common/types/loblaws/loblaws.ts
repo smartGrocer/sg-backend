@@ -30,29 +30,29 @@ export interface IGetProductLoblaws extends IGetProduct {
 }
 
 export const LoblawsChainAlternateName = (
-	chainBrand: LoblawsChainName
+	flag_name: LoblawsChainName
 ): string => {
-	if (chainBrand === LoblawsChainName.superstore) {
+	if (flag_name === LoblawsChainName.superstore) {
 		return "realcanadiansuperstore";
 	}
 
-	if (chainBrand === LoblawsChainName.independent) {
+	if (flag_name === LoblawsChainName.independent) {
 		return "yourindependentgrocer";
 	}
 
-	if (chainBrand === LoblawsChainName.loblaw) {
+	if (flag_name === LoblawsChainName.loblaw) {
 		return "loblaws";
 	}
 
-	if (chainBrand === LoblawsChainName.dominion) {
+	if (flag_name === LoblawsChainName.dominion) {
 		return "newfoundlandgrocerystores";
 	}
 
-	if (chainBrand === LoblawsChainName.rass) {
+	if (flag_name === LoblawsChainName.rass) {
 		return "atlanticsuperstore";
 	}
 
-	return chainBrand;
+	return flag_name;
 };
 
 export interface LoblawsStore {
