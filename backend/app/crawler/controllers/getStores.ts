@@ -25,7 +25,7 @@ const getStores = async (req: Request, res: Response) => {
 	// if chain brand is not provided or is invalid
 	if (!Object.values(AllParentCompanyList).includes(parent_company)) {
 		return res.status(400).json({
-			message: `Invalid chain brand, please provide a valid chain brand.`,
+			message: `Invalid parent_company, please provide a valid parent_company as a param: ?parent_company=metro.`,
 			availableOptions: Object.values(AllParentCompanyList),
 		});
 	}
