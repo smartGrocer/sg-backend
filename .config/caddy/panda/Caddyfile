@@ -1,15 +1,15 @@
-panda.nmpereira.com nmpereira.ddns.net {
+panda.nmpereira.com nmpereira.ddns.net localhost {
         # https://caddy.community/t/check-for-token-in-request-or-a-cookie-and-react-accordingly/17853
-        @headerfilter {
-                not query service_token=pandapaw
-        }
+        # @headerfilter {
+        #         not query service_token=pandapaw
+        # }
 
-        respond @headerfilter 403 {
-                body "Invalid service token"
-        }
+        # respond @headerfilter 403 {
+        #         body "Invalid service token"
+        # }
 
 
-	reverse_proxy scrapper1:3000 scrapper2:3000 scrapper3:3000 scrapper4:3000 {
+	reverse_proxy scrapper1:3000 scrapper2:3000 {
         lb_policy round_robin # "random" is default if not specified
 
         lb_retries 2
