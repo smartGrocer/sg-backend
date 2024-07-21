@@ -22,7 +22,7 @@ const getStores = async (req: Request, res: Response) => {
 
 	const allStores: IStoreProps[] = [];
 
-	// if chain brand is not provided or is invalid
+	// if parent_company is not provided or is invalid
 	if (!Object.values(AllParentCompanyList).includes(parent_company)) {
 		return res.status(400).json({
 			message: `Invalid parent_company, please provide a valid parent_company as a param: ?parent_company=metro.`,
@@ -46,7 +46,7 @@ const getStores = async (req: Request, res: Response) => {
 		});
 	}
 
-	// if the chain brand is loblaws
+	// if the parent_company is loblaws
 	if (parent_company === AllParentCompanyList.loblaws || showAllStores) {
 		const { message, count, data, code, availableOptions } =
 			await fetchLoblawsStores({
@@ -70,7 +70,7 @@ const getStores = async (req: Request, res: Response) => {
 		allStores.push(...(data || []));
 	}
 
-	// if the chain brand is metro or foodbasics
+	// if the parent_company is metro or foodbasics
 	if (
 		parent_company === AllParentCompanyList.metro ||
 		parent_company === AllParentCompanyList.foodbasics ||
