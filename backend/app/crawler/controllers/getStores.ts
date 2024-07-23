@@ -25,7 +25,7 @@ const getStores = async (req: Request, res: Response) => {
 	// if parent_company is not provided or is invalid
 	if (!Object.values(AllParentCompanyList).includes(parent_company)) {
 		return res.status(400).json({
-			message: `Invalid parent_company, please provide a valid parent_company as a param: ?parent_company=metro.`,
+			message: `Invalid parent_company, please provide a valid parent_company as /api/stores/:parent_company like /api/stores/metro or /api/stores/loblaws.`,
 			availableOptions: Object.values(AllParentCompanyList),
 		});
 	}
