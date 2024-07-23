@@ -2,7 +2,7 @@ import axios from "axios";
 // eslint-disable-next-line import/no-cycle
 import {
 	IStoreLoblawsSrcProps,
-	LoblawsChainAlternateName,
+	LoblawsFlagAlternateName,
 	LoblawsFlagName,
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
@@ -81,7 +81,7 @@ const getLoblawsStores = async ({
 
 		// if showAllStores is true, return all stores. Otherwise, return the store for the chain name
 		for await (const iStore of listOfStores) {
-			const url = `https://www.${LoblawsChainAlternateName(iStore)}.ca/api/pickup-locations`;
+			const url = `https://www.${LoblawsFlagAlternateName(iStore)}.ca/api/pickup-locations`;
 			const bannerId = iStore;
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
 

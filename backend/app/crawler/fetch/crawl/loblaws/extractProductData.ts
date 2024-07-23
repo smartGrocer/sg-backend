@@ -3,7 +3,7 @@ import { IProductProps } from "../../../../common/types/common/product";
 import { AllParentCompanyList } from "../../../../common/types/common/store";
 import {
 	ILoblawsAllFoodProps,
-	LoblawsChainAlternateName,
+	LoblawsFlagAlternateName,
 	LoblawsFlagName,
 } from "../../../../common/types/loblaws/loblaws";
 
@@ -31,7 +31,7 @@ const extractProductData = (
 			chain_name: chainName, // loblaw not loblaws
 			product_brand: product.brand || "",
 			product_link:
-				`https://www.${LoblawsChainAlternateName(
+				`https://www.${LoblawsFlagAlternateName(
 					chainName
 				)}.ca${product?.link}` || "",
 			product_image:

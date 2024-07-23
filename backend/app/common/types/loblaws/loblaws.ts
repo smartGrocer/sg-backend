@@ -29,7 +29,7 @@ export interface IGetProductLoblaws extends IGetProduct {
 	chainName: LoblawsFlagName;
 }
 
-export const LoblawsChainAlternateName = (
+export const LoblawsFlagAlternateName = (
 	flag_name: LoblawsFlagName
 ): string => {
 	if (flag_name === LoblawsFlagName.superstore) {
