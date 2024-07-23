@@ -76,7 +76,7 @@ const getMetroStores = async ({
 							? AllParentCompanyList.metro
 							: AllParentCompanyList.foodbasics,
 					flag_name: flagName,
-					store_name: storeName,
+					store_name: storeName.trim(),
 					latitude: parseFloat(storeLatitude),
 					longitude: parseFloat(storeLongitude),
 					formatted_address: `${storeAddress_line1}, ${storeAddress_line2}`,
