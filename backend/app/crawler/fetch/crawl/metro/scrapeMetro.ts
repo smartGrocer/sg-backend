@@ -3,7 +3,7 @@ import {
 	IProductProps,
 	PandaBrowserKeys,
 } from "../../../../common/types/common/product";
-import { MetroChain } from "../../../../common/types/metro/metro";
+import { MetroFlags } from "../../../../common/types/metro/metro";
 import pickStore from "../common/pickRandomStore";
 import cleanAndExtractMetroData from "../../../../common/helpers/cleanAndExtractMetroData";
 import sleep from "../../../../common/helpers/sleep";
@@ -13,13 +13,13 @@ import logger from "../../../../common/logging/logger";
 
 interface IScrapeMetroArgs {
 	store_num: string;
-	chainName: MetroChain;
+	chainName: MetroFlags;
 }
 const urlPage = ({
 	chainName,
 	page,
 }: {
-	chainName: MetroChain;
+	chainName: MetroFlags;
 	page: number;
 }): string => {
 	return `https://www.${chainName === "metro" ? "metro.ca/en/online-grocery" : "foodbasics.ca"}/search-page-${page}`;
@@ -139,7 +139,7 @@ const scrapeStore = async ({
 };
 
 const scrapeMetro = async (
-	chainName: MetroChain
+	chainName: MetroFlags
 ): Promise<IProductProps[] | Error> => {
 	try {
 		const store_num = await pickStore(chainName);

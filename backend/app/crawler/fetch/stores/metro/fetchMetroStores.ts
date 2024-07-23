@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import getMetroStores from "./getStore";
-import { MetroChain } from "../../../../common/types/metro/metro";
+import { MetroFlags } from "../../../../common/types/metro/metro";
 import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";
 import {
 	IFetchStores,
@@ -16,21 +16,21 @@ const fetchMetroStores = async ({
 	distance,
 	showAllStores,
 }: IFetchFoodBasicStores): Promise<IFetchStoresReturn> => {
-	const chainName = req.params.chain as MetroChain;
+	const chainName = req.params.chain as MetroFlags;
 
 	if (!chainName) {
 		return {
 			message: `chain_name is required, please provide a store name as /stores/:store_name/:chain_name`,
-			availableOptions: Object.values(MetroChain),
+			availableOptions: Object.values(MetroFlags),
 			code: 400,
 		};
 	}
 
 	// if chain name is not valid
-	if (!Object.values(MetroChain).includes(chainName) && !showAllStores) {
+	if (!Object.values(MetroFlags).includes(chainName) && !showAllStores) {
 		return {
 			message: `Invalid chain name, please provide a valid chain name.`,
-			availableOptions: Object.values(MetroChain),
+			availableOptions: Object.values(MetroFlags),
 			code: 400,
 		};
 	}

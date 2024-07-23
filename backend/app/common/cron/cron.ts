@@ -2,7 +2,7 @@
 import { CronJob } from "cron";
 import { LoblawsFlagName } from "../types/loblaws/loblaws";
 import scrapeLoblaws from "../../crawler/fetch/crawl/loblaws/scrapeLoblaws";
-import { MetroChain } from "../types/metro/metro";
+import { MetroFlags } from "../types/metro/metro";
 import scrapeMetro from "../../crawler/fetch/crawl/metro/scrapeMetro";
 import logger from "../logging/logger";
 
@@ -54,10 +54,10 @@ const scheduleCron = (): void => {
 					}
 
 					if (
-						Object.values(MetroChain).includes(runner as MetroChain)
+						Object.values(MetroFlags).includes(runner as MetroFlags)
 					) {
 						// run the metro runner
-						await scrapeMetro(runner as MetroChain);
+						await scrapeMetro(runner as MetroFlags);
 					}
 
 					pastRunners.push(runner);

@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { AllParentCompanyList } from "../../common/types/common/store";
 import { LoblawsFlagName } from "../../common/types/loblaws/loblaws";
-import { MetroChain } from "../../common/types/metro/metro";
+import { MetroFlags } from "../../common/types/metro/metro";
 import scrapeLoblaws from "../fetch/crawl/loblaws/scrapeLoblaws";
 import scrapeMetro from "../fetch/crawl/metro/scrapeMetro";
 
 const scrapeStores = async (req: Request, res: Response) => {
 	const { query } = req;
-	const chainName = query.chain as LoblawsFlagName | MetroChain;
+	const chainName = query.chain as LoblawsFlagName | MetroFlags;
 
 	if (!chainName) {
 		return res.status(400).json({
@@ -33,8 +33,8 @@ const scrapeStores = async (req: Request, res: Response) => {
 		});
 	}
 
-	if (Object.values(MetroChain).includes(chainName as MetroChain)) {
-		const response = await scrapeMetro(chainName as MetroChain);
+	if (Object.values(MetroFlags).includes(chainName as MetroFlags)) {
+		const response = await scrapeMetro(chainName as MetroFlags);
 		if (response instanceof Error) {
 			return res.status(500).json({
 				message: "Error scraping metro",

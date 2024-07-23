@@ -8,13 +8,13 @@ import Product from "../../../../common/db/schema/product";
 import sleep from "../../../../common/helpers/sleep";
 import logger from "../../../../common/logging/logger";
 import { IProductData } from "../../../../common/types/common/product";
-import { MetroChain } from "../../../../common/types/metro/metro";
+import { MetroFlags } from "../../../../common/types/metro/metro";
 import getProduct from "../../product/metro/getProduct";
 
 const scrapeAllProductsMetro = async ({
 	chainName,
 }: {
-	chainName: MetroChain;
+	chainName: MetroFlags;
 }): Promise<void> => {
 	await sleep({ min: 15, max: 35 });
 	const start_time = new Date().getTime();

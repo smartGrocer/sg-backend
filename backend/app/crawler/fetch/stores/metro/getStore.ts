@@ -5,14 +5,14 @@ import {
 	AllParentCompanyList,
 	IStoreProps,
 } from "../../../../common/types/common/store";
-import { MetroChain } from "../../../../common/types/metro/metro";
+import { MetroFlags } from "../../../../common/types/metro/metro";
 import {
 	getCachedData,
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 
 interface IGetMetroStores {
-	chainName: MetroChain;
+	chainName: MetroFlags;
 }
 
 const getMetroStores = async ({
@@ -32,7 +32,7 @@ const getMetroStores = async ({
 		const endpoint = `/find-a-grocery`;
 		const domain = `https://www.${chain}.ca`;
 		const url =
-			chain === MetroChain.metro
+			chain === MetroFlags.metro
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
