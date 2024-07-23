@@ -15,7 +15,7 @@ export interface IProduct {
 	product_num: string;
 	store_num: string;
 	parent_company: AllParentCompanyList;
-	chain_name: string;
+	flag_name: string;
 	product_brand: string;
 	product_name: string;
 	product_link: string;

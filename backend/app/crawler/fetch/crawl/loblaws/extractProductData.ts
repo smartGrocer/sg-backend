@@ -28,7 +28,7 @@ const extractProductData = (
 			product_name: product.title,
 			store_num,
 			parent_company: AllParentCompanyList.loblaws,
-			chain_name: flagName, // loblaw not loblaws
+			flag_name: flagName, // loblaw not loblaws
 			product_brand: product.brand || "",
 			product_link:
 				`https://www.${LoblawsFlagAlternateName(

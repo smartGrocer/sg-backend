@@ -8,7 +8,7 @@ const pickStore = async (
 	// pick random store from db based on flagName
 	try {
 		const randomStore = await Store.aggregate([
-			{ $match: { chain_name: flagName, scrape: true } },
+			{ $match: { flag_name: flagName, scrape: true } },
 			{ $sample: { size: 1 } },
 		]);
 

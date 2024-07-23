@@ -20,7 +20,7 @@ const fetchMetroStores = async ({
 
 	if (!flagName) {
 		return {
-			message: `chain_name is required, please provide a store name as /stores/:store_name/:chain_name`,
+			message: `flag_name is required, please provide a store name as /stores/:store_name/:flag_name`,
 			availableOptions: Object.values(MetroFlags),
 			code: 400,
 		};

@@ -92,7 +92,7 @@ const getLoblawsStores = async ({
 				(store: IStoreLoblawsSrcProps) => {
 					return {
 						store_num: store.storeId || "",
-						chain_name: store.storeBannerId || "",
+						flag_name: store.storeBannerId || "",
 						parent_company: AllParentCompanyList.loblaws,
 						store_name: store.name || "",
 						latitude: store.geoPoint.latitude || 0,

@@ -55,7 +55,7 @@ const getProduct = async ({
 
 		productData.product_num = product.code;
 		productData.store_num = store_num;
-		productData.chain_name = flagName;
+		productData.flag_name = flagName;
 		productData.parent_company = AllParentCompanyList.loblaws;
 		productData.product_brand = product.brand;
 		productData.product_name = product.name;

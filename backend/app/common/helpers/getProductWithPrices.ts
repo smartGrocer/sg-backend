@@ -74,7 +74,7 @@ const getProductWithPrices = async (productId: string) => {
 							},
 						},
 						store: {
-							chain_name: "$priceHistory.store.chain_name",
+							flag_name: "$priceHistory.store.flag_name",
 							store_num: "$priceHistory.store.store_num",
 							formatted_address:
 								"$priceHistory.store.formatted_address",
@@ -105,7 +105,7 @@ const getProductWithPrices = async (productId: string) => {
 						in: {
 							store_num: "$$price.store_num",
 							store: {
-								chain_name: "$$price.store.chain_name",
+								flag_name: "$$price.store.flag_name",
 								store_num: "$$price.store.store_num",
 								formatted_address:
 									"$$price.store.formatted_address",

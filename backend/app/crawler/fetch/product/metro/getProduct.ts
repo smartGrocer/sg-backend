@@ -165,7 +165,7 @@ const getProduct = async ({
 					flagName === "metro"
 						? AllParentCompanyList.metro
 						: AllParentCompanyList.foodbasics,
-				chain_name: flagName,
+				flag_name: flagName,
 				product_brand,
 				product_name,
 				product_link,

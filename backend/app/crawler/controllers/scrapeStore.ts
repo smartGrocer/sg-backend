@@ -11,7 +11,7 @@ const scrapeStores = async (req: Request, res: Response) => {
 
 	if (!flagName) {
 		return res.status(400).json({
-			message: `Chain name is required, please provide a chain name as a query parameter like so: /scrape?chain=chain_name`,
+			message: `Chain name is required, please provide a chain name as a query parameter like so: /scrape?chain=flag_name`,
 			availableOptions: [...Object.values(LoblawsFlagName)],
 		});
 	}
@@ -50,7 +50,7 @@ const scrapeStores = async (req: Request, res: Response) => {
 	}
 
 	return res.status(400).json({
-		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /scrape?chain=chain_name`,
+		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /scrape?chain=flag_name`,
 		availableOptions: [...Object.values(AllParentCompanyList)],
 	});
 };

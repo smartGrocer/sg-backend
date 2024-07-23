@@ -20,7 +20,7 @@ export interface IStoreProps {
 	// id: string;
 	store_num: string;
 	parent_company: AllParentCompanyList;
-	chain_name: string;
+	flag_name: string;
 	store_name: string;
 	latitude: number;
 	longitude: number;

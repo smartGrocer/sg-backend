@@ -139,7 +139,7 @@ const cleanAndExtractMetroData = ({
 			productData.push({
 				product_num,
 				store_num,
-				chain_name: flagName,
+				flag_name: flagName,
 				parent_company:
 					flagName === "metro"
 						? AllParentCompanyList.metro

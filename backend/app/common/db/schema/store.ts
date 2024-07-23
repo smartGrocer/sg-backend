@@ -9,7 +9,7 @@ const storeSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	chain_name: {
+	flag_name: {
 		type: String,
 		required: true,
 	},
