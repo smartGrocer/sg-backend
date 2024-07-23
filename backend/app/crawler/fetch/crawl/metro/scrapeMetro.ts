@@ -13,27 +13,27 @@ import logger from "../../../../common/logging/logger";
 
 interface IScrapeMetroArgs {
 	store_num: string;
-	chainName: MetroFlags;
+	flagName: MetroFlags;
 }
 const urlPage = ({
-	chainName,
+	flagName,
 	page,
 }: {
-	chainName: MetroFlags;
+	flagName: MetroFlags;
 	page: number;
 }): string => {
-	return `https://www.${chainName === "metro" ? "metro.ca/en/online-grocery" : "foodbasics.ca"}/search-page-${page}`;
+	return `https://www.${flagName === "metro" ? "metro.ca/en/online-grocery" : "foodbasics.ca"}/search-page-${page}`;
 };
 
 const scrapeStore = async ({
-	chainName,
+	flagName,
 }: IScrapeMetroArgs): Promise<IProductProps[] | Error> => {
 	try {
 		logger.info({
-			message: `Scraping ${chainName}`,
+			message: `Scraping ${flagName}`,
 			service: "scrapper",
 		});
-		const url = urlPage({ chainName, page: 1 });
+		const url = urlPage({ flagName, page: 1 });
 
 		const AllProducts: IProductProps[] = [];
 
@@ -53,10 +53,10 @@ const scrapeStore = async ({
 		const { products: data, page_results } = cleanAndExtractMetroData({
 			data: cleanData,
 			store_num:
-				chainName === "metro"
+				flagName === "metro"
 					? AllParentCompanyList.metro
 					: AllParentCompanyList.foodbasics,
-			chainName,
+			flagName,
 		});
 
 		AllProducts.push(...data);
@@ -67,7 +67,7 @@ const scrapeStore = async ({
 		} = await writeToDb(data);
 
 		logger.info({
-			message: `Scraped ${chainName} pg 1 | Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products`,
+			message: `Scraped ${flagName} pg 1 | Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products`,
 			service: "scrapper",
 		});
 
@@ -77,7 +77,7 @@ const scrapeStore = async ({
 				length: page_results + 1,
 			}).map((_, i) => i + 2)) {
 				const time_start = new Date().getTime();
-				const url_loop = urlPage({ chainName, page });
+				const url_loop = urlPage({ flagName, page });
 
 				const { response: response_loop, resData: resData_loop } =
 					await usePandaBrowser({
@@ -100,10 +100,10 @@ const scrapeStore = async ({
 				} = cleanAndExtractMetroData({
 					data: cleanData_loop,
 					store_num:
-						chainName === "metro"
+						flagName === "metro"
 							? AllParentCompanyList.metro
 							: AllParentCompanyList.foodbasics,
-					chainName,
+					flagName,
 				});
 
 				AllProducts.push(...data_loop);
@@ -113,7 +113,7 @@ const scrapeStore = async ({
 				const endTime = new Date().getTime();
 
 				logger.info({
-					message: `Scraped ${chainName} pg ${page}/${page_results} | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
+					message: `Scraped ${flagName} pg ${page}/${page_results} | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
 						(endTime - time_start) / 1000
 					}s`,
 					service: "scrapper",
@@ -130,7 +130,7 @@ const scrapeStore = async ({
 		return AllProducts;
 	} catch (e) {
 		logger.error({
-			message: `Error scraping ${chainName}`,
+			message: `Error scraping ${flagName}`,
 			error: e,
 			service: "scrapper",
 		});
@@ -139,16 +139,16 @@ const scrapeStore = async ({
 };
 
 const scrapeMetro = async (
-	chainName: MetroFlags
+	flagName: MetroFlags
 ): Promise<IProductProps[] | Error> => {
 	try {
-		const store_num = await pickStore(chainName);
+		const store_num = await pickStore(flagName);
 
 		if (store_num instanceof Error || !store_num) {
 			throw new Error("Error picking store");
 		}
 
-		const products = await scrapeStore({ chainName, store_num });
+		const products = await scrapeStore({ flagName, store_num });
 
 		if (products instanceof Error) {
 			throw new Error("Error scraping store");
@@ -157,7 +157,7 @@ const scrapeMetro = async (
 		return products;
 	} catch (e) {
 		logger.error({
-			message: `Error scraping ${chainName}`,
+			message: `Error scraping ${flagName}`,
 			error: e,
 			service: "scrapper",
 		});

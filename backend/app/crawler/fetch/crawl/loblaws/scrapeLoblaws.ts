@@ -13,24 +13,24 @@ import logger from "../../../../common/logging/logger";
 
 interface IScrapeLoblawsArgs {
 	store_num: string;
-	chainName: LoblawsFlagName;
+	flagName: LoblawsFlagName;
 }
 
 const scrapeStore = async ({
-	chainName,
+	flagName,
 	store_num,
 }: IScrapeLoblawsArgs): Promise<IProductProps[] | Error> => {
 	try {
 		const AllProducts: IProductProps[] = [];
 
 		logger.info({
-			message: `Scraping ${chainName} ${store_num}`,
+			message: `Scraping ${flagName} ${store_num}`,
 			service: "scrapper",
 		});
 		const initialResponse = await getProductsFromPage({
 			page: 1,
 			store_num,
-			chainName,
+			flagName,
 		});
 		if (initialResponse instanceof Error) {
 			return initialResponse;
@@ -41,7 +41,7 @@ const scrapeStore = async ({
 		) as IExtractProductDataProps;
 		const initialProducts = extractProductData(
 			initialData,
-			chainName,
+			flagName,
 			store_num
 		);
 		AllProducts.push(...(initialProducts || []));
@@ -55,7 +55,7 @@ const scrapeStore = async ({
 			await writeToDb(initialProducts);
 
 		logger.info({
-			message: `Scraped ${chainName} pg 1 | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products`,
+			message: `Scraped ${flagName} pg 1 | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products`,
 			service: "scrapper",
 		});
 		await sleep({ min: 20, max: 35 });
@@ -67,12 +67,12 @@ const scrapeStore = async ({
 			const response = await getProductsFromPage({
 				page,
 				store_num,
-				chainName,
+				flagName,
 			});
 
 			if (response instanceof Error) {
 				logger.error({
-					message: `Error fetching ${chainName} ${store_num} pg ${page}`,
+					message: `Error fetching ${flagName} ${store_num} pg ${page}`,
 					error: response?.message,
 					service: "scrapper",
 				});
@@ -83,7 +83,7 @@ const scrapeStore = async ({
 				response.data
 			) as IExtractProductDataProps;
 
-			const data = extractProductData(cleanData, chainName, store_num);
+			const data = extractProductData(cleanData, flagName, store_num);
 
 			AllProducts.push(...(data || []));
 
@@ -94,7 +94,7 @@ const scrapeStore = async ({
 			const endTime = new Date().getTime();
 
 			logger.info({
-				message: `Scraped ${chainName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products | ${
+				message: `Scraped ${flagName} ${store_num} pg ${page}/${totalPages}| Added:${upsertedCountInitial}| Modified:${modifiedCountInitial} | Total: ${AllProducts.length} products | ${
 					(endTime - time_start) / 1000
 				}s`,
 				service: "scrapper",
@@ -107,7 +107,7 @@ const scrapeStore = async ({
 		return AllProducts;
 	} catch (e) {
 		logger.error({
-			message: `Error scraping ${chainName} ${store_num}`,
+			message: `Error scraping ${flagName} ${store_num}`,
 			error: e,
 			service: "scrapper",
 		});
@@ -116,16 +116,16 @@ const scrapeStore = async ({
 };
 
 const scrapeLoblaws = async (
-	chainName: LoblawsFlagName
+	flagName: LoblawsFlagName
 ): Promise<IProductProps[] | Error> => {
 	try {
-		const store_num = await pickStore(chainName);
+		const store_num = await pickStore(flagName);
 
 		if (store_num instanceof Error || !store_num) {
 			throw new Error("Error picking store");
 		}
 
-		const products = await scrapeStore({ chainName, store_num });
+		const products = await scrapeStore({ flagName, store_num });
 
 		if (products instanceof Error) {
 			throw new Error("Error scraping store");
@@ -134,7 +134,7 @@ const scrapeLoblaws = async (
 		return products;
 	} catch (e) {
 		logger.error({
-			message: `Error scraping ${chainName}`,
+			message: `Error scraping ${flagName}`,
 			error: e,
 			service: "scrapper",
 		});

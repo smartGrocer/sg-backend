@@ -12,19 +12,19 @@ import { MetroFlags } from "../../../../common/types/metro/metro";
 import getProduct from "../../product/metro/getProduct";
 
 const scrapeAllProductsMetro = async ({
-	chainName,
+	flagName,
 }: {
-	chainName: MetroFlags;
+	flagName: MetroFlags;
 }): Promise<void> => {
 	await sleep({ min: 15, max: 35 });
 	const start_time = new Date().getTime();
 
 	// eslint-disable-next-line no-use-before-define
-	const product = await findProductMetro({ chainName });
+	const product = await findProductMetro({ flagName });
 
 	if (!product) {
 		logger.info({
-			message: `No products found for ${chainName} | Time: ${
+			message: `No products found for ${flagName} | Time: ${
 				(new Date().getTime() - start_time) / 1000
 			} s`,
 			service: "scrapper",
@@ -37,7 +37,7 @@ const scrapeAllProductsMetro = async ({
 		product_num: product.product_num,
 		url: product.product_link,
 		store_num: product.parent_company,
-		chainName,
+		flagName,
 	});
 
 	if (productData instanceof Error) {
@@ -49,7 +49,7 @@ const scrapeAllProductsMetro = async ({
 		});
 
 		// eslint-disable-next-line consistent-return
-		await scrapeAllProductsMetro({ chainName }); // Retry with next product
+		await scrapeAllProductsMetro({ flagName }); // Retry with next product
 		return;
 	}
 
@@ -87,20 +87,20 @@ const scrapeAllProductsMetro = async ({
 		service: "scrapper",
 	});
 	// Continue scraping for more products
-	await scrapeAllProductsMetro({ chainName });
+	await scrapeAllProductsMetro({ flagName });
 };
 
 const findProductMetro = async ({
-	chainName,
+	flagName,
 }: {
-	chainName: string;
+	flagName: string;
 }): Promise<IProductData> => {
 	// find random products in mongodb that do not have a description field or is an empty string
 
 	const product = await Product.aggregate([
 		{
 			$match: {
-				parent_company: chainName,
+				parent_company: flagName,
 				description: { $exists: false },
 			},
 		},

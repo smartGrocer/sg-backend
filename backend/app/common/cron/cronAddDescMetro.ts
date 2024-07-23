@@ -19,7 +19,7 @@ const cronAddDescMetro = async (): Promise<void> => {
 				service: "cron",
 			});
 			await scrapeProductMetro({
-				chainName: runner as MetroFlags,
+				flagName: runner as MetroFlags,
 			});
 		}
 
@@ -33,7 +33,7 @@ const cronAddDescMetro = async (): Promise<void> => {
 						service: "cron",
 					});
 					await scrapeProductMetro({
-						chainName: runner as MetroFlags,
+						flagName: runner as MetroFlags,
 					});
 				}
 			},

@@ -7,11 +7,11 @@ import logger from "../../../../common/logging/logger";
 
 const getProductsFromPage = async ({
 	store_num,
-	chainName,
+	flagName,
 	page,
 }: {
 	store_num: string;
-	chainName: LoblawsFlagName;
+	flagName: LoblawsFlagName;
 	page: number;
 }): Promise<AxiosResponse | Error> => {
 	try {
@@ -20,8 +20,8 @@ const getProductsFromPage = async ({
 		const headers = {
 			"Content-Type": "application/json",
 			"Accept-Language": "en",
-			Origin: `https://www.${LoblawsFlagAlternateName(chainName as LoblawsFlagName)}.ca`,
-			Referer: `https://www.${LoblawsFlagAlternateName(chainName as LoblawsFlagName)}.ca/`,
+			Origin: `https://www.${LoblawsFlagAlternateName(flagName as LoblawsFlagName)}.ca`,
+			Referer: `https://www.${LoblawsFlagAlternateName(flagName as LoblawsFlagName)}.ca/`,
 			"x-apikey": "C1xujSegT5j3ap3yexJjqhOfELwGKYvz",
 			"x-application-type": "Web",
 			"x-loblaw-tenant-id": "ONLINE_GROCERIES",
@@ -51,7 +51,7 @@ const getProductsFromPage = async ({
 		return response;
 	} catch (e) {
 		logger.error({
-			message: `Error fetching products for ${chainName} | page: ${page}`,
+			message: `Error fetching products for ${flagName} | page: ${page}`,
 			error: e,
 			service: "crawler",
 		});

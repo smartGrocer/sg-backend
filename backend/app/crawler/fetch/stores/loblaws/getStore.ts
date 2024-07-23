@@ -50,18 +50,18 @@ const filterStoreDuplicates = (data: IStoreProps[]): IStoreProps[] => {
 
 const getLoblawsStores = async ({
 	showAllStores,
-	chainName,
+	flagName,
 }: LoblawsStore): Promise<IStoreProps[] | Error> => {
-	if (!chainName && !showAllStores) {
+	if (!flagName && !showAllStores) {
 		throw new Error("Chain name is required");
 	}
 
 	// if the chain name is not in the enum, throw an error
-	if (!Object.values(LoblawsFlagName).includes(chainName) && !showAllStores) {
+	if (!Object.values(LoblawsFlagName).includes(flagName) && !showAllStores) {
 		throw new Error("Invalid chain name");
 	}
 
-	const cacheKey = `stores-${chainName}-${showAllStores ? "all" : chainName}`;
+	const cacheKey = `stores-${flagName}-${showAllStores ? "all" : flagName}`;
 
 	const cachedData = await getCachedData({
 		key: cacheKey,
@@ -74,7 +74,7 @@ const getLoblawsStores = async ({
 
 	const listOfStores = showAllStores
 		? Object.values(LoblawsFlagName)
-		: [chainName];
+		: [flagName];
 
 	try {
 		const returnData = [] as IStoreProps[];

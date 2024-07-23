@@ -19,7 +19,7 @@ export interface IExtractProductDataProps {
 
 const extractProductData = (
 	data: IExtractProductDataProps,
-	chainName: LoblawsFlagName,
+	flagName: LoblawsFlagName,
 	store_num: string
 ): IProductProps[] => {
 	return data.productTiles.map((product: ILoblawsAllFoodProps) => {
@@ -28,11 +28,11 @@ const extractProductData = (
 			product_name: product.title,
 			store_num,
 			parent_company: AllParentCompanyList.loblaws,
-			chain_name: chainName, // loblaw not loblaws
+			chain_name: flagName, // loblaw not loblaws
 			product_brand: product.brand || "",
 			product_link:
 				`https://www.${LoblawsFlagAlternateName(
-					chainName
+					flagName
 				)}.ca${product?.link}` || "",
 			product_image:
 				product?.productImage[0]?.imageUrl ||

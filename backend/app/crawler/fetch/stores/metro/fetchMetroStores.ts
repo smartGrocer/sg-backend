@@ -16,9 +16,9 @@ const fetchMetroStores = async ({
 	distance,
 	showAllStores,
 }: IFetchFoodBasicStores): Promise<IFetchStoresReturn> => {
-	const chainName = req.params.chain as MetroFlags;
+	const flagName = req.params.chain as MetroFlags;
 
-	if (!chainName) {
+	if (!flagName) {
 		return {
 			message: `chain_name is required, please provide a store name as /stores/:store_name/:chain_name`,
 			availableOptions: Object.values(MetroFlags),
@@ -27,7 +27,7 @@ const fetchMetroStores = async ({
 	}
 
 	// if chain name is not valid
-	if (!Object.values(MetroFlags).includes(chainName) && !showAllStores) {
+	if (!Object.values(MetroFlags).includes(flagName) && !showAllStores) {
 		return {
 			message: `Invalid chain name, please provide a valid chain name.`,
 			availableOptions: Object.values(MetroFlags),
@@ -36,7 +36,7 @@ const fetchMetroStores = async ({
 	}
 
 	const stores = await getMetroStores({
-		chainName,
+		flagName,
 	});
 
 	if (stores instanceof Error) {
@@ -58,7 +58,7 @@ const fetchMetroStores = async ({
 	await writeStoreToDb(filteredStores);
 
 	return {
-		message: `Stores fetched successfully for ${chainName}`,
+		message: `Stores fetched successfully for ${flagName}`,
 		count: filteredStores.length,
 		data: filteredStores,
 		code: 200,

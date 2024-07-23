@@ -17,9 +17,9 @@ const fetchLoblawsStores = async ({
 	showAllStores,
 }: IFetchLoblawsStores): Promise<IFetchStoresReturn> => {
 	// chain name
-	const chainName = req.params.chain as LoblawsFlagName;
+	const flagName = req.params.chain as LoblawsFlagName;
 
-	if (!chainName && !showAllStores) {
+	if (!flagName && !showAllStores) {
 		return {
 			message:
 				"chain_name is required, please provide a store name as /stores/:store_name/:chain_name",
@@ -29,7 +29,7 @@ const fetchLoblawsStores = async ({
 	}
 
 	// chain name has to be in the enum
-	if (!Object.values(LoblawsFlagName).includes(chainName) && !showAllStores) {
+	if (!Object.values(LoblawsFlagName).includes(flagName) && !showAllStores) {
 		return {
 			message:
 				"Invalid chain name, please provide a valid chain name. Pick a valid chain name",
@@ -39,7 +39,7 @@ const fetchLoblawsStores = async ({
 	}
 
 	// get stores
-	const stores = await getLoblawsStores({ chainName, showAllStores });
+	const stores = await getLoblawsStores({ flagName, showAllStores });
 
 	if (stores instanceof Error) {
 		return {
@@ -60,7 +60,7 @@ const fetchLoblawsStores = async ({
 	await writeStoreToDb(filteredStores);
 
 	return {
-		message: `Stores fetched successfully for ${chainName}`,
+		message: `Stores fetched successfully for ${flagName}`,
 		count: filteredStores.length,
 		data: filteredStores,
 		code: 200,

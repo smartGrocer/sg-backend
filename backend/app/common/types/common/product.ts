@@ -39,7 +39,7 @@ export interface IProductProps extends IProduct, IPrice {}
 
 export interface ISearchProducts {
 	search_term: string;
-	chainName: IAllStoreChains;
+	flagName: IAllStoreChains;
 	store_num: string;
 }
 

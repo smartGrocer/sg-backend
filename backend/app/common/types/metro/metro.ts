@@ -8,14 +8,14 @@ export enum MetroFlags {
 }
 
 export interface ISearchMetro extends ISearchStore {
-	chainName: MetroFlags;
+	flagName: MetroFlags;
 }
 
 export interface IGetProductMetro extends IGetProduct {
 	url: string;
-	chainName: MetroFlags;
+	flagName: MetroFlags;
 }
 
 export interface IGetProductMetroProps extends IGetProductProps {
-	chainName: MetroFlags;
+	flagName: MetroFlags;
 }

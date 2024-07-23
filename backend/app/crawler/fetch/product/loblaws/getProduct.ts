@@ -19,9 +19,9 @@ import removeHtmlTags from "../../../../common/helpers/removeHtmlTags";
 const getProduct = async ({
 	product_num,
 	store_num,
-	chainName,
+	flagName,
 }: IGetProductLoblawsProps): Promise<IProductProps | Error> => {
-	const cacheKey = `product-${chainName}-${store_num}-${product_num}`;
+	const cacheKey = `product-${flagName}-${store_num}-${product_num}`;
 
 	const cachedData = await getCachedData({
 		key: cacheKey,
@@ -40,7 +40,7 @@ const getProduct = async ({
 		.reverse()
 		.join("");
 
-	const url_get = `https://api.pcexpress.ca/pcx-bff/api/v1/products/${product_num}?lang=en&date=${date}&pickupType=STORE&storeId=${store_num}&banner=${chainName}`;
+	const url_get = `https://api.pcexpress.ca/pcx-bff/api/v1/products/${product_num}?lang=en&date=${date}&pickupType=STORE&storeId=${store_num}&banner=${flagName}`;
 
 	const headers = {
 		"x-apikey": "C1xujSegT5j3ap3yexJjqhOfELwGKYvz",
@@ -55,11 +55,11 @@ const getProduct = async ({
 
 		productData.product_num = product.code;
 		productData.store_num = store_num;
-		productData.chain_name = chainName;
+		productData.chain_name = flagName;
 		productData.parent_company = AllParentCompanyList.loblaws;
 		productData.product_brand = product.brand;
 		productData.product_name = product.name;
-		productData.product_link = `https://www.${LoblawsFlagAlternateName(chainName as LoblawsFlagName)}.ca${product.link}`;
+		productData.product_link = `https://www.${LoblawsFlagAlternateName(flagName as LoblawsFlagName)}.ca${product.link}`;
 		productData.product_image = pickImage(product.imageAssets);
 		productData.description = removeHtmlTags(product.description || "N/A");
 		productData.product_size_unit = parseQuantity(product.packageSize).unit;

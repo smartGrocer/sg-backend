@@ -22,11 +22,11 @@ export enum LoblawsFlagName {
 }
 
 export interface ISearchLoblaws extends ISearchStore {
-	chainName: LoblawsFlagName;
+	flagName: LoblawsFlagName;
 }
 
 export interface IGetProductLoblaws extends IGetProduct {
-	chainName: LoblawsFlagName;
+	flagName: LoblawsFlagName;
 }
 
 export const LoblawsFlagAlternateName = (
@@ -56,7 +56,7 @@ export const LoblawsFlagAlternateName = (
 };
 
 export interface LoblawsStore {
-	chainName: LoblawsFlagName;
+	flagName: LoblawsFlagName;
 	showAllStores: boolean;
 }
 
@@ -258,17 +258,17 @@ export const pickImage = (images: ILoblawsProductSrcProps["imageAssets"]) => {
 
 export const validateLoblawsStoreId = async ({
 	storeId,
-	chainName,
+	flagName,
 }: {
 	storeId: string;
-	chainName: string;
+	flagName: string;
 }): Promise<{
 	message: string;
 	availableOptions?: string[];
 	code: number;
 }> => {
 	const stores = await getLoblawsStores({
-		chainName: chainName as LoblawsFlagName,
+		flagName: flagName as LoblawsFlagName,
 		showAllStores: false,
 	});
 
@@ -294,7 +294,7 @@ export const validateLoblawsStoreId = async ({
 
 	if (!stores.find((store) => store.store_num === storeId)) {
 		return {
-			message: `Store ID: ${storeId} is not valid for chain: ${chainName}`,
+			message: `Store ID: ${storeId} is not valid for chain: ${flagName}`,
 			availableOptions: [
 				// remove duplicates
 				...new Set<string>(
@@ -306,11 +306,11 @@ export const validateLoblawsStoreId = async ({
 	}
 
 	return {
-		message: `Store ID: ${storeId} is valid for chain: ${chainName}`,
+		message: `Store ID: ${storeId} is valid for chain: ${flagName}`,
 		code: 200,
 	};
 };
 
 export interface IGetProductLoblawsProps extends IGetProductProps {
-	chainName: LoblawsFlagName;
+	flagName: LoblawsFlagName;
 }

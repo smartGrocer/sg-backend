@@ -7,17 +7,17 @@ import scrapeMetro from "../fetch/crawl/metro/scrapeMetro";
 
 const scrapeStores = async (req: Request, res: Response) => {
 	const { query } = req;
-	const chainName = query.chain as LoblawsFlagName | MetroFlags;
+	const flagName = query.chain as LoblawsFlagName | MetroFlags;
 
-	if (!chainName) {
+	if (!flagName) {
 		return res.status(400).json({
 			message: `Chain name is required, please provide a chain name as a query parameter like so: /scrape?chain=chain_name`,
 			availableOptions: [...Object.values(LoblawsFlagName)],
 		});
 	}
 
-	if (Object.values(LoblawsFlagName).includes(chainName as LoblawsFlagName)) {
-		const response = await scrapeLoblaws(chainName as LoblawsFlagName);
+	if (Object.values(LoblawsFlagName).includes(flagName as LoblawsFlagName)) {
+		const response = await scrapeLoblaws(flagName as LoblawsFlagName);
 
 		if (response instanceof Error) {
 			return res.status(500).json({
@@ -33,8 +33,8 @@ const scrapeStores = async (req: Request, res: Response) => {
 		});
 	}
 
-	if (Object.values(MetroFlags).includes(chainName as MetroFlags)) {
-		const response = await scrapeMetro(chainName as MetroFlags);
+	if (Object.values(MetroFlags).includes(flagName as MetroFlags)) {
+		const response = await scrapeMetro(flagName as MetroFlags);
 		if (response instanceof Error) {
 			return res.status(500).json({
 				message: "Error scraping metro",

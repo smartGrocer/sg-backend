@@ -3,12 +3,12 @@ import logger from "../../../../common/logging/logger";
 import { IAllStoreChains } from "../../../../common/types/common/store";
 
 const pickStore = async (
-	chainName: IAllStoreChains
+	flagName: IAllStoreChains
 ): Promise<string | Error> => {
-	// pick random store from db based on chainName
+	// pick random store from db based on flagName
 	try {
 		const randomStore = await Store.aggregate([
-			{ $match: { chain_name: chainName, scrape: true } },
+			{ $match: { chain_name: flagName, scrape: true } },
 			{ $sample: { size: 1 } },
 		]);
 
@@ -24,7 +24,7 @@ const pickStore = async (
 		return store;
 	} catch (e) {
 		logger.error({
-			message: `Error picking store ${chainName}`,
+			message: `Error picking store ${flagName}`,
 			error: e,
 			service: "crawler",
 		});

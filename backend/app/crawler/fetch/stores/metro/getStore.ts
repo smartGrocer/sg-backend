@@ -12,15 +12,14 @@ import {
 } from "../../../../common/cache/storeCache";
 
 interface IGetMetroStores {
-	chainName: MetroFlags;
+	flagName: MetroFlags;
 }
 
 const getMetroStores = async ({
-	chainName,
+	flagName,
 }: IGetMetroStores): Promise<IStoreProps[] | Error> => {
 	try {
-		const chain = chainName;
-		const cacheKey = `stores-${chainName}`;
+		const cacheKey = `stores-${flagName}`;
 		const cachedData = await getCachedData({
 			key: cacheKey,
 			cacheInRedis: true,
@@ -30,9 +29,9 @@ const getMetroStores = async ({
 			return cachedData;
 		}
 		const endpoint = `/find-a-grocery`;
-		const domain = `https://www.${chain}.ca`;
+		const domain = `https://www.${flagName}.ca`;
 		const url =
-			chain === MetroFlags.metro
+			flagName === MetroFlags.metro
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
@@ -73,10 +72,10 @@ const getMetroStores = async ({
 				data.push({
 					store_num: storeId,
 					parent_company:
-						chainName === "metro"
+						flagName === "metro"
 							? AllParentCompanyList.metro
 							: AllParentCompanyList.foodbasics,
-					chain_name: chainName,
+					chain_name: flagName,
 					store_name: storeName,
 					latitude: parseFloat(storeLatitude),
 					longitude: parseFloat(storeLongitude),
