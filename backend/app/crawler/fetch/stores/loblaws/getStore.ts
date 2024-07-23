@@ -53,7 +53,7 @@ const getLoblawsStores = async ({
 	flagName,
 }: LoblawsStore): Promise<IStoreProps[] | Error> => {
 	if (!flagName && !showAllStores) {
-		throw new Error("Chain name is required");
+		throw new Error("Flag name is required");
 	}
 
 	// if the flag name is not in the enum, throw an error
