@@ -17,15 +17,13 @@ const fetchMetroStores = async ({
 	showAllStores,
 }: IFetchFoodBasicStores): Promise<IFetchStoresReturn> => {
 	const flagName = req.params.flag as MetroFlags;
-
-	if (!flagName) {
+	if (!flagName && !showAllStores) {
 		return {
 			message: `flag_name is required, please provide a store name as /stores/:parent_name/:flag_name`,
 			availableOptions: Object.values(MetroFlags),
 			code: 400,
 		};
 	}
-
 	// if flag name is not valid
 	if (!Object.values(MetroFlags).includes(flagName) && !showAllStores) {
 		return {
@@ -35,6 +33,7 @@ const fetchMetroStores = async ({
 		};
 	}
 
+	// TODO: add getting metro and foodbasics stores when showAllStores is true
 	const stores = await getMetroStores({
 		flagName,
 	});
