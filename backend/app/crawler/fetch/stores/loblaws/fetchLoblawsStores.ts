@@ -22,7 +22,7 @@ const fetchLoblawsStores = async ({
 	if (!flagName && !showAllStores) {
 		return {
 			message:
-				"flag_name is required, please provide a store name as /stores/:store_name/:flag_name",
+				"flag_name is required, please provide a store name as /stores/:parent_name/:flag_name",
 			availableOptions: Object.values(LoblawsFlagName),
 			code: 400,
 		};
