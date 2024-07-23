@@ -1,10 +1,8 @@
 import Store from "../../../../common/db/schema/store";
 import logger from "../../../../common/logging/logger";
-import { IAllStoreChains } from "../../../../common/types/common/store";
+import { IAllStoreFlags } from "../../../../common/types/common/store";
 
-const pickStore = async (
-	flagName: IAllStoreChains
-): Promise<string | Error> => {
+const pickStore = async (flagName: IAllStoreFlags): Promise<string | Error> => {
 	// pick random store from db based on flagName
 	try {
 		const randomStore = await Store.aggregate([

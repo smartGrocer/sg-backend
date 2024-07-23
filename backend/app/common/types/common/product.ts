@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { AllParentCompanyList, IAllStoreChains } from "./store";
+import { AllParentCompanyList, IAllStoreFlags } from "./store";
 
 export interface ISearchStore {
 	search_term: string;
@@ -39,7 +39,7 @@ export interface IProductProps extends IProduct, IPrice {}
 
 export interface ISearchProducts {
 	search_term: string;
-	flagName: IAllStoreChains;
+	flagName: IAllStoreFlags;
 	store_num: string;
 }
 
