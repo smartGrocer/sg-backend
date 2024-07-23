@@ -5,7 +5,7 @@ import { IProductProps } from "../../../../common/types/common/product";
 import {
 	IGetProductLoblawsProps,
 	LoblawsChainAlternateName,
-	LoblawsChainName,
+	LoblawsFlagName,
 	pickImage,
 } from "../../../../common/types/loblaws/loblaws";
 import parseQuantity from "../../../../common/helpers/parseQuantity";
@@ -59,7 +59,7 @@ const getProduct = async ({
 		productData.parent_company = AllParentCompanyList.loblaws;
 		productData.product_brand = product.brand;
 		productData.product_name = product.name;
-		productData.product_link = `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca${product.link}`;
+		productData.product_link = `https://www.${LoblawsChainAlternateName(chainName as LoblawsFlagName)}.ca${product.link}`;
 		productData.product_image = pickImage(product.imageAssets);
 		productData.description = removeHtmlTags(product.description || "N/A");
 		productData.product_size_unit = parseQuantity(product.packageSize).unit;

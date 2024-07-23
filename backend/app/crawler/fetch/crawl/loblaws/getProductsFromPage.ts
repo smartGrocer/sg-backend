@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import {
 	LoblawsChainAlternateName,
-	LoblawsChainName,
+	LoblawsFlagName,
 } from "../../../../common/types/loblaws/loblaws";
 import logger from "../../../../common/logging/logger";
 
@@ -11,7 +11,7 @@ const getProductsFromPage = async ({
 	page,
 }: {
 	store_num: string;
-	chainName: LoblawsChainName;
+	chainName: LoblawsFlagName;
 	page: number;
 }): Promise<AxiosResponse | Error> => {
 	try {
@@ -20,8 +20,8 @@ const getProductsFromPage = async ({
 		const headers = {
 			"Content-Type": "application/json",
 			"Accept-Language": "en",
-			Origin: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca`,
-			Referer: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca/`,
+			Origin: `https://www.${LoblawsChainAlternateName(chainName as LoblawsFlagName)}.ca`,
+			Referer: `https://www.${LoblawsChainAlternateName(chainName as LoblawsFlagName)}.ca/`,
 			"x-apikey": "C1xujSegT5j3ap3yexJjqhOfELwGKYvz",
 			"x-application-type": "Web",
 			"x-loblaw-tenant-id": "ONLINE_GROCERIES",

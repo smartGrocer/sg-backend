@@ -5,7 +5,7 @@ import getLoblawsStores from "../../../crawler/fetch/stores/loblaws/getStore";
 import { IStoreProps } from "../common/store";
 
 // eslint-disable-next-line no-shadow
-export enum LoblawsChainName {
+export enum LoblawsFlagName {
 	loblaw = "loblaw",
 	zehrs = "zehrs",
 	valumart = "valumart",
@@ -22,33 +22,33 @@ export enum LoblawsChainName {
 }
 
 export interface ISearchLoblaws extends ISearchStore {
-	chainName: LoblawsChainName;
+	chainName: LoblawsFlagName;
 }
 
 export interface IGetProductLoblaws extends IGetProduct {
-	chainName: LoblawsChainName;
+	chainName: LoblawsFlagName;
 }
 
 export const LoblawsChainAlternateName = (
-	flag_name: LoblawsChainName
+	flag_name: LoblawsFlagName
 ): string => {
-	if (flag_name === LoblawsChainName.superstore) {
+	if (flag_name === LoblawsFlagName.superstore) {
 		return "realcanadiansuperstore";
 	}
 
-	if (flag_name === LoblawsChainName.independent) {
+	if (flag_name === LoblawsFlagName.independent) {
 		return "yourindependentgrocer";
 	}
 
-	if (flag_name === LoblawsChainName.loblaw) {
+	if (flag_name === LoblawsFlagName.loblaw) {
 		return "loblaws";
 	}
 
-	if (flag_name === LoblawsChainName.dominion) {
+	if (flag_name === LoblawsFlagName.dominion) {
 		return "newfoundlandgrocerystores";
 	}
 
-	if (flag_name === LoblawsChainName.rass) {
+	if (flag_name === LoblawsFlagName.rass) {
 		return "atlanticsuperstore";
 	}
 
@@ -56,7 +56,7 @@ export const LoblawsChainAlternateName = (
 };
 
 export interface LoblawsStore {
-	chainName: LoblawsChainName;
+	chainName: LoblawsFlagName;
 	showAllStores: boolean;
 }
 
@@ -268,7 +268,7 @@ export const validateLoblawsStoreId = async ({
 	code: number;
 }> => {
 	const stores = await getLoblawsStores({
-		chainName: chainName as LoblawsChainName,
+		chainName: chainName as LoblawsFlagName,
 		showAllStores: false,
 	});
 
@@ -312,5 +312,5 @@ export const validateLoblawsStoreId = async ({
 };
 
 export interface IGetProductLoblawsProps extends IGetProductProps {
-	chainName: LoblawsChainName;
+	chainName: LoblawsFlagName;
 }

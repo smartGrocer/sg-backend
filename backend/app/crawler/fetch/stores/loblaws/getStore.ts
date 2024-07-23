@@ -3,7 +3,7 @@ import axios from "axios";
 import {
 	IStoreLoblawsSrcProps,
 	LoblawsChainAlternateName,
-	LoblawsChainName,
+	LoblawsFlagName,
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
@@ -57,10 +57,7 @@ const getLoblawsStores = async ({
 	}
 
 	// if the chain name is not in the enum, throw an error
-	if (
-		!Object.values(LoblawsChainName).includes(chainName) &&
-		!showAllStores
-	) {
+	if (!Object.values(LoblawsFlagName).includes(chainName) && !showAllStores) {
 		throw new Error("Invalid chain name");
 	}
 
@@ -76,7 +73,7 @@ const getLoblawsStores = async ({
 	}
 
 	const listOfStores = showAllStores
-		? Object.values(LoblawsChainName)
+		? Object.values(LoblawsFlagName)
 		: [chainName];
 
 	try {

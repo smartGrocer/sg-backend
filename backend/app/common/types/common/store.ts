@@ -4,7 +4,7 @@ import { IPostalData } from "../../helpers/getCoordinatesFromPostal";
 import { TValidPostalCode } from "../../helpers/validatePostalCode";
 
 // eslint-disable-next-line import/no-cycle
-import { LoblawsChainName } from "../loblaws/loblaws";
+import { LoblawsFlagName } from "../loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
 import { MetroChain } from "../metro/metro";
 
@@ -55,5 +55,5 @@ export interface IFetchStoresReturn {
 	availableOptions?: string | string[];
 }
 
-// IAllStoreChains is a union of all the store chains enums like LoblawsChainName, MetroChain, walmart, etc. Need to be able to do Object.values(IAllStoreChains) to get all the chain names
-export type IAllStoreChains = LoblawsChainName | MetroChain | "walmart";
+// IAllStoreChains is a union of all the store chains enums like LoblawsFlagName, MetroChain, walmart, etc. Need to be able to do Object.values(IAllStoreChains) to get all the chain names
+export type IAllStoreChains = LoblawsFlagName | MetroChain | "walmart";

@@ -4,7 +4,7 @@ import { AllParentCompanyList } from "../../../../common/types/common/store";
 import {
 	ILoblawsAllFoodProps,
 	LoblawsChainAlternateName,
-	LoblawsChainName,
+	LoblawsFlagName,
 } from "../../../../common/types/loblaws/loblaws";
 
 export interface IExtractProductDataProps {
@@ -19,7 +19,7 @@ export interface IExtractProductDataProps {
 
 const extractProductData = (
 	data: IExtractProductDataProps,
-	chainName: LoblawsChainName,
+	chainName: LoblawsFlagName,
 	store_num: string
 ): IProductProps[] => {
 	return data.productTiles.map((product: ILoblawsAllFoodProps) => {

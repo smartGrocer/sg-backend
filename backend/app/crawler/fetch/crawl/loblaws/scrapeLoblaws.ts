@@ -1,5 +1,5 @@
 import { IProductProps } from "../../../../common/types/common/product";
-import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
+import { LoblawsFlagName } from "../../../../common/types/loblaws/loblaws";
 import getProductsFromPage from "./getProductsFromPage";
 import cleanLoblawsData from "./cleanLoblawsData";
 
@@ -13,7 +13,7 @@ import logger from "../../../../common/logging/logger";
 
 interface IScrapeLoblawsArgs {
 	store_num: string;
-	chainName: LoblawsChainName;
+	chainName: LoblawsFlagName;
 }
 
 const scrapeStore = async ({
@@ -116,7 +116,7 @@ const scrapeStore = async ({
 };
 
 const scrapeLoblaws = async (
-	chainName: LoblawsChainName
+	chainName: LoblawsFlagName
 ): Promise<IProductProps[] | Error> => {
 	try {
 		const store_num = await pickStore(chainName);
