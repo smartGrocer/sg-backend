@@ -7,11 +7,11 @@ import scrapeMetro from "../fetch/crawl/metro/scrapeMetro";
 
 const scrapeStores = async (req: Request, res: Response) => {
 	const { query } = req;
-	const flagName = query.chain as LoblawsFlagName | MetroFlags;
+	const flagName = query.flag as LoblawsFlagName | MetroFlags;
 
 	if (!flagName) {
 		return res.status(400).json({
-			message: `Chain name is required, please provide a chain name as a query parameter like so: /scrape?chain=flag_name`,
+			message: `Chain name is required, please provide a flag name as a query parameter like so: /scrape?flag=flag_name`,
 			availableOptions: [...Object.values(LoblawsFlagName)],
 		});
 	}
@@ -50,7 +50,7 @@ const scrapeStores = async (req: Request, res: Response) => {
 	}
 
 	return res.status(400).json({
-		message: `Invalid chain name, please provide a valid chain name as a query parameter like so: /scrape?chain=flag_name`,
+		message: `Invalid flag name, please provide a valid flag name as a query parameter like so: /scrape?flag=flag_name`,
 		availableOptions: [...Object.values(AllParentCompanyList)],
 	});
 };

@@ -56,9 +56,9 @@ const getLoblawsStores = async ({
 		throw new Error("Chain name is required");
 	}
 
-	// if the chain name is not in the enum, throw an error
+	// if the flag name is not in the enum, throw an error
 	if (!Object.values(LoblawsFlagName).includes(flagName) && !showAllStores) {
-		throw new Error("Invalid chain name");
+		throw new Error("Invalid flag name");
 	}
 
 	const cacheKey = `stores-${flagName}-${showAllStores ? "all" : flagName}`;
@@ -79,7 +79,7 @@ const getLoblawsStores = async ({
 	try {
 		const returnData = [] as IStoreProps[];
 
-		// if showAllStores is true, return all stores. Otherwise, return the store for the chain name
+		// if showAllStores is true, return all stores. Otherwise, return the store for the flag name
 		for await (const iStore of listOfStores) {
 			const url = `https://www.${LoblawsFlagAlternateName(iStore)}.ca/api/pickup-locations`;
 			const bannerId = iStore;

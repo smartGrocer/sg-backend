@@ -294,7 +294,7 @@ export const validateLoblawsStoreId = async ({
 
 	if (!stores.find((store) => store.store_num === storeId)) {
 		return {
-			message: `Store ID: ${storeId} is not valid for chain: ${flagName}`,
+			message: `Store ID: ${storeId} is not valid for flag: ${flagName}`,
 			availableOptions: [
 				// remove duplicates
 				...new Set<string>(
@@ -306,7 +306,7 @@ export const validateLoblawsStoreId = async ({
 	}
 
 	return {
-		message: `Store ID: ${storeId} is valid for chain: ${flagName}`,
+		message: `Store ID: ${storeId} is valid for flag: ${flagName}`,
 		code: 200,
 	};
 };

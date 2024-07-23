@@ -55,5 +55,5 @@ export interface IFetchStoresReturn {
 	availableOptions?: string | string[];
 }
 
-// IAllStoreChains is a union of all the store chains enums like LoblawsFlagName, MetroFlags, walmart, etc. Need to be able to do Object.values(IAllStoreChains) to get all the chain names
+// IAllStoreChains is a union of all the store chains enums like LoblawsFlagName, MetroFlags, walmart, etc. Need to be able to do Object.values(IAllStoreChains) to get all the flag names
 export type IAllStoreChains = LoblawsFlagName | MetroFlags | "walmart";

@@ -12,7 +12,7 @@ describe("Route /store", () => {
 			);
 
 			expect(response.body.availableRoutes).toMatchObject({
-				stores: "/api/stores/:parent_company/:chain?postal_code=postal_code&distance=5000",
+				stores: "/api/stores/:parent_company/:flag?postal_code=postal_code&distance=5000",
 			});
 		});
 

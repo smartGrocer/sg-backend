@@ -16,8 +16,8 @@ const fetchLoblawsStores = async ({
 	distance,
 	showAllStores,
 }: IFetchLoblawsStores): Promise<IFetchStoresReturn> => {
-	// chain name
-	const flagName = req.params.chain as LoblawsFlagName;
+	// flag name
+	const flagName = req.params.flag as LoblawsFlagName;
 
 	if (!flagName && !showAllStores) {
 		return {
@@ -28,11 +28,11 @@ const fetchLoblawsStores = async ({
 		};
 	}
 
-	// chain name has to be in the enum
+	// flag name has to be in the enum
 	if (!Object.values(LoblawsFlagName).includes(flagName) && !showAllStores) {
 		return {
 			message:
-				"Invalid chain name, please provide a valid chain name. Pick a valid chain name",
+				"Invalid flag name, please provide a valid flag name. Pick a valid flag name",
 			availableOptions: Object.values(LoblawsFlagName) as string[],
 			code: 400,
 		};

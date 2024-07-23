@@ -16,7 +16,7 @@ const fetchMetroStores = async ({
 	distance,
 	showAllStores,
 }: IFetchFoodBasicStores): Promise<IFetchStoresReturn> => {
-	const flagName = req.params.chain as MetroFlags;
+	const flagName = req.params.flag as MetroFlags;
 
 	if (!flagName) {
 		return {
@@ -26,10 +26,10 @@ const fetchMetroStores = async ({
 		};
 	}
 
-	// if chain name is not valid
+	// if flag name is not valid
 	if (!Object.values(MetroFlags).includes(flagName) && !showAllStores) {
 		return {
-			message: `Invalid chain name, please provide a valid chain name.`,
+			message: `Invalid flag name, please provide a valid flag name.`,
 			availableOptions: Object.values(MetroFlags),
 			code: 400,
 		};
