@@ -1,17 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 import {
-	LoblawsChainAlternateName,
-	LoblawsChainName,
+	LoblawsFlagAlternateName,
+	LoblawsFlagName,
 } from "../../../../common/types/loblaws/loblaws";
 import logger from "../../../../common/logging/logger";
 
 const getProductsFromPage = async ({
 	store_num,
-	chainName,
+	flagName,
 	page,
 }: {
 	store_num: string;
-	chainName: LoblawsChainName;
+	flagName: LoblawsFlagName;
 	page: number;
 }): Promise<AxiosResponse | Error> => {
 	try {
@@ -20,8 +20,8 @@ const getProductsFromPage = async ({
 		const headers = {
 			"Content-Type": "application/json",
 			"Accept-Language": "en",
-			Origin: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca`,
-			Referer: `https://www.${LoblawsChainAlternateName(chainName as LoblawsChainName)}.ca/`,
+			Origin: `https://www.${LoblawsFlagAlternateName(flagName as LoblawsFlagName)}.ca`,
+			Referer: `https://www.${LoblawsFlagAlternateName(flagName as LoblawsFlagName)}.ca/`,
 			"x-apikey": "C1xujSegT5j3ap3yexJjqhOfELwGKYvz",
 			"x-application-type": "Web",
 			"x-loblaw-tenant-id": "ONLINE_GROCERIES",
@@ -51,7 +51,7 @@ const getProductsFromPage = async ({
 		return response;
 	} catch (e) {
 		logger.error({
-			message: `Error fetching products for ${chainName} | page: ${page}`,
+			message: `Error fetching products for ${flagName} | page: ${page}`,
 			error: e,
 			service: "crawler",
 		});

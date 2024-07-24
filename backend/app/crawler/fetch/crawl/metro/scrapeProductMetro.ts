@@ -8,23 +8,23 @@ import Product from "../../../../common/db/schema/product";
 import sleep from "../../../../common/helpers/sleep";
 import logger from "../../../../common/logging/logger";
 import { IProductData } from "../../../../common/types/common/product";
-import { MetroChain } from "../../../../common/types/metro/metro";
+import { MetroFlags } from "../../../../common/types/metro/metro";
 import getProduct from "../../product/metro/getProduct";
 
 const scrapeAllProductsMetro = async ({
-	chainName,
+	flagName,
 }: {
-	chainName: MetroChain;
+	flagName: MetroFlags;
 }): Promise<void> => {
 	await sleep({ min: 15, max: 35 });
 	const start_time = new Date().getTime();
 
 	// eslint-disable-next-line no-use-before-define
-	const product = await findProductMetro({ chainName });
+	const product = await findProductMetro({ flagName });
 
 	if (!product) {
 		logger.info({
-			message: `No products found for ${chainName} | Time: ${
+			message: `No products found for ${flagName} | Time: ${
 				(new Date().getTime() - start_time) / 1000
 			} s`,
 			service: "scrapper",
@@ -36,25 +36,26 @@ const scrapeAllProductsMetro = async ({
 	const productData = await getProduct({
 		product_num: product.product_num,
 		url: product.product_link,
-		store_num: product.chain_brand,
-		chainName,
+		store_num: product.parent_company,
+		flagName,
 	});
 
 	if (productData instanceof Error) {
 		logger.error({
-			message: `Error fetching product ${product.product_num} at ${product.chain_brand} | Time: ${
+			message: `Error fetching product ${product.product_num} at ${product.parent_company} | Time: ${
 				(new Date().getTime() - start_time) / 1000
 			} s`,
 			error: productData,
 		});
 
 		// eslint-disable-next-line consistent-return
-		await scrapeAllProductsMetro({ chainName }); // Retry with next product
+		await scrapeAllProductsMetro({ flagName }); // Retry with next product
 		return;
 	}
 
 	// if productData starts with "Product number: " then don't save to db
-	if (productData &&
+	if (
+		productData &&
 		productData?.description
 			.toLowerCase()
 			.startsWith("Product number: ".toLowerCase())
@@ -66,7 +67,7 @@ const scrapeAllProductsMetro = async ({
 	await Product.findOneAndUpdate(
 		{
 			product_num: product.product_num,
-			chain_brand: product.chain_brand,
+			parent_company: product.parent_company,
 		},
 		{
 			$set: {
@@ -80,24 +81,29 @@ const scrapeAllProductsMetro = async ({
 	);
 
 	logger.info({
-		message: `Product description updated for ${product.product_num} at ${product.chain_brand} | Time: ${
+		message: `Product description updated for ${product.product_num} at ${product.parent_company} | Time: ${
 			(new Date().getTime() - start_time) / 1000
 		} s`,
 		service: "scrapper",
 	});
 	// Continue scraping for more products
-	await scrapeAllProductsMetro({ chainName });
+	await scrapeAllProductsMetro({ flagName });
 };
 
 const findProductMetro = async ({
-	chainName,
+	flagName,
 }: {
-	chainName: string;
+	flagName: string;
 }): Promise<IProductData> => {
 	// find random products in mongodb that do not have a description field or is an empty string
 
 	const product = await Product.aggregate([
-		{ $match: { chain_brand: chainName, description: { $exists: false } } },
+		{
+			$match: {
+				parent_company: flagName,
+				description: { $exists: false },
+			},
+		},
 		{ $sample: { size: 1 } },
 	]);
 

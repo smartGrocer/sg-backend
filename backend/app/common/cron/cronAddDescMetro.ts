@@ -1,7 +1,7 @@
 import { CronJob } from "cron";
 import scrapeProductMetro from "../../crawler/fetch/crawl/metro/scrapeProductMetro";
 import getSecret from "../helpers/getSecret";
-import { MetroChain } from "../types/metro/metro";
+import { MetroFlags } from "../types/metro/metro";
 import logger from "../logging/logger";
 
 const cronAddDescMetro = async (): Promise<void> => {
@@ -19,7 +19,7 @@ const cronAddDescMetro = async (): Promise<void> => {
 				service: "cron",
 			});
 			await scrapeProductMetro({
-				chainName: runner as MetroChain,
+				flagName: runner as MetroFlags,
 			});
 		}
 
@@ -33,7 +33,7 @@ const cronAddDescMetro = async (): Promise<void> => {
 						service: "cron",
 					});
 					await scrapeProductMetro({
-						chainName: runner as MetroChain,
+						flagName: runner as MetroFlags,
 					});
 				}
 			},

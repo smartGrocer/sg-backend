@@ -4,12 +4,12 @@ import { IPostalData } from "../../helpers/getCoordinatesFromPostal";
 import { TValidPostalCode } from "../../helpers/validatePostalCode";
 
 // eslint-disable-next-line import/no-cycle
-import { LoblawsChainName } from "../loblaws/loblaws";
+import { LoblawsFlagName } from "../loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
-import { MetroChain } from "../metro/metro";
+import { MetroFlags } from "../metro/metro";
 
 // eslint-disable-next-line no-shadow
-export enum AllStoreChainBrands {
+export enum AllParentCompanyList {
 	all = "all",
 	loblaws = "loblaws",
 	walmart = "walmart",
@@ -19,8 +19,8 @@ export enum AllStoreChainBrands {
 export interface IStoreProps {
 	// id: string;
 	store_num: string;
-	chain_brand: AllStoreChainBrands;
-	chain_name: string;
+	parent_company: AllParentCompanyList;
+	flag_name: string;
 	store_name: string;
 	latitude: number;
 	longitude: number;
@@ -55,5 +55,5 @@ export interface IFetchStoresReturn {
 	availableOptions?: string | string[];
 }
 
-// IAllStoreChains is a union of all the store chains enums like LoblawsChainName, MetroChain, walmart, etc. Need to be able to do Object.values(IAllStoreChains) to get all the chain names
-export type IAllStoreChains = LoblawsChainName | MetroChain | "walmart";
+// IAllStoreFlags is a union of all the store flags enums like LoblawsFlagName, MetroFlags, walmart, etc. Need to be able to do Object.values(IAllStoreFlags) to get all the flag names
+export type IAllStoreFlags = LoblawsFlagName | MetroFlags | "walmart";

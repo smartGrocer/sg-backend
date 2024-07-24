@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import parseQuantity from "./parseQuantity";
-import { AllStoreChainBrands } from "../types/common/store";
+import { AllParentCompanyList } from "../types/common/store";
 import { IProductProps } from "../types/common/product";
 
 interface IExtractMetroDataReturn {
@@ -11,11 +11,11 @@ interface IExtractMetroDataReturn {
 const cleanAndExtractMetroData = ({
 	data,
 	store_num,
-	chainName,
+	flagName,
 }: {
 	data: string;
 	store_num: string;
-	chainName: string;
+	flagName: string;
 }): IExtractMetroDataReturn => {
 	const $ = cheerio.load(data);
 	const productData = [] as IProductProps[];
@@ -34,7 +34,7 @@ const cleanAndExtractMetroData = ({
 				$(el).find(".product-details-link").attr("href") || "";
 			const product_link =
 				`https://www.${
-					chainName === "metro" ? "metro.ca" : "foodbasics.ca"
+					flagName === "metro" ? "metro.ca" : "foodbasics.ca"
 				}${link_to_product}` || "";
 			const product_image =
 				$(el)
@@ -139,11 +139,11 @@ const cleanAndExtractMetroData = ({
 			productData.push({
 				product_num,
 				store_num,
-				chain_name: chainName,
-				chain_brand:
-					chainName === "metro"
-						? AllStoreChainBrands.metro
-						: AllStoreChainBrands.foodbasics,
+				flag_name: flagName,
+				parent_company:
+					flagName === "metro"
+						? AllParentCompanyList.metro
+						: AllParentCompanyList.foodbasics,
 				product_brand,
 				product_name,
 				product_link,

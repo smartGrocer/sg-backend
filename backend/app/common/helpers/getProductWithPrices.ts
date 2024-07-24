@@ -39,7 +39,7 @@ const getProductWithPrices = async (productId: string) => {
 			$group: {
 				_id: "$_id",
 				product_num: { $first: "$product_num" },
-				chain_brand: { $first: "$chain_brand" },
+				parent_company: { $first: "$parent_company" },
 				product_brand: { $first: "$product_brand" },
 				product_name: { $first: "$product_name" },
 				product_link: { $first: "$product_link" },
@@ -74,7 +74,7 @@ const getProductWithPrices = async (productId: string) => {
 							},
 						},
 						store: {
-							chain_name: "$priceHistory.store.chain_name",
+							flag_name: "$priceHistory.store.flag_name",
 							store_num: "$priceHistory.store.store_num",
 							formatted_address:
 								"$priceHistory.store.formatted_address",
@@ -90,7 +90,7 @@ const getProductWithPrices = async (productId: string) => {
 			$project: {
 				_id: 0,
 				product_num: 1,
-				chain_brand: 1,
+				parent_company: 1,
 				product_brand: 1,
 				product_name: 1,
 				product_link: 1,
@@ -105,7 +105,7 @@ const getProductWithPrices = async (productId: string) => {
 						in: {
 							store_num: "$$price.store_num",
 							store: {
-								chain_name: "$$price.store.chain_name",
+								flag_name: "$$price.store.flag_name",
 								store_num: "$$price.store.store_num",
 								formatted_address:
 									"$$price.store.formatted_address",

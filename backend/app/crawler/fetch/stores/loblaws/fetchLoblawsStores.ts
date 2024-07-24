@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { LoblawsChainName } from "../../../../common/types/loblaws/loblaws";
+import { LoblawsFlagName } from "../../../../common/types/loblaws/loblaws";
 import getLoblawsStores from "./getStore";
 import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";
 import {
@@ -16,33 +16,30 @@ const fetchLoblawsStores = async ({
 	distance,
 	showAllStores,
 }: IFetchLoblawsStores): Promise<IFetchStoresReturn> => {
-	// chain name
-	const chainName = req.params.chain as LoblawsChainName;
+	// flag name
+	const flagName = req.params.flag as LoblawsFlagName;
 
-	if (!chainName && !showAllStores) {
+	if (!flagName && !showAllStores) {
 		return {
 			message:
-				"chain_name is required, please provide a store name as /stores/:store_name/:chain_name",
-			availableOptions: Object.values(LoblawsChainName),
+				"flag_name is required, please provide a store name as /stores/:parent_name/:flag_name",
+			availableOptions: Object.values(LoblawsFlagName),
 			code: 400,
 		};
 	}
 
-	// chain name has to be in the enum
-	if (
-		!Object.values(LoblawsChainName).includes(chainName) &&
-		!showAllStores
-	) {
+	// flag name has to be in the enum
+	if (!Object.values(LoblawsFlagName).includes(flagName) && !showAllStores) {
 		return {
 			message:
-				"Invalid chain name, please provide a valid chain name. Pick a valid chain name",
-			availableOptions: Object.values(LoblawsChainName) as string[],
+				"Invalid flag name, please provide a valid flag name. Pick a valid flag name",
+			availableOptions: Object.values(LoblawsFlagName) as string[],
 			code: 400,
 		};
 	}
 
 	// get stores
-	const stores = await getLoblawsStores({ chainName, showAllStores });
+	const stores = await getLoblawsStores({ flagName, showAllStores });
 
 	if (stores instanceof Error) {
 		return {
@@ -63,7 +60,7 @@ const fetchLoblawsStores = async ({
 	await writeStoreToDb(filteredStores);
 
 	return {
-		message: `Stores fetched successfully for ${chainName}`,
+		message: `Stores fetched successfully for ${flagName}`,
 		count: filteredStores.length,
 		data: filteredStores,
 		code: 200,

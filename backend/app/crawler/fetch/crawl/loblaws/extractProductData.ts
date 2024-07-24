@@ -1,10 +1,10 @@
 import removeHtmlTags from "../../../../common/helpers/removeHtmlTags";
 import { IProductProps } from "../../../../common/types/common/product";
-import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import { AllParentCompanyList } from "../../../../common/types/common/store";
 import {
 	ILoblawsAllFoodProps,
-	LoblawsChainAlternateName,
-	LoblawsChainName,
+	LoblawsFlagAlternateName,
+	LoblawsFlagName,
 } from "../../../../common/types/loblaws/loblaws";
 
 export interface IExtractProductDataProps {
@@ -19,7 +19,7 @@ export interface IExtractProductDataProps {
 
 const extractProductData = (
 	data: IExtractProductDataProps,
-	chainName: LoblawsChainName,
+	flagName: LoblawsFlagName,
 	store_num: string
 ): IProductProps[] => {
 	return data.productTiles.map((product: ILoblawsAllFoodProps) => {
@@ -27,12 +27,12 @@ const extractProductData = (
 			product_num: product.productId,
 			product_name: product.title,
 			store_num,
-			chain_brand: AllStoreChainBrands.loblaws,
-			chain_name: chainName, // loblaw not loblaws
+			parent_company: AllParentCompanyList.loblaws,
+			flag_name: flagName, // loblaw not loblaws
 			product_brand: product.brand || "",
 			product_link:
-				`https://www.${LoblawsChainAlternateName(
-					chainName
+				`https://www.${LoblawsFlagAlternateName(
+					flagName
 				)}.ca${product?.link}` || "",
 			product_image:
 				product?.productImage[0]?.imageUrl ||

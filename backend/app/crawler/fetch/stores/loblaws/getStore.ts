@@ -2,13 +2,13 @@ import axios from "axios";
 // eslint-disable-next-line import/no-cycle
 import {
 	IStoreLoblawsSrcProps,
-	LoblawsChainAlternateName,
-	LoblawsChainName,
+	LoblawsFlagAlternateName,
+	LoblawsFlagName,
 	LoblawsStore,
 } from "../../../../common/types/loblaws/loblaws";
 // eslint-disable-next-line import/no-cycle
 import {
-	AllStoreChainBrands,
+	AllParentCompanyList,
 	IStoreProps,
 } from "../../../../common/types/common/store";
 import {
@@ -50,21 +50,18 @@ const filterStoreDuplicates = (data: IStoreProps[]): IStoreProps[] => {
 
 const getLoblawsStores = async ({
 	showAllStores,
-	chainName,
+	flagName,
 }: LoblawsStore): Promise<IStoreProps[] | Error> => {
-	if (!chainName && !showAllStores) {
-		throw new Error("Chain name is required");
+	if (!flagName && !showAllStores) {
+		throw new Error("Flag name is required");
 	}
 
-	// if the chain name is not in the enum, throw an error
-	if (
-		!Object.values(LoblawsChainName).includes(chainName) &&
-		!showAllStores
-	) {
-		throw new Error("Invalid chain name");
+	// if the flag name is not in the enum, throw an error
+	if (!Object.values(LoblawsFlagName).includes(flagName) && !showAllStores) {
+		throw new Error("Invalid flag name");
 	}
 
-	const cacheKey = `stores-${chainName}-${showAllStores ? "all" : chainName}`;
+	const cacheKey = `stores-${flagName}-${showAllStores ? "all" : flagName}`;
 
 	const cachedData = await getCachedData({
 		key: cacheKey,
@@ -76,15 +73,15 @@ const getLoblawsStores = async ({
 	}
 
 	const listOfStores = showAllStores
-		? Object.values(LoblawsChainName)
-		: [chainName];
+		? Object.values(LoblawsFlagName)
+		: [flagName];
 
 	try {
 		const returnData = [] as IStoreProps[];
 
-		// if showAllStores is true, return all stores. Otherwise, return the store for the chain name
+		// if showAllStores is true, return all stores. Otherwise, return the store for the flag name
 		for await (const iStore of listOfStores) {
-			const url = `https://www.${LoblawsChainAlternateName(iStore)}.ca/api/pickup-locations`;
+			const url = `https://www.${LoblawsFlagAlternateName(iStore)}.ca/api/pickup-locations`;
 			const bannerId = iStore;
 			const fetchUrl = `${url}?bannerIds=${bannerId}`;
 
@@ -95,8 +92,8 @@ const getLoblawsStores = async ({
 				(store: IStoreLoblawsSrcProps) => {
 					return {
 						store_num: store.storeId || "",
-						chain_name: store.storeBannerId || "",
-						chain_brand: AllStoreChainBrands.loblaws,
+						flag_name: store.storeBannerId || "",
+						parent_company: AllParentCompanyList.loblaws,
 						store_name: store.name || "",
 						latitude: store.geoPoint.latitude || 0,
 						longitude: store.geoPoint.longitude || 0,

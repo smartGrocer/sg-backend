@@ -4,7 +4,7 @@ import { TValidPostalCode } from "../../../../common/helpers/validatePostalCode"
 import { IStoreWalmartSrcProps } from "../../../../common/types/walmart/walmart";
 // eslint-disable-next-line import/no-cycle
 import {
-	AllStoreChainBrands,
+	AllParentCompanyList,
 	IStoreProps,
 } from "../../../../common/types/common/store";
 import {
@@ -58,8 +58,8 @@ const getWalmartStores = async ({
 
 				return {
 					store_num: store.id,
-					chain_brand: AllStoreChainBrands.walmart,
-					chain_name: "walmart",
+					parent_company: AllParentCompanyList.walmart,
+					flag_name: "walmart",
 					store_name: store.displayName,
 					latitude: store.geoPoint.latitude,
 					longitude: store.geoPoint.longitude,

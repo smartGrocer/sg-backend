@@ -11,18 +11,18 @@ import {
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 import usePandaBrowser from "../../../../common/helpers/usePandaBrowser";
-import { AllStoreChainBrands } from "../../../../common/types/common/store";
+import { AllParentCompanyList } from "../../../../common/types/common/store";
 
 const getProduct = async ({
 	product_num,
 	url,
 	store_num,
-	chainName,
+	flagName,
 }: IGetProductMetroProps): Promise<IProductProps | Error> => {
 	const productData: IProductProps[] = [];
 
 	try {
-		const cacheKey = `product-${chainName}-${store_num}-${product_num}-${url}`;
+		const cacheKey = `product-${flagName}-${store_num}-${product_num}-${url}`;
 
 		const cachedData = await getCachedData({
 			key: cacheKey,
@@ -56,7 +56,7 @@ const getProduct = async ({
 
 			const product_link = link_to_product
 				? `https://www.${
-						chainName === "metro" ? "metro.ca" : "foodbasics.ca"
+						flagName === "metro" ? "metro.ca" : "foodbasics.ca"
 					}${link_to_product}`
 				: "";
 			const product_image =
@@ -161,11 +161,11 @@ const getProduct = async ({
 			productData.push({
 				product_num: product_id_2,
 				store_num: store_id_2,
-				chain_brand:
-					chainName === "metro"
-						? AllStoreChainBrands.metro
-						: AllStoreChainBrands.foodbasics,
-				chain_name: chainName,
+				parent_company:
+					flagName === "metro"
+						? AllParentCompanyList.metro
+						: AllParentCompanyList.foodbasics,
+				flag_name: flagName,
 				product_brand,
 				product_name,
 				product_link,

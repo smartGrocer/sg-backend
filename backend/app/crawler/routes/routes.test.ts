@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../../index";
-import { AllStoreChainBrands } from "../../common/types/common/store";
+import { AllParentCompanyList } from "../../common/types/common/store";
 
 describe("Route /store", () => {
 	describe("GET /api", () => {
@@ -12,7 +12,7 @@ describe("Route /store", () => {
 			);
 
 			expect(response.body.availableRoutes).toMatchObject({
-				stores: "/api/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
+				stores: "/api/stores/:parent_company/:flag?postal_code=postal_code&distance=5000",
 			});
 		});
 
@@ -39,7 +39,7 @@ describe("Route /store", () => {
 
 	describe("GET /api/stores", () => {
 		describe("when query params are missing or incorrect", () => {
-			describe("when chain_brand is missing", () => {
+			describe("when parent_company is missing", () => {
 				it("should throw an error", async () => {
 					const routesInputs = [
 						"/api/stores",
@@ -52,10 +52,10 @@ describe("Route /store", () => {
 
 						expect(response.status).toBe(400);
 						expect(response.body.message).toBe(
-							"Invalid chain brand, please provide a valid chain brand."
+							"Invalid parent_company, please provide a valid parent_company as /api/stores/:parent_company like /api/stores/metro or /api/stores/loblaws."
 						);
 						expect(response.body.availableOptions).toEqual(
-							Object.values(AllStoreChainBrands)
+							Object.values(AllParentCompanyList)
 						);
 					}
 				});
@@ -130,6 +130,6 @@ describe("Route /store", () => {
 			});
 		});
 
-		describe("when query includes valid chain_brands", () => {});
+		describe("when query includes valid parent_company", () => {});
 	});
 });

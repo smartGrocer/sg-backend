@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import getMetroStores from "./getStore";
-import { MetroChain } from "../../../../common/types/metro/metro";
+import { MetroFlags } from "../../../../common/types/metro/metro";
 import filterStoresByLocation from "../../../../common/helpers/filterStoresByLocation";
 import {
 	IFetchStores,
@@ -16,27 +16,26 @@ const fetchMetroStores = async ({
 	distance,
 	showAllStores,
 }: IFetchFoodBasicStores): Promise<IFetchStoresReturn> => {
-	const chainName = req.params.chain as MetroChain;
-
-	if (!chainName) {
+	const flagName = req.params.flag as MetroFlags;
+	if (!flagName && !showAllStores) {
 		return {
-			message: `chain_name is required, please provide a store name as /stores/:store_name/:chain_name`,
-			availableOptions: Object.values(MetroChain),
+			message: `flag_name is required, please provide a store name as /stores/:parent_name/:flag_name`,
+			availableOptions: Object.values(MetroFlags),
+			code: 400,
+		};
+	}
+	// if flag name is not valid
+	if (!Object.values(MetroFlags).includes(flagName) && !showAllStores) {
+		return {
+			message: `Invalid flag name, please provide a valid flag name.`,
+			availableOptions: Object.values(MetroFlags),
 			code: 400,
 		};
 	}
 
-	// if chain name is not valid
-	if (!Object.values(MetroChain).includes(chainName) && !showAllStores) {
-		return {
-			message: `Invalid chain name, please provide a valid chain name.`,
-			availableOptions: Object.values(MetroChain),
-			code: 400,
-		};
-	}
-
+	// TODO: add getting metro and foodbasics stores when showAllStores is true
 	const stores = await getMetroStores({
-		chainName,
+		flagName,
 	});
 
 	if (stores instanceof Error) {
@@ -58,7 +57,7 @@ const fetchMetroStores = async ({
 	await writeStoreToDb(filteredStores);
 
 	return {
-		message: `Stores fetched successfully for ${chainName}`,
+		message: `Stores fetched successfully for ${flagName}`,
 		count: filteredStores.length,
 		data: filteredStores,
 		code: 200,

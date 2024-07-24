@@ -2,20 +2,20 @@
 import { IGetProduct, IGetProductProps, ISearchStore } from "../common/product";
 
 // eslint-disable-next-line no-shadow
-export enum MetroChain {
+export enum MetroFlags {
 	metro = "metro",
 	foodbasics = "foodbasics",
 }
 
 export interface ISearchMetro extends ISearchStore {
-	chainName: MetroChain;
+	flagName: MetroFlags;
 }
 
 export interface IGetProductMetro extends IGetProduct {
 	url: string;
-	chainName: MetroChain;
+	flagName: MetroFlags;
 }
 
 export interface IGetProductMetroProps extends IGetProductProps {
-	chainName: MetroChain;
+	flagName: MetroFlags;
 }

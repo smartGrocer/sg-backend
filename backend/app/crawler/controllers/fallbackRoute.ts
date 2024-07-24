@@ -5,8 +5,8 @@ const fallBackRoute = async (_req: Request, res: Response) => {
 		message:
 			"Welcome to the Crawler Service. Please use one of the available routes",
 		availableRoutes: {
-			stores: "/api/stores/:chain_brand/:chain?postal_code=postal_code&distance=5000",
-			scrape: "/api/scrape?chain=chain_name",
+			stores: "/api/stores/:parent_company/:flag?postal_code=postal_code&distance=5000",
+			scrape: "/api/scrape?flag=flag_name",
 			all_products: "/api/products/all?per_page=10&page=1",
 			product: "/api/product/:id",
 		},

@@ -7,7 +7,7 @@ export interface Pagination {
 }
 
 export interface Product {
-  chain_brand: string;
+  parent_company: string;
   createdAt: string;
   description: string;
   productBrand: string;

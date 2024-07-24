@@ -1,8 +1,8 @@
 // const { CronJob } = require("cron");
 import { CronJob } from "cron";
-import { LoblawsChainName } from "../types/loblaws/loblaws";
+import { LoblawsFlagName } from "../types/loblaws/loblaws";
 import scrapeLoblaws from "../../crawler/fetch/crawl/loblaws/scrapeLoblaws";
-import { MetroChain } from "../types/metro/metro";
+import { MetroFlags } from "../types/metro/metro";
 import scrapeMetro from "../../crawler/fetch/crawl/metro/scrapeMetro";
 import logger from "../logging/logger";
 
@@ -22,7 +22,7 @@ const scheduleCron = (): void => {
 		"valumart",
 		"fortinos",
 
-		// ...Object.values(LoblawsChainName),
+		// ...Object.values(LoblawsFlagName),
 
 		"metro",
 		"foodbasics",
@@ -43,21 +43,21 @@ const scheduleCron = (): void => {
 						service: "cron",
 					});
 
-					// if runner was in LoblawsChainName
+					// if runner was in LoblawsFlagName
 					if (
-						Object.values(LoblawsChainName).includes(
-							runner as LoblawsChainName
+						Object.values(LoblawsFlagName).includes(
+							runner as LoblawsFlagName
 						)
 					) {
 						// run the loblaws runner
-						await scrapeLoblaws(runner as LoblawsChainName);
+						await scrapeLoblaws(runner as LoblawsFlagName);
 					}
 
 					if (
-						Object.values(MetroChain).includes(runner as MetroChain)
+						Object.values(MetroFlags).includes(runner as MetroFlags)
 					) {
 						// run the metro runner
-						await scrapeMetro(runner as MetroChain);
+						await scrapeMetro(runner as MetroFlags);
 					}
 
 					pastRunners.push(runner);

@@ -5,7 +5,7 @@ import getLoblawsStores from "../../../crawler/fetch/stores/loblaws/getStore";
 import { IStoreProps } from "../common/store";
 
 // eslint-disable-next-line no-shadow
-export enum LoblawsChainName {
+export enum LoblawsFlagName {
 	loblaw = "loblaw",
 	zehrs = "zehrs",
 	valumart = "valumart",
@@ -22,41 +22,41 @@ export enum LoblawsChainName {
 }
 
 export interface ISearchLoblaws extends ISearchStore {
-	chainName: LoblawsChainName;
+	flagName: LoblawsFlagName;
 }
 
 export interface IGetProductLoblaws extends IGetProduct {
-	chainName: LoblawsChainName;
+	flagName: LoblawsFlagName;
 }
 
-export const LoblawsChainAlternateName = (
-	chainBrand: LoblawsChainName
+export const LoblawsFlagAlternateName = (
+	flag_name: LoblawsFlagName
 ): string => {
-	if (chainBrand === LoblawsChainName.superstore) {
+	if (flag_name === LoblawsFlagName.superstore) {
 		return "realcanadiansuperstore";
 	}
 
-	if (chainBrand === LoblawsChainName.independent) {
+	if (flag_name === LoblawsFlagName.independent) {
 		return "yourindependentgrocer";
 	}
 
-	if (chainBrand === LoblawsChainName.loblaw) {
+	if (flag_name === LoblawsFlagName.loblaw) {
 		return "loblaws";
 	}
 
-	if (chainBrand === LoblawsChainName.dominion) {
+	if (flag_name === LoblawsFlagName.dominion) {
 		return "newfoundlandgrocerystores";
 	}
 
-	if (chainBrand === LoblawsChainName.rass) {
+	if (flag_name === LoblawsFlagName.rass) {
 		return "atlanticsuperstore";
 	}
 
-	return chainBrand;
+	return flag_name;
 };
 
 export interface LoblawsStore {
-	chainName: LoblawsChainName;
+	flagName: LoblawsFlagName;
 	showAllStores: boolean;
 }
 
@@ -258,17 +258,17 @@ export const pickImage = (images: ILoblawsProductSrcProps["imageAssets"]) => {
 
 export const validateLoblawsStoreId = async ({
 	storeId,
-	chainName,
+	flagName,
 }: {
 	storeId: string;
-	chainName: string;
+	flagName: string;
 }): Promise<{
 	message: string;
 	availableOptions?: string[];
 	code: number;
 }> => {
 	const stores = await getLoblawsStores({
-		chainName: chainName as LoblawsChainName,
+		flagName: flagName as LoblawsFlagName,
 		showAllStores: false,
 	});
 
@@ -294,7 +294,7 @@ export const validateLoblawsStoreId = async ({
 
 	if (!stores.find((store) => store.store_num === storeId)) {
 		return {
-			message: `Store ID: ${storeId} is not valid for chain: ${chainName}`,
+			message: `Store ID: ${storeId} is not valid for flag: ${flagName}`,
 			availableOptions: [
 				// remove duplicates
 				...new Set<string>(
@@ -306,11 +306,11 @@ export const validateLoblawsStoreId = async ({
 	}
 
 	return {
-		message: `Store ID: ${storeId} is valid for chain: ${chainName}`,
+		message: `Store ID: ${storeId} is valid for flag: ${flagName}`,
 		code: 200,
 	};
 };
 
 export interface IGetProductLoblawsProps extends IGetProductProps {
-	chainName: LoblawsChainName;
+	flagName: LoblawsFlagName;
 }

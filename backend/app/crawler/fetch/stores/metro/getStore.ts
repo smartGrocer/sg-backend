@@ -2,25 +2,24 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 // eslint-disable-next-line import/no-cycle
 import {
-	AllStoreChainBrands,
+	AllParentCompanyList,
 	IStoreProps,
 } from "../../../../common/types/common/store";
-import { MetroChain } from "../../../../common/types/metro/metro";
+import { MetroFlags } from "../../../../common/types/metro/metro";
 import {
 	getCachedData,
 	saveToCache,
 } from "../../../../common/cache/storeCache";
 
 interface IGetMetroStores {
-	chainName: MetroChain;
+	flagName: MetroFlags;
 }
 
 const getMetroStores = async ({
-	chainName,
+	flagName,
 }: IGetMetroStores): Promise<IStoreProps[] | Error> => {
 	try {
-		const chain = chainName;
-		const cacheKey = `stores-${chainName}`;
+		const cacheKey = `stores-${flagName}`;
 		const cachedData = await getCachedData({
 			key: cacheKey,
 			cacheInRedis: true,
@@ -30,9 +29,9 @@ const getMetroStores = async ({
 			return cachedData;
 		}
 		const endpoint = `/find-a-grocery`;
-		const domain = `https://www.${chain}.ca`;
+		const domain = `https://www.${flagName}.ca`;
 		const url =
-			chain === MetroChain.metro
+			flagName === MetroFlags.metro
 				? `${domain}/en${endpoint}`
 				: `${domain}${endpoint}`;
 
@@ -72,12 +71,12 @@ const getMetroStores = async ({
 
 				data.push({
 					store_num: storeId,
-					chain_brand:
-						chainName === "metro"
-							? AllStoreChainBrands.metro
-							: AllStoreChainBrands.foodbasics,
-					chain_name: chainName,
-					store_name: storeName,
+					parent_company:
+						flagName === "metro"
+							? AllParentCompanyList.metro
+							: AllParentCompanyList.foodbasics,
+					flag_name: flagName,
+					store_name: storeName.trim(),
 					latitude: parseFloat(storeLatitude),
 					longitude: parseFloat(storeLongitude),
 					formatted_address: `${storeAddress_line1}, ${storeAddress_line2}`,
