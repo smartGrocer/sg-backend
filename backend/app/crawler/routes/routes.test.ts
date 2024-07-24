@@ -52,7 +52,7 @@ describe("Route /store", () => {
 
 						expect(response.status).toBe(400);
 						expect(response.body.message).toBe(
-							"Invalid parent_company, please provide a valid parent_company."
+							"Invalid parent_company, please provide a valid parent_company as /api/stores/:parent_company like /api/stores/metro or /api/stores/loblaws."
 						);
 						expect(response.body.availableOptions).toEqual(
 							Object.values(AllParentCompanyList)
