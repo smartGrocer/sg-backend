@@ -1,19 +1,5 @@
 import mongoose from "mongoose";
 
-const productLinkSchema = new mongoose.Schema(
-	{
-		flag_name: {
-			type: String,
-			required: true,
-		},
-		product_link: {
-			type: String,
-			required: true,
-		},
-	},
-	{ _id: false }
-);
-
 const productSchema = new mongoose.Schema({
 	product_num: {
 		type: String,
@@ -32,9 +18,18 @@ const productSchema = new mongoose.Schema({
 	product_link: {
 		type: String,
 	},
+
+	/**
+	 * product_links:	{
+	 * 	'nofrills': 'https://nofrills.ca/...',
+	 * 	'loblaws': 'https://loblaws.ca/...',
+	 * 	'zehrs': 'https://zehrs.ca/...',
+	 * }
+	 * where the key is the flag_name and the value is the product_link
+	 */
 	product_links: {
-		type: [productLinkSchema],
-		default: [],
+		type: Map,
+		of: String,
 	},
 	product_image: {
 		type: String,
