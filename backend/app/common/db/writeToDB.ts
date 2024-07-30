@@ -97,7 +97,7 @@ export const writeToDb = async (
 						product_name: product.product_name,
 						product_link: product.product_link,
 						product_links: {
-							$addToSet: product.product_link,
+							[product.flag_name]: product.product_link,
 						},
 						product_image: product.product_image,
 						updatedAt: new Date(),

@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const productLinkSchema = new mongoose.Schema(
 	{
-		chain_name: {
+		flag_name: {
 			type: String,
 			required: true,
 		},
-		link: {
+		product_link: {
 			type: String,
 			required: true,
 		},
