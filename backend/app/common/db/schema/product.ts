@@ -30,6 +30,9 @@ const productSchema = new mongoose.Schema({
 		type: String,
 	},
 	product_link: {
+		type: String,
+	},
+	product_links: {
 		type: [productLinkSchema],
 		default: [],
 	},
