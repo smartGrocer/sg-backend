@@ -18,15 +18,6 @@ const productSchema = new mongoose.Schema({
 	product_link: {
 		type: String,
 	},
-
-	/**
-	 * product_links:	{
-	 * 	'nofrills': 'https://nofrills.ca/...',
-	 * 	'loblaws': 'https://loblaws.ca/...',
-	 * 	'zehrs': 'https://zehrs.ca/...',
-	 * }
-	 * where the key is the flag_name and the value is the product_link
-	 */
 	product_links: {
 		type: Map,
 		of: String,
