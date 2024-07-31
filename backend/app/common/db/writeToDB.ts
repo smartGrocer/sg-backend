@@ -81,9 +81,9 @@ export const writeToDb = async (
 		}
 
 		const bulkOperations = products.map((product) => {
-			// Construct the product_links map
+			// Construct the product_link map
 			const productLinksUpdate: { [key: string]: string } = {};
-			productLinksUpdate[`product_links.${product.flag_name}`] =
+			productLinksUpdate[`product_link.${product.flag_name}`] =
 				product.product_link;
 
 			return {
@@ -101,7 +101,7 @@ export const writeToDb = async (
 							parent_company: product.parent_company,
 							product_brand: product.product_brand,
 							product_name: product.product_name,
-							product_link: product.product_link,
+							// product_link: product.product_link,
 							product_image: product.product_image,
 							updatedAt: new Date(),
 							...productLinksUpdate,

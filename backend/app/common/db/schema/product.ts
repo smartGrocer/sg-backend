@@ -15,10 +15,10 @@ const productSchema = new mongoose.Schema({
 	product_name: {
 		type: String,
 	},
+	// product_link: {
+	// 	type: String,
+	// },
 	product_link: {
-		type: String,
-	},
-	product_links: {
 		type: Map,
 		of: String,
 	},
