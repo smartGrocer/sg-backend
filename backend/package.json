@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"engines": {
+		"node": "22"
+	},
 	"scripts": {
 		"build": "npx tsc",
 		"dev": "nodemon app/index.ts --host 0.0.0.0",
