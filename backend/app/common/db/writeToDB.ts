@@ -101,7 +101,6 @@ export const writeToDb = async (
 							parent_company: product.parent_company,
 							product_brand: product.product_brand,
 							product_name: product.product_name,
-							// product_link: product.product_link,
 							product_image: product.product_image,
 							updatedAt: new Date(),
 							...productLinksUpdate,

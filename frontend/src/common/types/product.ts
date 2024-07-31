@@ -12,7 +12,7 @@ export interface Product {
   description: string;
   productBrand: string;
   product_image: string;
-  product_link: string;
+  product_link: { [key: string]: string };
   product_name: string;
   product_num: string;
   updatedAt: string;
