@@ -35,7 +35,7 @@ const scrapeAllProductsMetro = async ({
 	// fetch product page and scrape description
 	const productData = await getProduct({
 		product_num: product.product_num,
-		url: product.product_link,
+		url: product.product_link[flagName],
 		store_num: product.parent_company,
 		flagName,
 	});

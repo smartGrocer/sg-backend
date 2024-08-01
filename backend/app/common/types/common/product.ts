@@ -92,7 +92,7 @@ export interface IProductData {
 	parent_company: AllParentCompanyList;
 	product_brand: string;
 	product_name: string;
-	product_link: string;
+	product_link: { [key in IAllStoreFlags]: string };
 	product_image: string;
 	description: string;
 	// product_size_unit: string;

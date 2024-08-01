@@ -122,19 +122,19 @@ const scrapeLoblaws = async (
 		const store_num = await pickStore(flagName);
 
 		if (store_num instanceof Error || !store_num) {
-			throw new Error("Error picking store");
+			throw new Error(`Error picking store :${flagName}`);
 		}
 
 		const products = await scrapeStore({ flagName, store_num });
 
 		if (products instanceof Error) {
-			throw new Error("Error scraping store");
+			throw new Error(`Error scraping ${flagName}`);
 		}
 
 		return products;
 	} catch (e) {
 		logger.error({
-			message: `Error scraping ${flagName}`,
+			message: `Error scraping: ${flagName}`,
 			error: e,
 			service: "scrapper",
 		});

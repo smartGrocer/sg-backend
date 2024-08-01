@@ -80,29 +80,36 @@ export const writeToDb = async (
 			};
 		}
 
-		const bulkOperations = products.map((product) => ({
-			updateOne: {
-				filter: {
-					product_num: product.product_num,
-					parent_company: product.parent_company,
-				},
-				update: {
-					$set: {
-						...(product.description !== "" && {
-							description: product.description,
-						}),
+		const bulkOperations = products.map((product) => {
+			// Construct the product_link map
+			const productLinksUpdate: { [key: string]: string } = {};
+			productLinksUpdate[`product_link.${product.flag_name}`] =
+				product.product_link;
+
+			return {
+				updateOne: {
+					filter: {
 						product_num: product.product_num,
 						parent_company: product.parent_company,
-						product_brand: product.product_brand,
-						product_name: product.product_name,
-						product_link: product.product_link,
-						product_image: product.product_image,
-						updatedAt: new Date(),
 					},
+					update: {
+						$set: {
+							...(product.description !== "" && {
+								description: product.description,
+							}),
+							product_num: product.product_num,
+							parent_company: product.parent_company,
+							product_brand: product.product_brand,
+							product_name: product.product_name,
+							product_image: product.product_image,
+							updatedAt: new Date(),
+							...productLinksUpdate,
+						},
+					},
+					upsert: true,
 				},
-				upsert: true,
-			},
-		}));
+			};
+		});
 
 		const result = await Product.bulkWrite(bulkOperations);
 

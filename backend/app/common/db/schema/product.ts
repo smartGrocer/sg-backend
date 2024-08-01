@@ -16,7 +16,8 @@ const productSchema = new mongoose.Schema({
 		type: String,
 	},
 	product_link: {
-		type: String,
+		type: Map,
+		of: String,
 	},
 	product_image: {
 		type: String,
