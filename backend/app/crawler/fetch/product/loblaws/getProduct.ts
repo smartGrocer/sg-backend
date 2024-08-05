@@ -1,6 +1,5 @@
 import axios from "axios";
 import UserAgent from "user-agents";
-// eslint-disable-next-line import/no-cycle
 import { IProductProps } from "../../../../common/types/common/product";
 import {
 	IGetProductLoblawsProps,
@@ -8,7 +7,6 @@ import {
 	LoblawsFlagName,
 	pickImage,
 } from "../../../../common/types/loblaws/loblaws";
-import parseQuantity from "../../../../common/helpers/parseQuantity";
 import {
 	getCachedData,
 	saveToCache,
@@ -62,22 +60,7 @@ const getProduct = async ({
 		productData.product_link = `https://www.${LoblawsFlagAlternateName(flagName as LoblawsFlagName)}.ca${product.link}`;
 		productData.product_image = pickImage(product.imageAssets);
 		productData.description = removeHtmlTags(product.description || "N/A");
-		productData.product_size_unit = parseQuantity(product.packageSize).unit;
-		productData.product_size_quantity = parseQuantity(
-			product.packageSize
-		).quantity;
-		productData.unit_soldby_type = product.pricingUnits.type;
-		productData.unit_soldby_unit = product.pricingUnits.unit;
 		productData.price = product.offers[0].price.value || null;
-		productData.price_unit = product.offers[0].price.unit || null;
-		productData.price_was = product.offers[0]?.priceWas?.value || null;
-		productData.price_was_unit = product.offers[0]?.priceWas?.unit || null;
-		productData.compare_price =
-			product.offers[0].comparisonPrices[0].value || null;
-		productData.compare_price_unit =
-			product.offers[0].comparisonPrices[0].unit || null;
-		productData.compare_price_quantity =
-			product.offers[0].comparisonPrices[0].quantity || null;
 
 		// cache data
 		await saveToCache({

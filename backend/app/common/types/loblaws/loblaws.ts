@@ -1,6 +1,5 @@
-// eslint-disable-next-line import/no-cycle
-import { IGetProduct, IGetProductProps, ISearchStore } from "../common/product";
-// eslint-disable-next-line import/no-cycle
+import { IGetProduct, IGetProductProps } from "../common/product";
+
 import getLoblawsStores from "../../../crawler/fetch/stores/loblaws/getStore";
 import { IStoreProps } from "../common/store";
 
@@ -19,10 +18,6 @@ export enum LoblawsFlagName {
 	maxi = "maxi",
 	provigo = "provigo",
 	extrafoods = "extrafoods",
-}
-
-export interface ISearchLoblaws extends ISearchStore {
-	flagName: LoblawsFlagName;
 }
 
 export interface IGetProductLoblaws extends IGetProduct {
@@ -281,7 +276,7 @@ export const validateLoblawsStoreId = async ({
 
 	if (!storeId) {
 		return {
-			message: `Store ID is required as a query parameter like so: /search/:product_search?store_num=1234`,
+			message: `Store ID is required as a query parameter like so: /product/:product_search?store_num=1234`,
 			availableOptions: [
 				// remove duplicates
 				...new Set<string>(

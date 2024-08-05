@@ -42,19 +42,8 @@ const extractProductData = (
 				)[0]?.imageUrl ||
 				"",
 			description: removeHtmlTags(product.description || "N/A"),
-			product_size_unit: product.uom,
-			// product_size_quantity: product[i].packageSizing,
-			product_size_quantity: 1,
 
-			unit_soldby_type: product.pricingUnits.type,
-			unit_soldby_unit: product.pricingUnits.unit,
 			price: Number(product.pricing.price),
-			price_unit: product.pricingUnits.unit,
-			price_was: product.pricing.wasPrice,
-			price_was_unit: "",
-			compare_price: 1,
-			compare_price_unit: "",
-			compare_price_quantity: 1,
 		};
 	});
 };
