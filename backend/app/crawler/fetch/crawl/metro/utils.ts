@@ -54,7 +54,7 @@ const processMetroScrapper = async (
 	const endTime = new Date().getTime();
 
 	logger.info({
-		message: `Scraped ${flagName} pg ${page}/${page_results} | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length} products | ${
+		message: `Scraped ${flagName} pg ${page} | Added:${upsertedCount}| Modified:${modifiedCount} | Total: ${AllProducts.length}/${page_results} products | ${
 			(endTime - time_start) / 1000
 		}s`,
 		service: "scrapper",
