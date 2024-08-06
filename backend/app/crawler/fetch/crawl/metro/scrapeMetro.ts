@@ -8,7 +8,6 @@ import pickStore from "../common/pickRandomStore";
 import cleanAndExtractMetroData from "../../../../common/helpers/cleanAndExtractMetroData";
 import sleep from "../../../../common/helpers/sleep";
 import { writeToDb } from "../../../../common/db/writeToDB";
-import { AllParentCompanyList } from "../../../../common/types/common/store";
 import logger from "../../../../common/logging/logger";
 
 interface IScrapeMetroArgs {
@@ -27,10 +26,11 @@ const urlPage = ({
 
 const scrapeStore = async ({
 	flagName,
+	store_num,
 }: IScrapeMetroArgs): Promise<IProductProps[] | Error> => {
 	try {
 		logger.info({
-			message: `Scraping ${flagName}`,
+			message: `Scraping ${flagName} | Store: ${store_num}`,
 			service: "scrapper",
 		});
 		const url = urlPage({ flagName, page: 1 });
@@ -52,10 +52,7 @@ const scrapeStore = async ({
 
 		const { products: data, page_results } = cleanAndExtractMetroData({
 			data: cleanData,
-			store_num:
-				flagName === "metro"
-					? AllParentCompanyList.metro
-					: AllParentCompanyList.foodbasics,
+			store_num,
 			flagName,
 		});
 
@@ -99,10 +96,7 @@ const scrapeStore = async ({
 					page_results: page_results_loop,
 				} = cleanAndExtractMetroData({
 					data: cleanData_loop,
-					store_num:
-						flagName === "metro"
-							? AllParentCompanyList.metro
-							: AllParentCompanyList.foodbasics,
+					store_num,
 					flagName,
 				});
 
