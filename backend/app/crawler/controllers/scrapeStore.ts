@@ -12,7 +12,10 @@ const scrapeStores = async (req: Request, res: Response) => {
 	if (!flagName) {
 		return res.status(400).json({
 			message: `Flag name is required, please provide a flag name as a query parameter like so: /scrape?flag=flag_name`,
-			availableOptions: [...Object.values(LoblawsFlagName)],
+			availableOptions: [
+				...Object.values(LoblawsFlagName),
+				...Object.values(MetroFlags),
+			],
 		});
 	}
 
