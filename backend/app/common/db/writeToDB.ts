@@ -5,6 +5,7 @@ import Store from "./schema/store";
 import Product from "./schema/product";
 import Price from "./schema/price";
 import logger from "../logging/logger";
+import isLastPriceSame from "./utils";
 
 interface IWriteStoreToDbReturn {
 	message: string;
@@ -164,14 +165,7 @@ const addPricesToDb = async (
 				store_num: product.store_num,
 			});
 
-			// If there is no existing price history or the last price is not the same as the current price, add a new price entry to the history
-			if (
-				!existingPriceHistory ||
-				existingPriceHistory.history.length === 0 ||
-				existingPriceHistory.history[
-					existingPriceHistory.history.length - 1
-				].amount !== product.price
-			) {
+			if (isLastPriceSame({ existingPriceHistory, product })) {
 				bulkOperations.push({
 					updateOne: {
 						filter: {
