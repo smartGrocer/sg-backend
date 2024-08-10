@@ -11,7 +11,6 @@ import connectToRedis from "./common/cache/redis/connectRedis";
 import connectDB from "./common/db/connectDB";
 import logger from "./common/logging/logger";
 import fallBackRoute from "./crawler/controllers/fallbackRoute";
-import findDuplicateProducts from "./common/helpers/scripts/findDuplicateProducts";
 
 // For env File
 dotenv.config();
@@ -115,7 +114,6 @@ const startServer = async (): Promise<void> => {
 
 if (getSecret("NODE_ENV") !== "test") {
 	startServer().then(() => {
-		findDuplicateProducts();
 		if (getSecret("NODE_ENV") === "production") {
 			setTimeout(() => {
 				scheduleCron();
