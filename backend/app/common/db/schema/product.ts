@@ -25,9 +25,6 @@ const productSchema = new mongoose.Schema({
 	description: {
 		type: String,
 	},
-	isDuplicate: {
-		type: Boolean,
-	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
