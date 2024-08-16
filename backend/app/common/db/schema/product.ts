@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { quant_uom } from "../../types/common/product";
 
 const productSchema = new mongoose.Schema({
 	product_num: {
@@ -24,6 +25,19 @@ const productSchema = new mongoose.Schema({
 	},
 	description: {
 		type: String,
+	},
+	quantity: {
+		quant_uom: {
+			type: String,
+			enum: quant_uom,
+		},
+		quant_value: {
+			type: Number,
+		},
+		pack_size: {
+			type: Number,
+			default: 1,
+		},
 	},
 	createdAt: {
 		type: Date,

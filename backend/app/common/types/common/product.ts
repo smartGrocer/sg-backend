@@ -65,3 +65,5 @@ export interface IProductData {
 	product_image: string;
 	description: string;
 }
+
+export const quant_uom = ["g", "kg", "ml", "l", "unit"];
