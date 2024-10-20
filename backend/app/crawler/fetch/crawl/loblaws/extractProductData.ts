@@ -1,3 +1,5 @@
+import path from "path";
+import fs from "fs";
 import removeHtmlTags from "../../../../common/helpers/removeHtmlTags";
 import { IProductProps } from "../../../../common/types/common/product";
 import { AllParentCompanyList } from "../../../../common/types/common/store";
@@ -6,6 +8,7 @@ import {
 	LoblawsFlagAlternateName,
 	LoblawsFlagName,
 } from "../../../../common/types/loblaws/loblaws";
+import logger from "../../../../common/logging/logger";
 
 export interface IExtractProductDataProps {
 	productTiles: ILoblawsAllFoodProps[];
@@ -23,6 +26,19 @@ const extractProductData = (
 	store_num: string
 ): IProductProps[] => {
 	return data.productTiles.map((product: ILoblawsAllFoodProps) => {
+		const quanity = product?.packageSizing;
+
+		const logFilePath = path.join(
+			__dirname,
+			"../../../../data",
+			"loblaws-quantities.csv"
+		);
+		const logEntry = `${flagName},${product.productId},${quanity || "N/A"}\n`;
+
+		logger.info(`Writing to file: ${logEntry}`);
+
+		fs.appendFileSync(logFilePath, logEntry, "utf8");
+
 		return {
 			product_num: product.productId,
 			product_name: product.title,

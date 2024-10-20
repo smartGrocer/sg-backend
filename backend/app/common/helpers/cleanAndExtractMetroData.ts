@@ -1,6 +1,9 @@
 import * as cheerio from "cheerio";
+import fs from "fs";
+import path from "path";
 import { AllParentCompanyList } from "../types/common/store";
 import { IProductProps } from "../types/common/product";
+import logger from "../logging/logger";
 
 interface IExtractMetroDataReturn {
 	products: IProductProps[];
@@ -19,6 +22,8 @@ const cleanAndExtractMetroData = ({
 	const $ = cheerio.load(data);
 	const productData = [] as IProductProps[];
 	const page_results = $(".products-tools").text().trim().split(" ")[0] || 0;
+
+	let quant: string | null = null;
 	$(".searchOnlineResults")
 		.find("div.tile-product")
 		.each((_i, el) => {
@@ -58,6 +63,14 @@ const cleanAndExtractMetroData = ({
 					.text()
 					.trim() || "";
 
+			// const quanity = head__unit-details
+			const quantity = $(el).find(".head__unit-details");
+
+			// write quantity to a json file
+			if (quantity) {
+				quant = quantity.text().trim();
+			}
+
 			productData.push({
 				product_num,
 				store_num,
@@ -70,6 +83,18 @@ const cleanAndExtractMetroData = ({
 				description,
 				price,
 			});
+
+			// Append the quantity to a local file
+			const logFilePath = path.join(
+				__dirname,
+				"../../data",
+				"metro-quantities.csv"
+			);
+			const logEntry = `${flagName},${product_num},${quant || "N/A"}\n`;
+
+			logger.info(`Writing to file: ${logEntry}`);
+
+			fs.appendFileSync(logFilePath, logEntry, "utf8");
 		});
 
 	return { products: productData, page_results: Number(page_results) };

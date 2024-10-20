@@ -26,19 +26,19 @@ const productSchema = new mongoose.Schema({
 	description: {
 		type: String,
 	},
-	quantity: {
-		quant_uom: {
-			type: String,
-			enum: quant_uom,
-		},
-		quant_value: {
-			type: Number,
-		},
-		pack_size: {
-			type: Number,
-			default: 1,
-		},
+
+	quant_uom: {
+		type: String,
+		enum: quant_uom,
 	},
+	quant_value: {
+		type: Number,
+	},
+	pack_size: {
+		type: Number,
+		default: 1,
+	},
+
 	createdAt: {
 		type: Date,
 		default: Date.now,
